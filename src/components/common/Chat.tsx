@@ -60,7 +60,7 @@ const ChatButton = () => {
             position: "fixed",
             right: "30px",
             bottom: "20px",
-            backgroundColor: "#0866ff",
+            backgroundColor: theme.palette.primary.main,
             display: "flex",
             gap: "10px",
             borderRadius: "10px",
@@ -163,7 +163,7 @@ const ChatButton = () => {
               variant="outlined"
               fullWidth
               multiline
-              rows={2}
+              rows={1}
               margin="normal"
               value={userMessage}
               onChange={(e) => setUserMessage(e.target.value)}
@@ -174,7 +174,7 @@ const ChatButton = () => {
               onClick={handleSendMessage}
               sx={{
                 height: "100%",
-                padding: "0.75rem", // Ajusta el padding según tus necesidades
+                padding: "1rem",
               }}
             >
               <SendOutlined />

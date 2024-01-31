@@ -5,11 +5,7 @@ const SearchJob = () => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} md={6}>
-        <TextField
-          fullWidth
-          variant="outlined"
-          label="Palabra clave, empresa, ubicación, etc."
-        />
+        <TextField fullWidth variant="outlined" label="Puesto" />
       </Grid>
       <Grid item xs={12} md={4}>
         <TextField
