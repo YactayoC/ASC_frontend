@@ -1,7 +1,6 @@
 import {
   Box,
   Container,
-  IconButton,
   Link,
   ListItem,
   ListItemText,
@@ -9,12 +8,12 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { Facebook, LinkedIn, Twitter } from "@mui/icons-material";
 
 import theme from "../../theme";
 import ChatButton from "../components/common/Chat";
 import SearchJob from "../components/common/SearchJob";
-import HeaderButtons from "./auth/candidate/HeaderButtons";
+import HeaderButtons from "../components/candidate/HeaderButtons";
+import ButtonSocials from "../components/common/ButtonSocials";
 
 function Home() {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -181,57 +180,7 @@ function Home() {
         </Container>
       </Box>
 
-      <Box
-        sx={{
-          position: "fixed",
-          left: "0",
-          top: "30%",
-          transform: "translateY(-50%)",
-          backgroundColor: "white",
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-          borderRadius: "10px",
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        <IconButton component="a" href="https://www.facebook.com">
-          <Facebook
-            sx={{
-              fontSize: "2.5rem",
-              color: "#0866ff",
-              transition: "all 0.3s ease",
-              "&:hover": {
-                transform: "scale(1.2)",
-              },
-            }}
-          />
-        </IconButton>
-        <IconButton component="a" href="https://www.linkedin.com">
-          <LinkedIn
-            sx={{
-              fontSize: "2.5rem",
-              color: "#0e76a8",
-              transition: "all 0.3s ease",
-              "&:hover": {
-                transform: "scale(1.2)",
-              },
-            }}
-          />
-        </IconButton>
-        <IconButton component="a" href="https://www.twitter.com">
-          <Twitter
-            sx={{
-              fontSize: "2.5rem",
-              color: "#00acee",
-              transition: "all 0.3s ease",
-              "&:hover": {
-                transform: "scale(1.2)",
-              },
-            }}
-          />
-        </IconButton>
-      </Box>
+      <ButtonSocials />
 
       <ChatButton />
     </>

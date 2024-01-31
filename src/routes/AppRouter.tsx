@@ -3,6 +3,8 @@ import Home from "../pages/Home";
 import Register from "../pages/auth/candidate/Register";
 import Login from "../pages/auth/candidate/Login";
 import Alerts from "../pages/candidate/Alerts";
+import MyAccount from "../pages/candidate/MyAccount";
+import MyCV from "../pages/candidate/MyCV";
 
 export const AppRouter = () => {
   return (
@@ -16,6 +18,8 @@ export const AppRouter = () => {
 
         {/* Candidate */}
         <Route path="/candidate/alerts" element={<Alerts />} />
+        <Route path="/candidate/my-account" element={<MyAccount />} />
+        <Route path="/candidate/my-cv" element={<MyCV />} />
 
         {/* <Route
             path="/admin/*"

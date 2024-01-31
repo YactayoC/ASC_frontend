@@ -2,7 +2,7 @@ import { PostAddOutlined, ManageSearchOutlined } from "@mui/icons-material";
 import { Avatar, Box, Button, Menu, MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-import theme from "../../../../theme";
+import theme from "../../../theme";
 import { MouseEvent, useState } from "react";
 
 interface Props {
@@ -36,7 +36,7 @@ const HeaderButtons = ({
           alignItems: "center",
           [theme.breakpoints.down("sm")]: {
             flexDirection: "column",
-            marginTop: "2rem",
+            marginTop: "0rem",
           },
         }}
       >
@@ -48,6 +48,7 @@ const HeaderButtons = ({
                 marginLeft: "0rem",
               },
             }}
+            onClick={() => navigate("/")}
           >
             <img
               src="/logo.png"
@@ -127,6 +128,7 @@ const HeaderButtons = ({
           >
             <MenuItem
               disableTouchRipple
+              onClick={() => handleClose("")}
               sx={{
                 backgroundColor: "primary.main",
                 color: "white",
@@ -138,8 +140,12 @@ const HeaderButtons = ({
             >
               Luis de Tomas
             </MenuItem>
-            <MenuItem onClick={() => handleClose("")}>Mi cuenta</MenuItem>
-            <MenuItem onClick={() => handleClose("")}>Mi CV</MenuItem>
+            <MenuItem onClick={() => handleClose("/candidate/my-account")}>
+              Mi cuenta
+            </MenuItem>
+            <MenuItem onClick={() => handleClose("/candidate/my-cv")}>
+              Mi CV
+            </MenuItem>
             <MenuItem onClick={() => handleClose("")}>Cerrar sesion</MenuItem>
           </Menu>
         </Box>
