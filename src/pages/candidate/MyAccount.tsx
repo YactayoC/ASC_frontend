@@ -47,16 +47,19 @@ const MyAccount = () => {
   return (
     <>
       <HeaderButtons isAuthenticated={true} showLogo={true} />
-      <Container
-        maxWidth="xl"
+      <Box
+        // maxWidth=""
         sx={{
           display: "flex",
           flexDirection: "column",
-          marginTop: "5rem",
+          marginTop: "2rem",
           marginBottom: "2rem",
           rowGap: "2rem",
           border: "1px solid #a7a7a7",
           padding: "1rem",
+          width: "100%",
+          maxWidth: "95%",
+          margin: "auto",
         }}
       >
         <Typography variant="h4" textAlign="left" gutterBottom>
@@ -371,7 +374,7 @@ const MyAccount = () => {
             </Box>
           </Box>
         )}
-      </Container>
+      </Box>
 
       <Modal
         open={openModalEmail}

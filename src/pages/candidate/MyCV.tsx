@@ -1,5 +1,4 @@
 import {
-  Container,
   Box,
   Typography,
   Tabs,
@@ -16,12 +15,22 @@ import {
   RadioGroup,
   TextareaAutosize,
   styled,
+  InputLabel,
+  Select,
+  MenuItem,
+  Link,
 } from "@mui/material";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import theme from "../../../theme";
 import HeaderButtons from "../../components/candidate/HeaderButtons";
 import { useState } from "react";
 import {
+  Add,
+  AddRounded,
   CloudUpload,
   LocationOnOutlined,
   MailOutline,
@@ -42,14 +51,14 @@ const VisuallyHiddenInput = styled("input")({
 
 const MyCV = () => {
   const [tabValue, setTabValue] = useState(0);
-  const [openModalEmail, setOpenModalEmail] = useState(false);
+  const [openModalDataPersonal, setOpenModalDataPersonal] = useState(false);
 
   const handleOpenModalEmail = () => {
-    setOpenModalEmail(true);
+    setOpenModalDataPersonal(true);
   };
 
   const handleCloseModalEmail = () => {
-    setOpenModalEmail(false);
+    setOpenModalDataPersonal(false);
   };
 
   const handleChange = (_e: any, newValue: number) => {
@@ -65,16 +74,19 @@ const MyCV = () => {
   return (
     <>
       <HeaderButtons isAuthenticated={true} showLogo={true} />
-      <Container
-        maxWidth="xl"
+      <Box
+        // maxWidth="xxl"
         sx={{
           display: "flex",
           flexDirection: "column",
-          marginTop: "5rem",
+          marginTop: "2rem",
           marginBottom: "2rem",
           rowGap: "2rem",
           border: "1px solid #a7a7a7",
           padding: "1rem",
+          width: "100%",
+          maxWidth: "95%",
+          margin: "auto",
         }}
       >
         <Box
@@ -155,7 +167,7 @@ const MyCV = () => {
                     alignItems: "center",
                   }}
                 >
-                  <IconButton onClick={handleOpenModalEmail}>
+                  <IconButton>
                     <MailOutline
                       sx={{
                         fontSize: "2rem",
@@ -221,7 +233,11 @@ const MyCV = () => {
                 </Box>
               </Box>
 
-              <Button variant="outlined" color="primary">
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleOpenModalEmail}
+              >
                 Editar
               </Button>
             </Box>
@@ -256,200 +272,174 @@ const MyCV = () => {
               rowGap: "2rem",
             }}
           >
+            <Typography variant="h5" gutterBottom>
+              Luis De Tomas
+            </Typography>
+
             <Box
+              display="flex"
+              alignItems="start"
+              gap={"2rem"}
               sx={{
-                display: "flex",
-                flexDirection: "column",
-                rowGap: "1rem",
+                [theme.breakpoints.down("sm")]: {
+                  flexDirection: "column",
+                  gap: "1rem",
+                },
               }}
             >
-              <Typography
-                gutterBottom
-                sx={{
-                  fontSize: "1.5rem",
+              <img
+                src="https://fotosprofesionales.es/wp-content/uploads/2023/08/fotografo-de-retrato-madrid-foto-corporativa-hombre-12.jpg"
+                alt="avatar"
+                style={{
+                  width: "8rem",
+                  height: "10rem",
+                  cursor: "pointer",
                 }}
-              >
-                Cambiar contraseña
-              </Typography>
-              <Typography
-                gutterBottom
-                sx={{
-                  fontSize: "1.2rem",
-                  color: "#a7a7a7",
-                }}
-              >
-                Cambia tu contraseña para proteger tu cuenta.
-              </Typography>
+              />
+
               <Box
                 sx={{
                   display: "flex",
-                  alignItems: "center",
-                  columnGap: "2rem",
+                  flexDirection: "column",
+                  rowGap: "0.5rem",
                 }}
               >
-                <TextField
-                  label="Nueva contraseña"
-                  variant="outlined"
-                  margin="normal"
-                  type="password"
-                />
-                <TextField
-                  label="Confirma nueva contraseña"
-                  variant="outlined"
-                  margin="normal"
-                  type="password"
-                />
-              </Box>
-              <Box>
-                <FormControlLabel
-                  control={<Checkbox />}
-                  label="Solicita que todos los dispositivos inicien sesión con la nueva contraseña"
-                />
-              </Box>
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{
-                  width: "fit-content",
-                  [theme.breakpoints.down("sm")]: {
-                    width: "100%",
-                  },
-                }}
-              >
-                Guardar
-              </Button>
-            </Box>
-
-            <Divider />
-
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                rowGap: "1rem",
-              }}
-            >
-              <Typography
-                gutterBottom
-                sx={{
-                  fontSize: "1.5rem",
-                }}
-              >
-                Privacidad
-              </Typography>
-
-              <Box>
-                <FormControl>
-                  <RadioGroup
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue="female"
-                    name="radio-buttons-group"
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
                   >
-                    <FormControlLabel
-                      value="0"
-                      control={<Radio />}
-                      label="Tu CV es visible en los avisos a los que te postulaste y en otras búsquedas que realizan las empresas."
-                    />
-                    <FormControlLabel
-                      value="1"
-                      control={<Radio />}
-                      label="Tu CV es visible únicamente en los avisos a los que te postulaste"
-                    />
-                  </RadioGroup>
-                </FormControl>
+                    <IconButton>
+                      <MailOutline
+                        sx={{
+                          fontSize: "2rem",
+                        }}
+                      />
+                    </IconButton>
+                    <Typography
+                      variant="body1"
+                      gutterBottom
+                      sx={{
+                        marginBottom: "0",
+                      }}
+                    >
+                      luis_de_tomas@gmail.com
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <IconButton onClick={handleOpenModalEmail}>
+                      <PhoneOutlined
+                        sx={{
+                          fontSize: "2rem",
+                        }}
+                      />
+                    </IconButton>
+                    <Typography
+                      variant="body1"
+                      gutterBottom
+                      sx={{
+                        marginBottom: "0",
+                      }}
+                    >
+                      9999999999
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <IconButton onClick={handleOpenModalEmail}>
+                      <LocationOnOutlined
+                        sx={{
+                          fontSize: "2rem",
+                        }}
+                      />
+                    </IconButton>
+                    <Typography
+                      variant="body1"
+                      gutterBottom
+                      sx={{
+                        marginBottom: "0",
+                      }}
+                    >
+                      Perú, Lima, Lima, Lima
+                    </Typography>
+                  </Box>
+                </Box>
+
+                <TextField
+                  label="Descripción del perfil"
+                  variant="outlined"
+                  multiline
+                  fullWidth
+                  placeholder="Escribe una descripción de tu perfil"
+                  rows={3}
+                />
               </Box>
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{
-                  width: "fit-content",
-                  [theme.breakpoints.down("sm")]: {
-                    width: "100%",
-                  },
-                }}
-              >
-                Guardar
-              </Button>
             </Box>
 
-            <Divider />
-
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                rowGap: "1rem",
-              }}
-            >
-              <Typography
-                gutterBottom
+            <Box sx={{}}>
+              <Typography variant="h5" gutterBottom>
+                Experiencia laboral
+              </Typography>
+              <Divider />
+              <Box
                 sx={{
-                  fontSize: "1.5rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  rowGap: "1rem",
+                  marginTop: "1rem",
                 }}
               >
-                Eliminar mi cuenta
-              </Typography>
-
-              <Typography
-                gutterBottom
-                sx={{
-                  fontSize: "1.2rem",
-                }}
-              >
-                Si eliminas tu cuenta, no podrás postularte a más ofertas de
-                trabajo ni revisar tus postulaciones
-              </Typography>
-
-              <Box>
                 <Typography
                   gutterBottom
                   sx={{
                     fontSize: "1.2rem",
                   }}
                 >
-                  ¿Por qué quieres eliminar tu cuenta?
+                  Mis experiencias profesionales
                 </Typography>
-                <Box
-                  width="60%"
-                  sx={{
-                    [theme.breakpoints.down("sm")]: {
-                      width: "100%",
-                    },
-                  }}
-                >
-                  <TextareaAutosize
-                    aria-label="minimum height"
-                    minRows={5}
-                    style={{
-                      width: "100%",
-                      padding: "0.5rem",
-                      borderRadius: "0.5rem",
-                      border: "1px solid #a7a7a7",
-                      resize: "none",
-                      fontFamily: "roboto",
+                <Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      columnGap: "1rem",
                     }}
-                  />
+                  >
+                    <Button variant="outlined" endIcon={<Add />}>
+                      Agregar experiencia
+                    </Button>
+                    {/* <Link href="#" underline="hover">
+                      Agregar experiencia
+                    </Link>
+                    <IconButton color="primary" aria-label="add" size="large">
+                      <AddRounded fontSize="inherit" />
+                    </IconButton> */}
+                  </Box>
                 </Box>
               </Box>
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{
-                  width: "fit-content",
-                  [theme.breakpoints.down("sm")]: {
-                    width: "100%",
-                  },
-                }}
-              >
-                Eliminar
-              </Button>
             </Box>
           </Box>
         )}
-      </Container>
+      </Box>
 
       <Modal
-        open={openModalEmail}
+        open={openModalDataPersonal}
         onClose={handleCloseModalEmail}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
@@ -460,45 +450,210 @@ const MyCV = () => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: 350,
+            width: "900px",
             bgcolor: "background.paper",
             boxShadow: 24,
             padding: "2rem",
             paddingBlock: "3rem",
+            [theme.breakpoints.down("sm")]: {
+              width: "95%",
+              padding: "1rem",
+              paddingBlock: "2rem",
+            },
           }}
         >
-          <Typography variant="h6" id="modal-title" gutterBottom align="center">
-            Modificar email
+          <Typography variant="h6" id="modal-title" gutterBottom align="left">
+            Dato personal y de contacto
           </Typography>
+          <Divider />
           <form
             onSubmit={handleSubmitEmail}
             style={{
               display: "flex",
               flexDirection: "column",
-              rowGap: "0.5rem",
+              rowGap: "1.5rem",
+              marginTop: "1rem",
             }}
           >
-            <TextField
-              label="Email actual"
-              variant="outlined"
-              margin="normal"
-              type="email"
-              fullWidth
-            />
-            <TextField
-              label="Email nuevo"
-              variant="outlined"
-              margin="normal"
-              type="email"
-              fullWidth
-            />
-            <TextField
-              label="Repetir email nuevo"
-              variant="outlined"
-              margin="normal"
-              type="email"
-              fullWidth
-            />
+            <Box
+              sx={{
+                display: "flex",
+                columnGap: "1rem",
+                alignItems: "center",
+              }}
+            >
+              <TextField
+                label="Nombres"
+                variant="outlined"
+                margin="normal"
+                fullWidth
+              />
+              <TextField
+                label="Apellidos"
+                variant="outlined"
+                margin="normal"
+                fullWidth
+              />
+              <FormControl fullWidth>
+                <InputLabel id="select-nacionalidad">Nacionalidad</InputLabel>
+                <Select
+                  labelId="select-nacionalidad"
+                  id="demo-simple-select"
+                  value={10}
+                  label="Nacionalidad"
+                  // onChange={handleChange}
+                >
+                  <MenuItem value={10}>Perú</MenuItem>
+                  <MenuItem value={20}>Bolivia</MenuItem>
+                  <MenuItem value={30}>Venezuela</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <Typography variant="h6" gutterBottom align="left">
+                Fecha de nacimiento
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  columnGap: "3rem",
+                  alignItems: "center",
+                  [theme.breakpoints.down("sm")]: {
+                    flexDirection: "column",
+                    gap: "1rem",
+                  },
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    width: "100%",
+                    columnGap: "1rem",
+                  }}
+                >
+                  <FormControl
+                    sx={{
+                      width: "50%",
+                    }}
+                  >
+                    <InputLabel id="select-dia">Dia</InputLabel>
+                    <Select
+                      labelId="select-dia"
+                      id="demo-simple-select"
+                      value={1}
+                      label="Dia"
+                      // onChange={handleChange}
+                    >
+                      <MenuItem value={1}>1</MenuItem>
+                      <MenuItem value={2}>2</MenuItem>
+                      <MenuItem value={3}>3</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    sx={{
+                      width: "50%",
+                    }}
+                  >
+                    <InputLabel id="select-mes">Mes</InputLabel>
+                    <Select
+                      labelId="select-mes"
+                      id="demo-simple-select"
+                      value={1}
+                      label="Mes"
+                      // onChange={handleChange}
+                    >
+                      <MenuItem value={1}>Enero</MenuItem>
+                      <MenuItem value={2}>Febrero</MenuItem>
+                      <MenuItem value={3}>Marzo</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    sx={{
+                      width: "50%",
+                    }}
+                  >
+                    <InputLabel id="select-anio">Año</InputLabel>
+                    <Select
+                      labelId="select-anio"
+                      id="demo-simple-select"
+                      value={1}
+                      label="Año"
+                      // onChange={handleChange}
+                    >
+                      <MenuItem value={1}>1995</MenuItem>
+                      <MenuItem value={2}>1996</MenuItem>
+                      <MenuItem value={3}>1997</MenuItem>
+                      <MenuItem value={3}>1998</MenuItem>
+                      <MenuItem value={3}>1999</MenuItem>
+                      <MenuItem value={3}>2000</MenuItem>
+                      <MenuItem value={3}>2001</MenuItem>
+                      <MenuItem value={3}>2002</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    width: "100%",
+                    columnGap: "1rem",
+                  }}
+                >
+                  <FormControl fullWidth>
+                    <InputLabel id="select-civil">Estado Civil</InputLabel>
+                    <Select
+                      labelId="select-civil"
+                      id="demo-simple-select"
+                      value={10}
+                      label="Estado Civil"
+                      // onChange={handleChange}
+                    >
+                      <MenuItem value={10}>Soltero</MenuItem>
+                      <MenuItem value={20}>Viudo</MenuItem>
+                      <MenuItem value={30}>Casado</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Box>
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                columnGap: "1rem",
+              }}
+            >
+              <FormControl
+                sx={{
+                  width: "100%",
+                }}
+              >
+                <InputLabel id="select-documento">Tipo documento</InputLabel>
+                <Select
+                  labelId="select-documento"
+                  id="demo-simple-select"
+                  value={1}
+                  label="Tipo documento"
+                  // onChange={handleChange}
+                >
+                  <MenuItem value={1}>DNI</MenuItem>
+                  <MenuItem value={2}>Pasaporte</MenuItem>
+                </Select>
+              </FormControl>
+
+              <TextField
+                label="Documento"
+                variant="outlined"
+                margin="normal"
+                fullWidth
+              />
+            </Box>
             <Button type="submit" variant="contained" color="primary">
               Guardar
             </Button>

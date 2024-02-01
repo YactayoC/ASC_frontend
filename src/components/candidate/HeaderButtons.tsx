@@ -3,7 +3,7 @@ import { Avatar, Box, Button, Menu, MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 import theme from "../../../theme";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 
 interface Props {
   isAuthenticated: boolean;
@@ -25,6 +25,24 @@ const HeaderButtons = ({
     navigate(link);
     setAnchorEl(null);
   };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleClickOutside = (event: any) => {
+    if (anchorEl && !anchorEl.contains(event.target as Node)) {
+      handleCloseMenu();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [anchorEl]);
 
   if (isAuthenticated) {
     return (
