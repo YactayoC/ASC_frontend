@@ -5,6 +5,7 @@ import Login from "../pages/auth/candidate/Login";
 import Alerts from "../pages/candidate/Alerts";
 import MyAccount from "../pages/candidate/MyAccount";
 import MyCV from "../pages/candidate/MyCV";
+import ResultsSearch from "../pages/candidate/ResultsSearch";
 
 export const AppRouter = () => {
   return (
@@ -20,6 +21,7 @@ export const AppRouter = () => {
         <Route path="/candidate/alerts" element={<Alerts />} />
         <Route path="/candidate/my-account" element={<MyAccount />} />
         <Route path="/candidate/my-cv" element={<MyCV />} />
+        <Route path="/candidate/search/:value" element={<ResultsSearch />} />
 
         {/* <Route
             path="/admin/*"

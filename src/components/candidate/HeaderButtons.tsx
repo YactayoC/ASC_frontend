@@ -144,8 +144,25 @@ const HeaderButtons = ({
               },
             }}
           >
-            <MenuItem
+            <Box
+              onClick={() => handleClose("")}
+              sx={{
+                backgroundColor: "primary.main",
+                cursor: "pointer",
+                color: "white",
+                fontWeight: "bold",
+                paddingBlock: "0.5rem",
+                textAlign: "center",
+                "&:hover": {
+                  backgroundColor: "primary.main",
+                },
+              }}
+            >
+              Luis de Tomas
+            </Box>
+            {/* <MenuItem
               disableTouchRipple
+              selected
               onClick={() => handleClose("")}
               sx={{
                 backgroundColor: "primary.main",
@@ -157,7 +174,7 @@ const HeaderButtons = ({
               }}
             >
               Luis de Tomas
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem onClick={() => handleClose("/candidate/my-account")}>
               Mi cuenta
             </MenuItem>
