@@ -10,6 +10,17 @@ import {
 import { ArrowBack } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import theme from "../../../../theme";
+import {
+  LoginSocialGoogle,
+  LoginSocialFacebook,
+  IResolveParams,
+} from "reactjs-social-login";
+
+import {
+  FacebookLoginButton,
+  GoogleLoginButton,
+} from "react-social-login-buttons";
+
 
 const Login = () => {
   const navigate = useNavigate();
