@@ -21,7 +21,10 @@ export const AppRouter = () => {
         <Route path="/candidate/alerts" element={<Alerts />} />
         <Route path="/candidate/my-account" element={<MyAccount />} />
         <Route path="/candidate/my-cv" element={<MyCV />} />
-        <Route path="/candidate/search/:value" element={<ResultsSearch />} />
+        <Route
+          path="/candidate/search/:value/:location?"
+          element={<ResultsSearch />}
+        />
 
         {/* <Route
             path="/admin/*"

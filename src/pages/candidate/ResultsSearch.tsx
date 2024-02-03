@@ -3,30 +3,66 @@ import {
   Box,
   Button,
   ButtonGroup,
+  Card,
+  CardActionArea,
+  CardContent,
   Container,
+  Divider,
   FormControl,
+  Grid,
+  IconButton,
   InputLabel,
+  Link,
+  Menu,
   MenuItem,
   Select,
   Switch,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { useState } from "react";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { Facebook, Share, WhatsApp } from "@mui/icons-material";
 
 import HeaderButtons from "../../components/candidate/HeaderButtons";
 import theme from "../../../theme";
 import SearchJob from "../../components/common/SearchJob";
-import { useState } from "react";
+import dayjs from "dayjs";
+
+import { jobs } from "../../seed/resultsSearchJob";
+import SwipperableDr from "../../components/common/SwipperableDr";
 
 const ResultsSearch = () => {
-  const { value } = useParams();
+  const [open, setOpen] = useState(false);
+  const { value, location } = useParams();
   const [buttonOrderBy, setButtonOrderBy] = useState<string>("");
+  const [anchorEl, setAnchorEl] = useState(null);
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  console.log(location);
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleShareFacebook = () => {
+    const facebookShareUrl =
+      "https://www.facebook.com/sharer/sharer.php?u=pe.computrabajo.com/trabajo-de-desarrollador-en-lima#D5C37727DA72857061373E686DCF3405";
+    window.open(facebookShareUrl, "_blank");
+    handleClose();
+  };
+
+  const handleShareInstagram = () => {
+    handleClose();
+  };
 
   return (
     <>
       <HeaderButtons isAuthenticated={true} showLogo={true} />
 
       {/* Banner */}
-      <Box
+      {/* <Box
         sx={{
           width: "100%",
           height: "100%",
@@ -86,7 +122,7 @@ const ResultsSearch = () => {
         <Typography variant="h6" gutterBottom align="center" color={"#666666"}>
           ¡Aquí encontraras el empleo que buscabas!
         </Typography>
-      </Box>
+      </Box> */}
 
       <Container
         maxWidth="lg"
@@ -133,6 +169,7 @@ const ResultsSearch = () => {
               display: "flex",
               width: "100%",
               columnGap: "1rem",
+              backgroundColor: "#fff",
             }}
           >
             <FormControl fullWidth>
@@ -157,6 +194,7 @@ const ResultsSearch = () => {
               display: "flex",
               width: "100%",
               columnGap: "1rem",
+              backgroundColor: "#fff",
             }}
           >
             <FormControl fullWidth>
@@ -181,22 +219,21 @@ const ResultsSearch = () => {
               display: "flex",
               width: "100%",
               columnGap: "1rem",
+              backgroundColor: "#fff",
             }}
           >
-            <FormControl fullWidth>
-              <InputLabel id="select-modalidad-trabajo">Fecha</InputLabel>
-              <Select
-                labelId="select-modalidad-trabajo"
-                id="demo-simple-select"
-                value={10}
-                label="Modalidad de trabajo"
-                // onChange={handleChange}
-              >
-                <MenuItem value={10}>Soltero</MenuItem>
-                <MenuItem value={20}>Viudo</MenuItem>
-                <MenuItem value={30}>Casado</MenuItem>
-              </Select>
-            </FormControl>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Fecha"
+                  defaultValue={dayjs(new Date())}
+                  format="DD/MM/YYYY"
+                  sx={{
+                    width: "100%",
+                  }}
+                />
+              </LocalizationProvider>
+            </LocalizationProvider>
           </Box>
         </Box>
 
@@ -208,10 +245,14 @@ const ResultsSearch = () => {
             justifyContent: "center",
             alignItems: "center",
             rowGap: "2rem",
-            marginTop: "5rem",
+            marginTop: "2rem",
             border: "1px solid #e0e0e0",
+            backgroundColor: "#fff",
             width: "90%",
             padding: "2rem",
+            [theme.breakpoints.down("sm")]: {
+              width: "100%",
+            },
           }}
         >
           <Box
@@ -226,7 +267,13 @@ const ResultsSearch = () => {
               },
             }}
           >
-            <Typography gutterBottom fontWeight={400}>
+            <Typography
+              gutterBottom
+              fontWeight={400}
+              sx={{
+                maxWidth: "25rem",
+              }}
+            >
               340 vacantes sobre <strong>{value}</strong>
             </Typography>
 
@@ -276,6 +323,435 @@ const ResultsSearch = () => {
               </ButtonGroup>
             </Box>
           </Box>
+
+          {/* Contenido */}
+          <Grid container spacing={2}>
+            {/* Contenido resultado busquedas */}
+            <Grid
+              item
+              xs={12}
+              sm={5}
+              sx={{
+                maxHeight: "40rem",
+                overflowY: "auto",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  rowGap: "1rem",
+                  paddingRight: "1rem",
+                  paddingBottom: "1rem",
+                }}
+              >
+                {jobs.map((prob) => (
+                  <Card
+                    key={prob.id}
+                    sx={{
+                      border: "1px solid #e0e0e0",
+                    }}
+                  >
+                    <CardActionArea
+                      onClick={() => {
+                        if (isSmallScreen) {
+                          setOpen(true);
+                        }
+                      }}
+                    >
+                      <CardContent
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          rowGap: "0.5rem",
+                        }}
+                      >
+                        <Typography variant="h6">{prob.jobTitle}</Typography>
+                        <Link
+                          href={prob.companyLink}
+                          target="_blank"
+                          sx={{
+                            width: "fit-content",
+                            fontSize: "1rem",
+                          }}
+                        >
+                          {prob.companyName}
+                        </Link>
+                        <Typography
+                          sx={{
+                            fontSize: "1rem",
+                          }}
+                        >
+                          {prob.location}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontSize: "1rem",
+                          }}
+                        >
+                          Modalidad de trabajo: {prob.workMode}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontSize: "1rem",
+                          }}
+                        >
+                          Tipo de jornada: {prob.workType}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontSize: "0.8rem",
+                            color: "#a7a7a7",
+                          }}
+                        >
+                          Fecha: {prob.date}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                ))}
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    columnGap: "1rem",
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    disabled
+                    size="large"
+                    sx={{
+                      width: "100%",
+                      borderRadius: "20px",
+                    }}
+                  >
+                    Anterior
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    sx={{
+                      width: "100%",
+                      borderRadius: "20px",
+                    }}
+                  >
+                    Siguiente
+                  </Button>
+                </Box>
+              </Box>
+            </Grid>
+
+            {/* Seleccionar detalle */}
+            {isSmallScreen && (
+              <SwipperableDr open={open} setOpen={setOpen}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: "1rem",
+                    border: "1px solid #e0e0e0",
+                    height: "100%",
+                    maxHeight: "48rem",
+                    overflowY: "auto",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "start",
+                      columnGap: "1rem",
+                      height: "100%",
+                    }}
+                  >
+                    <Box>
+                      <Typography variant="h6">
+                        Desarrollador Frontend
+                      </Typography>
+                      <Link
+                        href="https://www.google.com"
+                        target="_blank"
+                        sx={{
+                          width: "fit-content",
+                          fontSize: "1rem",
+                        }}
+                      >
+                        Google
+                      </Link>
+                    </Box>
+                    <img
+                      src="
+                    https://cdn.pixabay.com/photo/2021/08/10/15/36/microsoft-6536268_1280.png"
+                      alt=""
+                      style={{
+                        width: "3rem",
+                        height: "3rem",
+                      }}
+                    />
+                  </Box>
+
+                  <Typography
+                    sx={{
+                      fontSize: "1rem",
+                    }}
+                  >
+                    Colombia, Bogotá
+                  </Typography>
+                  <Box
+                    sx={{
+                      marginTop: "1rem",
+                      display: "flex",
+                      columnGap: "1rem",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      sx={{
+                        width: "fit-content",
+                        borderRadius: "20px",
+                      }}
+                    >
+                      Postularme
+                    </Button>
+                    <IconButton
+                      color="primary"
+                      aria-label="upload picture"
+                      onClick={(e: any) => setAnchorEl(e.currentTarget)}
+                    >
+                      <Share />
+                    </IconButton>
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                    >
+                      <MenuItem
+                        onClick={handleShareFacebook}
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          columnGap: "0.5rem",
+                        }}
+                      >
+                        <Facebook />
+                        <Typography
+                          component={"span"}
+                          sx={{
+                            fontSize: "0.9rem",
+                          }}
+                        >
+                          Facebook
+                        </Typography>
+                      </MenuItem>
+                      <MenuItem
+                        onClick={handleShareInstagram}
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          columnGap: "0.5rem",
+                        }}
+                      >
+                        <WhatsApp />
+                        <Typography
+                          component={"span"}
+                          sx={{
+                            fontSize: "0.9rem",
+                          }}
+                        >
+                          Whatsapp
+                        </Typography>
+                      </MenuItem>
+                    </Menu>
+                  </Box>
+                  <Divider sx={{ marginTop: "1rem" }} />
+                  <Typography
+                    sx={{
+                      marginTop: "1rem",
+                      fontWeight: 400,
+                      color: "##313944",
+                    }}
+                  >
+                    Somos una empresa con larga trayectoria en el mercado Retail
+                    y manejo de tiendas en reconocidas marcas deportivas a nivel
+                    internacional, tales como CAT, CONVERSE, FILA, MERRELL,
+                    UMBRO Y COLISEUM, ofrecemos variedad de productos de calzado
+                    y textil. Somos una empresa con larga trayectoria en el
+                    mercado Retail y manejo de tiendas en reconocidas marcas
+                    deportivas a nivel internacional, tales como CAT, CONVERSE,
+                    FILA, MERRELL, UMBRO Y COLISEUM, ofrecemos variedad de
+                    productos de calzado y manejo de tiendas en reconocidas
+                    marcas deportivas a nivel internacional, tales como CAT,
+                    CONVERSE, FILA, MERRELL, UMBRO Y COLISEUM, ofrecemos
+                    variedad de productos de calzado y textil. Somos una empresa
+                    con larga trayectoria en el mercado Retail y manejo de
+                    tiendas en reconocidas marcas deportivas a nivel
+                    internacional, tales como CAT, CONVERSE, FILA, MERRELL,
+                    UMBRO Y COLISEUM, ofrecemos variedad de productos de calzado
+                    y manejo de tiendas en reconocidas marcas deportivas a nivel
+                    internacional, tales como CAT, CONVERSE, FILA, MERRELL,
+                    UMBRO Y COLISEUM, ofrecemos variedad de productos de calzado
+                    y textil. Somos una empresa con larga trayectoria en el
+                    mercado Retail y manejo de tiendas en reconocidas marcas
+                    deportivas a nivel internacional, tales como CAT, CONVERSE,
+                    FILA, MERRELL, UMBRO Y COLISEUM, ofrecemos variedad de
+                    productos de calzado y
+                  </Typography>
+                </Box>
+              </SwipperableDr>
+            )}
+
+            <Grid
+              item
+              xs={12}
+              sm={7}
+              sx={{
+                [theme.breakpoints.down("sm")]: {
+                  display: "none",
+                },
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  padding: "1rem",
+                  border: "1px solid #e0e0e0",
+                  height: "100%",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "start",
+                    columnGap: "1rem",
+                  }}
+                >
+                  <Box>
+                    <Typography variant="h6">Desarrollador Frontend</Typography>
+                    <Link
+                      href="https://www.google.com"
+                      target="_blank"
+                      sx={{
+                        width: "fit-content",
+                        fontSize: "1rem",
+                      }}
+                    >
+                      Google
+                    </Link>
+                  </Box>
+                  <img
+                    src="
+                    https://cdn.pixabay.com/photo/2021/08/10/15/36/microsoft-6536268_1280.png"
+                    alt=""
+                    style={{
+                      width: "3rem",
+                      height: "3rem",
+                    }}
+                  />
+                </Box>
+
+                <Typography
+                  sx={{
+                    fontSize: "1rem",
+                  }}
+                >
+                  Colombia, Bogotá
+                </Typography>
+                <Box
+                  sx={{
+                    marginTop: "1rem",
+                    display: "flex",
+                    columnGap: "1rem",
+                    alignItems: "center",
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    sx={{
+                      width: "fit-content",
+                      borderRadius: "20px",
+                    }}
+                  >
+                    Postularme
+                  </Button>
+                  <IconButton
+                    color="primary"
+                    aria-label="upload picture"
+                    onClick={(e: any) => setAnchorEl(e.currentTarget)}
+                  >
+                    <Share />
+                  </IconButton>
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    <MenuItem
+                      onClick={handleShareFacebook}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        columnGap: "0.5rem",
+                      }}
+                    >
+                      <Facebook />
+                      <Typography
+                        component={"span"}
+                        sx={{
+                          fontSize: "0.9rem",
+                        }}
+                      >
+                        Facebook
+                      </Typography>
+                    </MenuItem>
+                    <MenuItem
+                      onClick={handleShareInstagram}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        columnGap: "0.5rem",
+                      }}
+                    >
+                      <WhatsApp />
+                      <Typography
+                        component={"span"}
+                        sx={{
+                          fontSize: "0.9rem",
+                        }}
+                      >
+                        Whatsapp
+                      </Typography>
+                    </MenuItem>
+                  </Menu>
+                </Box>
+                <Divider sx={{ marginTop: "1rem" }} />
+                <Typography
+                  sx={{
+                    marginTop: "1rem",
+                    fontWeight: 400,
+                    color: "##313944",
+                  }}
+                >
+                  Somos una empresa con larga trayectoria en el mercado Retail y
+                  manejo de tiendas en reconocidas marcas deportivas a nivel
+                  internacional, tales como CAT, CONVERSE, FILA, MERRELL, UMBRO
+                  Y COLISEUM, ofrecemos variedad de productos de calzado y
+                  textil.
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
         </Box>
       </Container>
     </>
