@@ -45,7 +45,7 @@ const MyAccount = () => {
 
   return (
     <>
-      <HeaderButtons isAuthenticated={true} showLogo={true} />
+      <HeaderButtons showLogo={true} />
       <Box
         // maxWidth=""
         sx={{

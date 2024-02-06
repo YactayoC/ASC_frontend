@@ -36,6 +36,10 @@ const SearchJob = () => {
         value: search,
         location: location,
       });
+      localStorage.setItem(
+        "searchValue",
+        JSON.stringify({ value: search, location: location })
+      );
       navigate(`/candidate/search/${search}/${location}`);
     } else {
       return toast.error("Ingrese un puesto para buscar", {
@@ -54,6 +58,15 @@ const SearchJob = () => {
       setLocation(valueAtomSearch.location);
     }
   }, [valueAtomSearch]);
+
+  useEffect(() => {
+    const searchValue = localStorage.getItem("searchValue");
+    if (searchValue) {
+      const value = JSON.parse(searchValue);
+      setSearch(value.value);
+      setLocation(value.location);
+    }
+  }, []);
 
   return (
     <>

@@ -88,7 +88,7 @@ const MyCV = () => {
 
   return (
     <>
-      <HeaderButtons isAuthenticated={true} showLogo={true} />
+      <HeaderButtons showLogo={true} />
       <Box
         // maxWidth="xxl"
         sx={{

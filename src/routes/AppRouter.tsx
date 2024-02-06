@@ -6,6 +6,7 @@ import Alerts from "../pages/candidate/Alerts";
 import MyAccount from "../pages/candidate/MyAccount";
 import MyCV from "../pages/candidate/MyCV";
 import ResultsSearch from "../pages/candidate/ResultsSearch";
+import MyApplications from "../pages/candidate/MyApplications";
 
 export const AppRouter = () => {
   return (
@@ -19,6 +20,7 @@ export const AppRouter = () => {
 
         {/* Candidate */}
         <Route path="/candidate/alerts" element={<Alerts />} />
+        <Route path="/candidate/my-applications" element={<MyApplications />} />
         <Route path="/candidate/my-account" element={<MyAccount />} />
         <Route path="/candidate/my-cv" element={<MyCV />} />
         <Route

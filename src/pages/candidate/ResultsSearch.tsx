@@ -24,23 +24,37 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useState } from "react";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { Facebook, Share, WhatsApp } from "@mui/icons-material";
+import dayjs from "dayjs";
 
 import HeaderButtons from "../../components/candidate/HeaderButtons";
 import theme from "../../../theme";
 import SearchJob from "../../components/common/SearchJob";
-import dayjs from "dayjs";
-
 import { jobs } from "../../seed/resultsSearchJob";
 import SwipperableDr from "../../components/common/SwipperableDr";
 
 const ResultsSearch = () => {
   const [open, setOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const { value, location } = useParams();
-  const [buttonOrderBy, setButtonOrderBy] = useState<string>("");
+  const [buttonOrderBy, setButtonOrderBy] = useState("recientes");
   const [anchorEl, setAnchorEl] = useState(null);
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const itemsPerPage = 5;
+  const totalPages = Math.ceil(jobs.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentJobs = jobs.slice(startIndex, endIndex);
+
   console.log(location);
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -59,7 +73,7 @@ const ResultsSearch = () => {
 
   return (
     <>
-      <HeaderButtons isAuthenticated={true} showLogo={true} />
+      <HeaderButtons showLogo={true} />
 
       {/* Banner */}
       {/* <Box
@@ -345,7 +359,7 @@ const ResultsSearch = () => {
                   paddingBottom: "1rem",
                 }}
               >
-                {jobs.map((prob) => (
+                {currentJobs.slice(0, 5).map((prob) => (
                   <Card
                     key={prob.id}
                     sx={{
@@ -422,8 +436,9 @@ const ResultsSearch = () => {
                   <Button
                     variant="contained"
                     color="primary"
-                    disabled
+                    disabled={currentPage === 1}
                     size="large"
+                    onClick={handlePrevPage}
                     sx={{
                       width: "100%",
                       borderRadius: "20px",
@@ -434,7 +449,9 @@ const ResultsSearch = () => {
                   <Button
                     variant="contained"
                     color="primary"
+                    disabled={currentPage === totalPages}
                     size="large"
+                    onClick={handleNextPage}
                     sx={{
                       width: "100%",
                       borderRadius: "20px",

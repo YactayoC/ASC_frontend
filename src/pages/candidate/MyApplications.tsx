@@ -16,7 +16,7 @@ import theme from "../../../theme";
 import ButtonSocials from "../../components/common/ButtonSocials";
 import { useState } from "react";
 
-const Alerts = () => {
+const MyApplications = () => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -151,24 +151,85 @@ const Alerts = () => {
               variant="h4"
               gutterBottom
               sx={{
+                marginBottom: "0",
                 [theme.breakpoints.down("sm")]: {
                   fontSize: "1.5rem",
                 },
               }}
             >
-              Mis alertas
+              Mis postulaciones
             </Typography>
-            <Button
+            <TextField
+              label="Buscar puesto postulado"
               variant="outlined"
+              margin="normal"
+              type="text"
+              sx={{
+                width: "20rem",
+              }}
+            />
+          </Box>
+
+          <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
+            <Button
+              variant="contained"
+              color="primary"
               onClick={handleOpen}
               sx={{
-                width: "fit-content",
                 [theme.breakpoints.down("sm")]: {
-                  width: "100%",
+                  fontSize: "0.8rem",
                 },
               }}
             >
-              Agregar alerta
+              Todos
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleOpen}
+              sx={{
+                [theme.breakpoints.down("sm")]: {
+                  fontSize: "0.8rem",
+                },
+              }}
+            >
+              Todos
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleOpen}
+              sx={{
+                [theme.breakpoints.down("sm")]: {
+                  fontSize: "0.8rem",
+                },
+              }}
+            >
+              Todos
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleOpen}
+              sx={{
+                [theme.breakpoints.down("sm")]: {
+                  fontSize: "0.8rem",
+                },
+              }}
+            >
+              Todos
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleOpen}
+              sx={{
+                [theme.breakpoints.down("sm")]: {
+                  fontSize: "0.8rem",
+                },
+              }}
+            >
+              Todos
             </Button>
           </Box>
 
@@ -214,7 +275,6 @@ const Alerts = () => {
 
               <Button variant="outlined">Editar</Button>
             </Box>
-
             <Box
               sx={{
                 display: "flex",
@@ -320,4 +380,4 @@ const Alerts = () => {
   );
 };
 
-export default Alerts;
+export default MyApplications;

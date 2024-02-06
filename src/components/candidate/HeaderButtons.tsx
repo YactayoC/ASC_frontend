@@ -6,16 +6,13 @@ import theme from "../../../theme";
 import { MouseEvent, useEffect, useState } from "react";
 
 interface Props {
-  isAuthenticated: boolean;
   showLogo?: boolean;
 }
 
-const HeaderButtons = ({
-  isAuthenticated = false,
-  showLogo = false,
-}: Props) => {
+const HeaderButtons = ({ showLogo = false }: Props) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -26,13 +23,9 @@ const HeaderButtons = ({
     setAnchorEl(null);
   };
 
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
-
   const handleClickOutside = (event: any) => {
     if (anchorEl && !anchorEl.contains(event.target as Node)) {
-      handleCloseMenu();
+      setAnchorEl(null);
     }
   };
 
@@ -43,6 +36,16 @@ const HeaderButtons = ({
       document.removeEventListener("click", handleClickOutside);
     };
   }, [anchorEl]);
+
+  useEffect(() => {
+    const storedIsAuthenticated = localStorage.getItem("isAuthenticated");
+    setIsAuthenticated(storedIsAuthenticated === "true");
+  }, []);
+
+  useEffect(() => {
+    if (isAuthenticated === null) return;
+    localStorage.setItem("isAuthenticated", JSON.stringify(isAuthenticated));
+  }, [isAuthenticated]);
 
   if (isAuthenticated) {
     return (
@@ -98,18 +101,6 @@ const HeaderButtons = ({
           <Button
             variant="contained"
             color="primary"
-            onClick={() => navigate("/candidate/alerts")}
-            sx={{
-              display: "flex",
-              gap: "0.2rem",
-              alignItems: "center",
-            }}
-          >
-            Mis alertas
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
             // onClick={() => navigate("/auth/candidate/register")}
             sx={{
               display: "flex",
@@ -118,6 +109,18 @@ const HeaderButtons = ({
             }}
           >
             Mis postulaciones
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate("/candidate/alerts")}
+            sx={{
+              display: "flex",
+              gap: "0.2rem",
+              alignItems: "center",
+            }}
+          >
+            Mis alertas
           </Button>
           <Avatar
             src="https://fotosprofesionales.es/wp-content/uploads/2023/08/fotografo-de-retrato-madrid-foto-corporativa-hombre-12.jpg"
@@ -129,10 +132,11 @@ const HeaderButtons = ({
             }}
             onClick={handleClick}
           />
+
           <Menu
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
-            onClose={handleClose}
+            onClose={handleClickOutside}
             sx={{
               "& .MuiMenu-paper": {
                 marginTop: "1rem",
@@ -145,7 +149,7 @@ const HeaderButtons = ({
             }}
           >
             <Box
-              onClick={() => handleClose("")}
+              onClick={handleClickOutside}
               sx={{
                 backgroundColor: "primary.main",
                 cursor: "pointer",
@@ -160,30 +164,29 @@ const HeaderButtons = ({
             >
               Luis de Tomas
             </Box>
-            {/* <MenuItem
-              disableTouchRipple
-              selected
-              onClick={() => handleClose("")}
-              sx={{
-                backgroundColor: "primary.main",
-                color: "white",
-                fontWeight: "bold",
-                "&:hover": {
-                  backgroundColor: "primary.main",
-                },
-              }}
-            >
-              Luis de Tomas
-            </MenuItem> */}
             <MenuItem onClick={() => handleClose("/candidate/my-account")}>
               Mi cuenta
             </MenuItem>
             <MenuItem onClick={() => handleClose("/candidate/my-cv")}>
               Mi CV
             </MenuItem>
-            <MenuItem onClick={() => handleClose("")}>Cerrar sesion</MenuItem>
+            <MenuItem onClick={() => handleClose("/")}>Cerrar sesion</MenuItem>
           </Menu>
         </Box>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            setIsAuthenticated(!isAuthenticated);
+          }}
+          sx={{
+            display: "flex",
+            columnGap: "0.2rem",
+            alignItems: "center",
+          }}
+        >
+          {isAuthenticated ? "Cerrar sesión" : "Iniciar sesión"}
+        </Button>
       </Box>
     );
   }
@@ -236,6 +239,21 @@ const HeaderButtons = ({
           }}
         />
         Postula aquí
+      </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        type="button"
+        onClick={() => {
+          setIsAuthenticated(!isAuthenticated);
+        }}
+        sx={{
+          display: "flex",
+          columnGap: "0.2rem",
+          alignItems: "center",
+        }}
+      >
+        {isAuthenticated ? "Cerrar sesión" : "Iniciar sesión"}
       </Button>
     </Box>
   );

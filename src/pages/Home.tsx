@@ -34,7 +34,7 @@ function Home() {
           position: "relative",
         }}
       >
-        <HeaderButtons isAuthenticated={true} />
+        <HeaderButtons />
         <Container>
           <Box
             sx={{
