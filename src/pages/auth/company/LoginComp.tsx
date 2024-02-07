@@ -11,7 +11,7 @@ import { ArrowBack } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import theme from "../../../../theme";
 
-const Login = () => {
+const LoginComp = () => {
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
   const [email, setEmail] = useState("");
@@ -135,4 +135,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginComp;

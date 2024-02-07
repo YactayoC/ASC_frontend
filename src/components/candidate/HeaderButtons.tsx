@@ -215,6 +215,7 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
           gap: "0.2rem",
           alignItems: "center",
         }}
+        onClick={() => navigate("/auth/company/register")}
       >
         <PostAddOutlined
           sx={{
