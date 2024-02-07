@@ -55,6 +55,7 @@ const MyAccount = () => {
           marginBottom: "2rem",
           rowGap: "2rem",
           border: "1px solid #a7a7a7",
+          backgroundColor: "white",
           padding: "1rem",
           width: "100%",
           maxWidth: "95%",

@@ -101,7 +101,7 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
           <Button
             variant="contained"
             color="primary"
-            // onClick={() => navigate("/auth/candidate/register")}
+            onClick={() => navigate("/candidate/my-applications")}
             sx={{
               display: "flex",
               columnGap: "0.2rem",

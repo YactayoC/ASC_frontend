@@ -137,6 +137,7 @@ const Alerts = () => {
             display: "flex",
             flexDirection: "column",
             rowGap: "2rem",
+            backgroundColor: "white",
           }}
         >
           <Box
