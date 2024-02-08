@@ -57,13 +57,18 @@ const RegisterComp = () => {
               <RadioButtonUnchecked />
             )
           }
-          //   onClick={(e) => handleChange(e, i)}
+        //   onClick={(e) => handleChange(e, i)}
         />
       );
     }
 
     return tabs;
   };
+
+  const handleRegisterComp = () => {
+    navigate("/company/my-ads");
+    localStorage.setItem("isCompany", JSON.stringify(true));
+  }
 
   const top100Films = [
     { label: "The Shawshank Redemption", year: 1994 },
@@ -246,7 +251,7 @@ const RegisterComp = () => {
                   />
                 </Grid>
               </Grid>
-              <Button variant="contained" color="primary">
+              <Button variant="contained" color="primary" onClick={handleRegisterComp}>
                 Continuar
               </Button>
             </Box>

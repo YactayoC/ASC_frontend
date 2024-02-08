@@ -64,15 +64,14 @@ const MyAccountComp = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          marginTop: "2rem",
-          marginBottom: "2rem",
+          marginTop: "3rem",
           rowGap: "2rem",
           border: "1px solid #a7a7a7",
           backgroundColor: "white",
           padding: "1rem",
           width: "100%",
           maxWidth: "95%",
-          margin: "auto",
+          margin: "auto auto 2rem auto",
         }}
       >
         <Typography variant="h4" textAlign="left" gutterBottom>
@@ -298,7 +297,7 @@ const MyAccountComp = () => {
           </Box>
         )}
 
-        { tabValue === 1 && (
+        {tabValue === 1 && (
           <Box
             sx={{
               padding: "1rem",

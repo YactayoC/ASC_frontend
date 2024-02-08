@@ -10,6 +10,7 @@ import MyApplications from "../pages/candidate/MyApplications";
 import RegisterComp from "../pages/auth/company/RegisterComp";
 import LoginComp from "../pages/auth/company/LoginComp";
 import MyAccountComp from "../pages/company/MyAccountComp";
+import MyAdsComp from "../pages/company/MyAdsComp";
 
 export const AppRouter = () => {
   return (
@@ -35,6 +36,7 @@ export const AppRouter = () => {
         <Route path="/auth/company/login" element={<LoginComp />} />
         <Route path="/auth/company/register" element={<RegisterComp />} />
         <Route path="/company/my-account" element={<MyAccountComp />} />
+        <Route path="/company/my-ads" element={<MyAdsComp />} />
 
         {/* <Route
             path="/admin/*"

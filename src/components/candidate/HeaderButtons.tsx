@@ -13,6 +13,7 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [verifyCompany, setVerifyCompany] = useState<boolean>(false);
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -40,6 +41,11 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
   useEffect(() => {
     const storedIsAuthenticated = localStorage.getItem("isAuthenticated");
     setIsAuthenticated(storedIsAuthenticated === "true");
+  }, []);
+
+  useEffect(() => {
+    const storedIsCompany = localStorage.getItem("isCompany");
+    setVerifyCompany(storedIsCompany === "true");
   }, []);
 
   useEffect(() => {
@@ -83,96 +89,190 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
           </Box>
         )}
 
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            paddingRight: "2rem",
-            gap: "10px",
-            width: "100%",
-            marginBlock: "2rem",
-            [theme.breakpoints.down("sm")]: {
-              justifyContent: "center",
-              paddingRight: "0",
-            },
-          }}
-        >
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => navigate("/candidate/my-applications")}
+        {verifyCompany ? (
+          <Box
             sx={{
               display: "flex",
-              columnGap: "0.2rem",
+              justifyContent: "flex-end",
               alignItems: "center",
-            }}
-          >
-            Mis postulaciones
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => navigate("/candidate/alerts")}
-            sx={{
-              display: "flex",
-              gap: "0.2rem",
-              alignItems: "center",
-            }}
-          >
-            Mis alertas
-          </Button>
-          <Avatar
-            src="https://fotosprofesionales.es/wp-content/uploads/2023/08/fotografo-de-retrato-madrid-foto-corporativa-hombre-12.jpg"
-            alt="avatar"
-            sx={{
-              width: "3rem",
-              height: "3rem",
-              cursor: "pointer",
-            }}
-            onClick={handleClick}
-          />
-
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleClickOutside}
-            sx={{
-              "& .MuiMenu-paper": {
-                marginTop: "1rem",
-              },
-
-              "& .MuiList-root": {
-                paddingBottom: "0 !important",
-                paddingTop: "0",
+              paddingRight: "2rem",
+              gap: "10px",
+              width: "100%",
+              marginBlock: "2rem",
+              [theme.breakpoints.down("sm")]: {
+                justifyContent: "center",
+                paddingRight: "0",
               },
             }}
           >
-            <Box
-              onClick={handleClickOutside}
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => navigate("/")}
               sx={{
-                backgroundColor: "primary.main",
+                display: "flex",
+                columnGap: "0.2rem",
+                alignItems: "center",
+              }}
+            >
+              Publicar anuncio
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => navigate("/company/my-ads")}
+              sx={{
+                display: "flex",
+                gap: "0.2rem",
+                alignItems: "center",
+              }}
+            >
+              Mis avisos
+            </Button>
+            <Avatar
+              src="https://fotosprofesionales.es/wp-content/uploads/2023/08/fotografo-de-retrato-madrid-foto-corporativa-hombre-12.jpg"
+              alt="avatar"
+              sx={{
+                width: "3rem",
+                height: "3rem",
                 cursor: "pointer",
-                color: "white",
-                fontWeight: "bold",
-                paddingBlock: "0.5rem",
-                textAlign: "center",
-                "&:hover": {
-                  backgroundColor: "primary.main",
+              }}
+              onClick={handleClick}
+            />
+
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleClickOutside}
+              sx={{
+                width: "100%",
+                "& .MuiMenu-paper": {
+                  marginTop: "1rem",
+                },
+
+                "& .MuiList-root": {
+                  paddingBottom: "0 !important",
+                  paddingTop: "0",
                 },
               }}
             >
-              Luis de Tomas
-            </Box>
-            <MenuItem onClick={() => handleClose("/candidate/my-account")}>
-              Mi cuenta
-            </MenuItem>
-            <MenuItem onClick={() => handleClose("/candidate/my-cv")}>
-              Mi CV
-            </MenuItem>
-            <MenuItem onClick={() => handleClose("/")}>Cerrar sesion</MenuItem>
-          </Menu>
-        </Box>
+              <Box
+                onClick={handleClickOutside}
+                sx={{
+                  backgroundColor: "primary.main",
+                  cursor: "pointer",
+                  color: "white",
+                  fontWeight: "bold",
+                  paddingBlock: "0.5rem",
+                  textAlign: "center",
+                  "&:hover": {
+                    backgroundColor: "primary.main",
+                  },
+                }}
+              >
+                CTA Empresarial
+              </Box>
+              <MenuItem onClick={() => handleClose("/company/my-account")}>
+                Editar perfil
+              </MenuItem>
+              <MenuItem onClick={() => handleClose("/candidate/my-cv")}>
+                Notificaciones
+              </MenuItem>
+              <MenuItem onClick={() => handleClose("/")}>Cerrar sesion</MenuItem>
+            </Menu>
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              paddingRight: "2rem",
+              gap: "10px",
+              width: "100%",
+              marginBlock: "2rem",
+              [theme.breakpoints.down("sm")]: {
+                justifyContent: "center",
+                paddingRight: "0",
+              },
+            }}
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => navigate("/candidate/my-applications")}
+              sx={{
+                display: "flex",
+                columnGap: "0.2rem",
+                alignItems: "center",
+              }}
+            >
+              Mis postulaciones
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => navigate("/candidate/alerts")}
+              sx={{
+                display: "flex",
+                gap: "0.2rem",
+                alignItems: "center",
+              }}
+            >
+              Mis alertas
+            </Button>
+            <Avatar
+              src="https://fotosprofesionales.es/wp-content/uploads/2023/08/fotografo-de-retrato-madrid-foto-corporativa-hombre-12.jpg"
+              alt="avatar"
+              sx={{
+                width: "3rem",
+                height: "3rem",
+                cursor: "pointer",
+              }}
+              onClick={handleClick}
+            />
+
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleClickOutside}
+              sx={{
+                "& .MuiMenu-paper": {
+                  marginTop: "1rem",
+                },
+
+                "& .MuiList-root": {
+                  paddingBottom: "0 !important",
+                  paddingTop: "0",
+                },
+              }}
+            >
+              <Box
+                onClick={handleClickOutside}
+                sx={{
+                  backgroundColor: "primary.main",
+                  cursor: "pointer",
+                  color: "white",
+                  fontWeight: "bold",
+                  paddingBlock: "0.5rem",
+                  textAlign: "center",
+                  "&:hover": {
+                    backgroundColor: "primary.main",
+                  },
+                }}
+              >
+                Luis de Tomas
+              </Box>
+              <MenuItem onClick={() => handleClose("/candidate/my-account")}>
+                Mi cuenta
+              </MenuItem>
+              <MenuItem onClick={() => handleClose("/candidate/my-cv")}>
+                Mi CV
+              </MenuItem>
+              <MenuItem onClick={() => handleClose("/")}>Cerrar sesion</MenuItem>
+            </Menu>
+          </Box>
+        )}
         <Button
           variant="contained"
           color="primary"
