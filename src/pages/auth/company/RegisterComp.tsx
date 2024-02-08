@@ -67,7 +67,8 @@ const RegisterComp = () => {
 
   const handleRegisterComp = () => {
     navigate("/company/my-ads");
-    localStorage.setItem("isCompany", JSON.stringify(true));
+    localStorage.setItem("isCompany", "true");
+    localStorage.setItem("isAuthenticated", "true");
   }
 
   const top100Films = [

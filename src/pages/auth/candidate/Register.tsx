@@ -55,13 +55,19 @@ const Register = () => {
               <RadioButtonUnchecked />
             )
           }
-          //   onClick={(e) => handleChange(e, i)}
+        //   onClick={(e) => handleChange(e, i)}
         />
       );
     }
 
     return tabs;
   };
+
+  const handleRegister = () => {
+    navigate("/");
+    localStorage.setItem("isCompany", "false");
+    localStorage.setItem("isAuthenticated", "true");
+  }
 
   return (
     <>
@@ -204,7 +210,7 @@ const Register = () => {
               <TextField label="Nombres" variant="outlined" fullWidth />
               <TextField label="Apellidos" variant="outlined" fullWidth />
               <TextField label="Password" variant="outlined" fullWidth />
-              <Button variant="contained" color="primary">
+              <Button variant="contained" color="primary" onClick={handleRegister}>
                 Continuar
               </Button>
             </Box>
