@@ -463,7 +463,7 @@ const ResultsSearch = () => {
               </Box>
             </Grid>
 
-            {/* Seleccionar detalle */}
+            {/* Seleccionar detalle movil */}
             {isSmallScreen && (
               <SwipperableDr open={open} setOpen={setOpen}>
                 <Box
@@ -624,7 +624,7 @@ const ResultsSearch = () => {
                 </Box>
               </SwipperableDr>
             )}
-
+            {/* Seleccionar detalle escritorio */}
             <Grid
               item
               xs={12}
