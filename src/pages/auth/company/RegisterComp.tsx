@@ -8,6 +8,8 @@ import {
   Container,
   Tabs,
   IconButton,
+  Grid,
+  Autocomplete,
 } from "@mui/material";
 import {
   ArrowBack,
@@ -17,7 +19,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import theme from "../../../../theme";
 
-const Register = () => {
+const RegisterComp = () => {
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
   const [email, setEmail] = useState("");
@@ -63,11 +65,19 @@ const Register = () => {
     return tabs;
   };
 
-  const handleRegister = () => {
-    navigate("/");
-    localStorage.setItem("isCompany", "false");
+  const handleRegisterComp = () => {
+    navigate("/company/my-ads");
+    localStorage.setItem("isCompany", "true");
     localStorage.setItem("isAuthenticated", "true");
   }
+
+  const top100Films = [
+    { label: "The Shawshank Redemption", year: 1994 },
+    { label: "The Godfather", year: 1972 },
+    { label: "The Godfather: Part II", year: 1974 },
+    { label: "The Dark Knight", year: 2008 },
+    { label: "12 Angry", year: 1957 },
+  ];
 
   return (
     <>
@@ -152,7 +162,7 @@ const Register = () => {
               <Button variant="contained" color="primary" onClick={handleNext}>
                 Continuar
               </Button>
-              <Link to="/auth/candidate/login">
+              <Link to="/auth/company/login">
                 <Typography align="center" gutterBottom>
                   ¿Ya tienes una cuenta? Inicia sesión
                 </Typography>
@@ -207,10 +217,42 @@ const Register = () => {
               <Typography align="center" gutterBottom>
                 Asociaremos este nombre con
               </Typography>
-              <TextField label="Nombres" variant="outlined" fullWidth />
-              <TextField label="Apellidos" variant="outlined" fullWidth />
-              <TextField label="Password" variant="outlined" fullWidth />
-              <Button variant="contained" color="primary" onClick={handleRegister}>
+              <TextField label="Nombres y apellidos" variant="outlined" fullWidth />
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <TextField label="Contraseña" variant="outlined" fullWidth type="password" />
+                </Grid>
+                <Grid item xs={8}>
+                  <TextField label="Sector" variant="outlined" fullWidth />
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField label="Nombre comercial" variant="outlined" fullWidth />
+                </Grid>
+                <Grid item xs={8}>
+                  <TextField label="Razón social" variant="outlined" fullWidth />
+                </Grid>
+                <Grid item xs={4}>
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={top100Films}
+                    sx={{ width: "fullWidth" }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Sector" />
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={8}>
+                  <TextField
+                    id="outlined-multiline-static"
+                    label="Descripción"
+                    multiline
+                    sx={{ width: "100%" }}
+                    rows={6}
+                  />
+                </Grid>
+              </Grid>
+              <Button variant="contained" color="primary" onClick={handleRegisterComp}>
                 Continuar
               </Button>
             </Box>
@@ -221,4 +263,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default RegisterComp;

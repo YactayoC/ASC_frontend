@@ -16,6 +16,7 @@ import {
 import theme from "../../../theme";
 import ButtonSocials from "../../components/common/ButtonSocials";
 import { useState } from "react";
+import { HeaderMainPage } from "../../components/layout/HeaderMainPage";
 
 const Alerts = () => {
   const [open, setOpen] = useState(false);
@@ -136,6 +137,7 @@ const Alerts = () => {
                 sx={{
                   display: "flex",
                   flexDirection: "column",
+                  padding: "0.8rem",  
                 }}
               >
                 <Typography
@@ -147,36 +149,14 @@ const Alerts = () => {
                     },
                   }}
                 >
-                  Puesto de interés
+                  Frecuencia de envío
                 </Typography>
                 <Typography variant="body2" gutterBottom>
-                  Desarrollador Frontend - Lima
+                Una vez cada 2 días
                 </Typography>
               </Box>
 
               <Button variant="outlined">Editar</Button>
-            </Box>
-
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <Typography
-                variant="h5"
-                gutterBottom
-                sx={{
-                  [theme.breakpoints.down("sm")]: {
-                    fontSize: "1.2rem",
-                  },
-                }}
-              >
-                Frecuencia de envío
-              </Typography>
-              <Typography variant="body2" gutterBottom>
-                Una vez cada 2 días
-              </Typography>
             </Box>
           </Box>
         </Box>

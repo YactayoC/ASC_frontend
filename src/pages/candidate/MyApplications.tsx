@@ -11,10 +11,12 @@ import {
   Select,
   TextField,
   Typography,
+  Switch,
 } from "@mui/material";
 import theme from "../../../theme";
 import ButtonSocials from "../../components/common/ButtonSocials";
 import { useState } from "react";
+import { HeaderMainPage } from "../../components/layout/HeaderMainPage";
 
 const MyApplications = () => {
   const [open, setOpen] = useState(false);
@@ -37,67 +39,7 @@ const MyApplications = () => {
     <>
       <HeaderButtons showLogo={true} />
       {/* Banner */}
-      <Box
-        sx={{
-          width: "100%",
-          height: "100%",
-          borderBlock: "2px solid #2b78e4",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          paddingInline: "5rem",
-          paddingBlock: "2rem",
-        }}
-      >
-        <Box
-          sx={{
-            flexDirection: "row",
-            display: "flex",
-            width: "100%",
-            justifyContent: "space-between",
-            alignItems: "center",
-            rowGap: "2rem",
-            [theme.breakpoints.down("sm")]: {
-              flexDirection: "column",
-            },
-          }}
-        >
-          <Box>
-            <img
-              src="/alert-1.png"
-              alt="banner"
-              style={{
-                width: "10rem",
-                height: "10rem",
-              }}
-            />
-          </Box>
-
-          <Typography
-            variant="h4"
-            gutterBottom
-            align="center"
-            color={"#2b78e4"}
-            fontWeight={700}
-          >
-            Únete a nuestro equipo de trabajo
-          </Typography>
-          <Box>
-            <img
-              src="/alert-2.png"
-              alt="banner"
-              style={{
-                width: "10rem",
-                height: "10rem",
-              }}
-            />
-          </Box>
-        </Box>
-        <Typography variant="h6" gutterBottom align="center" color={"#666666"}>
-          ¡Aquí encontraras el empleo que buscabas!
-        </Typography>
-      </Box>
+      <HeaderMainPage />
 
       {/* Alertas */}
       <Container
@@ -137,6 +79,7 @@ const MyApplications = () => {
             display: "flex",
             flexDirection: "column",
             rowGap: "2rem",
+            backgroundColor: "#ffffff",
           }}
         >
           <Box
@@ -170,67 +113,101 @@ const MyApplications = () => {
             />
           </Box>
 
-          <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleOpen}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              [theme.breakpoints.down("sm")]: {
+                flexDirection: "column",
+                rowGap: "2rem",
+                justifyContent: "center",
+              },
+            }}
+          >
+            <Box
               sx={{
+                display: "flex",
+                justifyContent: "flex-start",
+                columnGap: "1.7rem",
                 [theme.breakpoints.down("sm")]: {
-                  fontSize: "0.8rem",
+                  flexDirection: "column",
+                  rowGap: "2rem",
                 },
               }}
             >
-              Todos
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleOpen}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleOpen}
+                sx={{
+                  [theme.breakpoints.down("sm")]: {
+                    fontSize: "0.8rem",
+                  },
+                }}
+              >
+                Todos
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleOpen}
+                sx={{
+                  [theme.breakpoints.down("sm")]: {
+                    fontSize: "0.8rem",
+                  },
+                }}
+              >
+                Postulaciones
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleOpen}
+                sx={{
+                  [theme.breakpoints.down("sm")]: {
+                    fontSize: "0.8rem",
+                  },
+                }}
+              >
+                CV Leido
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleOpen}
+                sx={{
+                  [theme.breakpoints.down("sm")]: {
+                    fontSize: "0.8rem",
+                  },
+                }}
+              >
+                CV en proceso
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleOpen}
+                sx={{
+                  [theme.breakpoints.down("sm")]: {
+                    fontSize: "0.8rem",
+                  },
+                }}
+              >
+                Proceso finalizado
+              </Button>
+            </Box>
+            <Box
               sx={{
-                [theme.breakpoints.down("sm")]: {
-                  fontSize: "0.8rem",
-                },
+                display: "flex",
+                alignItems: "center",
+                columnGap: "1rem",
               }}
             >
-              Todos
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleOpen}
-              sx={{
-                [theme.breakpoints.down("sm")]: {
-                  fontSize: "0.8rem",
-                },
-              }}
-            >
-              Todos
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleOpen}
-              sx={{
-                [theme.breakpoints.down("sm")]: {
-                  fontSize: "0.8rem",
-                },
-              }}
-            >
-              Todos
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleOpen}
-              sx={{
-                [theme.breakpoints.down("sm")]: {
-                  fontSize: "0.8rem",
-                },
-              }}
-            >
-              Todos
-            </Button>
+              <Typography gutterBottom fontWeight={400}>
+                Ordenar por fecha
+              </Typography>
+              <Switch aria-label="switch-offert" />
+            </Box>
           </Box>
 
           <Box
@@ -255,6 +232,7 @@ const MyApplications = () => {
                 sx={{
                   display: "flex",
                   flexDirection: "column",
+                  padding: "0.8rem",
                 }}
               >
                 <Typography
@@ -273,29 +251,9 @@ const MyApplications = () => {
                 </Typography>
               </Box>
 
-              <Button variant="outlined">Editar</Button>
+              <Button variant="outlined">Actualiza tu proceso</Button>
             </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <Typography
-                variant="h5"
-                gutterBottom
-                sx={{
-                  [theme.breakpoints.down("sm")]: {
-                    fontSize: "1.2rem",
-                  },
-                }}
-              >
-                Frecuencia de envío
-              </Typography>
-              <Typography variant="body2" gutterBottom>
-                Una vez cada 2 días
-              </Typography>
-            </Box>
+
           </Box>
         </Box>
       </Container>
@@ -344,7 +302,7 @@ const MyApplications = () => {
                 id="demo-simple-select"
                 value={10}
                 label="Ubicacion"
-                // onChange={handleChange}
+              // onChange={handleChange}
               >
                 <MenuItem value={10}>Lima</MenuItem>
                 <MenuItem value={20}>Chilca</MenuItem>
@@ -361,7 +319,7 @@ const MyApplications = () => {
                 id="demo-simple-select"
                 value={10}
                 label="Frecuencia de notificaciones"
-                // onChange={handleChange}
+              // onChange={handleChange}
               >
                 <MenuItem value={10}>Una vez cada 2 días</MenuItem>
                 <MenuItem value={20}>Una vez cada 3 días</MenuItem>
