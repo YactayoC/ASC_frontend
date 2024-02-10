@@ -1,5 +1,4 @@
 import HeaderButtons from "../../components/candidate/HeaderButtons";
-import HeaderMainPage from "../../components/layout/HeaderMainPage";
 import SearchJob from "../../components/common/SearchJob";
 import {
   Box,
