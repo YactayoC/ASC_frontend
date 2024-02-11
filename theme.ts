@@ -10,6 +10,7 @@ declare module "@mui/material/styles" {
     md: true;
     lgg: true;
     lg: true;
+    xll: true;
     xl: true;
     xxl: true;
   }
@@ -31,6 +32,7 @@ const theme = createTheme({
       md: 900, // Estandar para móvil / tablet
       lgg: 980,
       lg: 1200,
+      xll: 1250,
       xl: 1536,
       xxl: 1600,
     },

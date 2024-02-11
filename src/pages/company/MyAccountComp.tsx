@@ -99,25 +99,32 @@ const MyAccountComp = () => {
 
         {/* Cuadro segun tab */}
         {tabValue === 0 && (
+
           <Box
             sx={{
-              //   boxShadow: 3,
-              padding: "1rem",
               display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "flex-start",
+              padding: "2rem",
+              columnGap: "2rem",
               width: "100%",
-              flexDirection: "column",
-              rowGap: "2rem",
+              [theme.breakpoints.down("sm")]: {
+                flexDirection: "column",
+                gap: "1rem",
+              },
+              [theme.breakpoints.down("xll")]: {
+                flexDirection: "column",
+                gap: "1rem",
+                padding: "1rem",
+              },
             }}
           >
             <Box
-              display="flex"
-              alignItems="start"
-              gap={"2rem"}
               sx={{
-                [theme.breakpoints.down("sm")]: {
-                  flexDirection: "column",
-                  gap: "1rem",
+                [theme.breakpoints.down("xll")]: {
+                  alignSelf: "center",
                 },
+
               }}
             >
               <img
@@ -127,169 +134,211 @@ const MyAccountComp = () => {
                   width: "20rem",
                   height: "20rem",
                   cursor: "pointer",
+
+                  //HAZLO REPONSIVE
+
+
                 }}
               />
-
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "flex-start",
+                rowGap: "1rem",
+                flexDirection: "column",
+                width: "100%",
+              }}
+            >
+              <Typography variant="h4"
+                sx={{
+                  [theme.breakpoints.down("xll")]: {
+                    marginTop: "1rem",
+                  },
+                  [theme.breakpoints.down("mdd")]: {
+                    alignSelf: "center",
+                  }
+                }}
+              >
+                Datos del usuario
+              </Typography>
               <Box
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  rowGap: "0.5rem",
+                  rowGap: "2rem",
+                  width: "100%",
+
+                  [theme.breakpoints.down("mdd")]: {
+                    rowGap: "1rem",
+                  },
                 }}
               >
                 <Box
                   sx={{
                     display: "flex",
-                    alignItems: "flex-start",
-                    columnGap: "1rem",
-                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    columnGap: "2rem",
+                    [theme.breakpoints.down("mdd")]: {
+                      flexDirection: "column",
+                      gap: "1rem",
+                    },
                   }}
                 >
-                  <Typography variant="h4" gutterBottom>
-                    Datos del usuario
-                  </Typography>
-                  <Box
+                  <TextField
+                    label="Razon social"
+                    variant="outlined"
+                    type="text"
+                    fullWidth
+                  />
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={sectorCompany}
                     sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      rowGap: "1rem",
+                      width: "30rem",
+
+                      [theme.breakpoints.down("mdd")]: {
+                        width: "100%",
+                      },
                     }}
-                  >
-                    <Box
+                    renderInput={(params) => (
+                      <TextField {...params} label="Sector" />
+                    )}
+                  />
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="Fecha de fundación"
                       sx={{
-                        display: "flex",
-                        columnGap: "5rem",
-                        alignItems: "center",
+                        width: "80%",
+                        [theme.breakpoints.down("mdd")]: {
+                          width: "100%",
+                        },
                       }}
-                    >
-                      <TextField
-                        label="Razon social"
-                        variant="outlined"
-                        margin="normal"
-                        type="text"
-                        sx={{ width: "20rem" }}
-                      />
-                      <Autocomplete
-                        disablePortal
-                        id="combo-box-demo"
-                        options={sectorCompany}
-                        sx={{ width: "20rem" }}
-                        renderInput={(params) => (
-                          <TextField {...params} label="Sector" />
-                        )}
-                      />
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DemoContainer components={["DatePicker"]}>
-                          <DatePicker
-                            label="Fecha de fundación"
-                            sx={{ width: "20rem" }}
-                          />
-                        </DemoContainer>
-                      </LocalizationProvider>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <TextField
-                        label="RUC"
-                        variant="outlined"
-                        margin="normal"
-                        type="text"
-                        sx={{ width: "20rem" }}
-                      />
-                      <TextField
-                        label="Web"
-                        variant="outlined"
-                        margin="normal"
-                        type="text"
-                        sx={{ width: "20rem" }}
-                      />
-                      <TextField
-                        label="Correo"
-                        variant="outlined"
-                        margin="normal"
-                        type="text"
-                        sx={{ width: "20rem" }}
-                      />
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <TextField
-                        label="Teléfono"
-                        variant="outlined"
-                        margin="normal"
-                        type="text"
-                        sx={{ width: "20rem" }}
-                      />
-                      <TextField
-                        label="Móvil"
-                        variant="outlined"
-                        margin="normal"
-                        type="text"
-                        sx={{ width: "20rem" }}
-                      />
-                      <TextField
-                        label="País"
-                        variant="outlined"
-                        margin="normal"
-                        type="text"
-                        sx={{ width: "20rem" }}
-                      />
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Autocomplete
-                        disablePortal
-                        id="combo-box-demo"
-                        options={sectorCompany}
-                        sx={{ width: "20rem" }}
-                        renderInput={(params) => (
-                          <TextField {...params} label="Sector" />
-                        )}
-                      />
-                      <Autocomplete
-                        disablePortal
-                        id="combo-box-demo"
-                        options={sectorCompany}
-                        sx={{ width: "20rem" }}
-                        renderInput={(params) => (
-                          <TextField {...params} label="Sector" />
-                        )}
-                      />
-                      <Autocomplete
-                        disablePortal
-                        id="combo-box-demo"
-                        options={sectorCompany}
-                        sx={{ width: "20rem" }}
-                        renderInput={(params) => (
-                          <TextField {...params} label="Sector" />
-                        )}
-                      />
-                    </Box>
-                    <TextField
-                      id="outlined-multiline-static"
-                      label="Descripción"
-                      multiline
-                      sx={{ width: "100%", marginTop: "16px" }}
-                      rows={7}
                     />
-                  </Box>
+                  </LocalizationProvider>
                 </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    columnGap: "2rem",
+                    [theme.breakpoints.down("mdd")]: {
+                      flexDirection: "column",
+                      gap: "1rem",
+                    },
+                  }}
+                >
+                  <TextField
+                    label="RUC"
+                    variant="outlined"
+                    type="text"
+                    fullWidth
+                  />
+                  <TextField
+                    label="Web"
+                    variant="outlined"
+                    type="text"
+                    fullWidth
+                  />
+                  <TextField
+                    label="Correo"
+                    variant="outlined"
+                    type="text"
+                    fullWidth
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    columnGap: "2rem",
+                    [theme.breakpoints.down("mdd")]: {
+                      flexDirection: "column",
+                      gap: "1rem",
+                    },
+                  }}
+                >
+                  <TextField
+                    label="Teléfono"
+                    variant="outlined"
+                    type="text"
+                    fullWidth
+                  />
+                  <TextField
+                    label="Móvil"
+                    variant="outlined"
+                    type="text"
+                    fullWidth
+                  />
+                  <TextField
+                    label="País"
+                    variant="outlined"
+                    type="text"
+                    fullWidth
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    columnGap: "2rem",
+                    width: "100%",
+                    [theme.breakpoints.down("mdd")]: {
+                      flexDirection: "column",
+                      gap: "1rem",
+                    },
+                  }}
+                >
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={sectorCompany}
+                    sx={{
+                      width: "20rem",
+                      [theme.breakpoints.down("mdd")]: {
+                        width: "100%",
+                      },
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Departamento" />
+                    )}
+                  />
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={sectorCompany}
+                    sx={{
+                      width: "20rem",
+
+                      [theme.breakpoints.down("mdd")]: {
+                        width: "100%",
+                      },
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Provincia" />
+                    )}
+                  />
+                  <TextField
+                    label="Dirección"
+                    variant="outlined"
+                    type="text"
+                    fullWidth
+                  />
+                </Box>
+                <TextField
+                  id="outlined-multiline-static"
+                  label="Descripción"
+                  multiline
+                  fullWidth
+                  rows={7}
+                />
               </Box>
+
             </Box>
           </Box>
         )}
@@ -338,13 +387,11 @@ const MyAccountComp = () => {
                 <TextField
                   label="Nueva contraseña"
                   variant="outlined"
-                  margin="normal"
                   type="password"
                 />
                 <TextField
                   label="Confirma nueva contraseña"
                   variant="outlined"
-                  margin="normal"
                   type="password"
                 />
               </Box>
@@ -442,7 +489,7 @@ const MyAccountComp = () => {
             </Box>
           </Box>
         )}
-      </Box>
+      </Box >
 
       <Modal
         open={openModalEmail}
@@ -477,21 +524,18 @@ const MyAccountComp = () => {
             <TextField
               label="Email actual"
               variant="outlined"
-              margin="normal"
               type="email"
               fullWidth
             />
             <TextField
               label="Email nuevo"
               variant="outlined"
-              margin="normal"
               type="email"
               fullWidth
             />
             <TextField
               label="Repetir email nuevo"
               variant="outlined"
-              margin="normal"
               type="email"
               fullWidth
             />
