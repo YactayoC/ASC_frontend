@@ -15,6 +15,9 @@ import {
     ToggleButtonGroup,
     ToggleButton,
     Typography,
+    IconButton,
+    Menu,
+    MenuItem,
 } from "@mui/material";
 
 import { styled } from '@mui/material/styles';
@@ -22,12 +25,14 @@ import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 import { Add } from "@mui/icons-material";
+import MenuIcon from '@mui/icons-material/Menu';
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import SearchJob from "../../components/common/SearchJob";
 import theme from "../../../theme";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const PostMyAd = () => {
     const [tabValueHorizontal, setTabValueHorizontal] = useState(0);
@@ -35,6 +40,10 @@ const PostMyAd = () => {
     const [preview, setPreview] = useState(true);
     const [alignment, setAlignment] = useState('inscritos');
     const [showSearchBar, setShowSearchBar] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+
+    const isXXLDown = useMediaQuery(theme.breakpoints.down('xxl'));
 
     const handleChangeToogle = (_event: React.MouseEvent<HTMLElement>, newAlignment: string) => {
         setAlignment(newAlignment);
@@ -47,13 +56,19 @@ const PostMyAd = () => {
     const handleChangeVertical = (_e: any, newValue: number) => {
         setTabValueVertical(newValue);
         setShowSearchBar(newValue === 0);
-
     };
 
     const handleChangePreview = () => {
-        console.log("ver preview")
         setPreview(!preview);
     }
+
+    const handleClickMoreOptions = (event: { currentTarget: any; }) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     const sectorCompany = [
         { label: "Tecnología" },
@@ -84,6 +99,12 @@ const PostMyAd = () => {
         whiteSpace: 'nowrap',
         width: 1,
     });
+
+    const options = [
+        { id: 0, label: "Datos del aviso" },
+        { id: 1, label: "Datos de la publicación" },
+        { id: 2, label: "Proceso de selección" },
+    ];
 
     return (
         <Box>
@@ -144,6 +165,9 @@ const PostMyAd = () => {
                                 marginTop: "4rem",
                                 borderRight: 1,
                                 borderColor: "divider",
+                                [theme.breakpoints.down("xxl")]: {
+                                    display: "none",
+                                }
                             }}
                         >
                             <Tab label="Datos del aviso" value={0} />
@@ -154,10 +178,45 @@ const PostMyAd = () => {
                         <Box sx={{ flexGrow: 1, width: "100%" }}>
                             {tabValueVertical === 0 && (
                                 <Box>
+                                    {isXXLDown && (
+                                        <div>
+                                            <IconButton
+                                                aria-label="more"
+                                                id="long-button"
+                                                aria-controls={open ? 'long-menu' : undefined}
+                                                aria-expanded={open ? 'true' : undefined}
+                                                aria-haspopup="true"
+                                                onClick={handleClickMoreOptions}
+                                            >
+                                                <MenuIcon />
+                                            </IconButton>
+                                            <Menu
+                                                id="long-menu"
+                                                MenuListProps={{
+                                                    'aria-labelledby': 'long-button',
+                                                }}
+                                                anchorEl={anchorEl}
+                                                open={open}
+                                                onClose={handleClose}
+                                            >
+                                                {options.map((option) => (
+                                                    <MenuItem key={option.label} selected={option.label === 'Pyxis'} onClick={() => {
+                                                        handleClose();
+                                                        setTabValueVertical(option.id);
+                                                    }}>
+                                                        {option.label}
+                                                    </MenuItem>
+                                                ))}
+                                            </Menu>
+                                        </div>
+                                    )}
                                     <Tabs
                                         value={tabValueHorizontal}
                                         onChange={handleChange}
                                         aria-label="Horizontal tabs example"
+                                        variant="scrollable"
+                                        scrollButtons="auto"
+                                        allowScrollButtonsMobile
                                         sx={{
                                             borderBottom: 1,
                                             borderColor: "divider",
@@ -178,16 +237,10 @@ const PostMyAd = () => {
                                                 rowGap: "2.1rem",
                                                 paddingTop: "1rem",
                                                 width: "auto",
-                                                [theme.breakpoints.down("xl")]: {
-                                                    paddingRight: "2rem",
-                                                },
-                                                [theme.breakpoints.down("md")]: {
+                                                [theme.breakpoints.down("lg")]: {
                                                     paddingRight: "0",
                                                     rowGap: "1rem",
                                                 },
-                                                [theme.breakpoints.down("sm")]: {
-                                                    paddingRight: "2rem",
-                                                }
                                             }}
                                         >
                                             <FormControlLabel
@@ -195,7 +248,7 @@ const PostMyAd = () => {
                                                 label="Ocultar el nombre de la empresa"
                                                 sx={{
                                                     alignSelf: "flex-end",
-                                                    [theme.breakpoints.down("md")]: {
+                                                    [theme.breakpoints.down("lg")]: {
                                                         alignSelf: "flex-start",
                                                     }
                                                 }}
@@ -206,7 +259,7 @@ const PostMyAd = () => {
                                                     flexDirection: "row",
                                                     columnGap: "2rem",
                                                     justifyContent: "space-between",
-                                                    [theme.breakpoints.down("md")]: {
+                                                    [theme.breakpoints.down("lg")]: {
                                                         flexDirection: "column",
                                                         rowGap: "1rem",
                                                     }
@@ -223,7 +276,7 @@ const PostMyAd = () => {
                                                     options={sectorCompany}
                                                     sx={{
                                                         width: "20rem",
-                                                        [theme.breakpoints.down("md")]: {
+                                                        [theme.breakpoints.down("lg")]: {
                                                             width: "100%",
                                                         }
                                                     }}
@@ -240,7 +293,7 @@ const PostMyAd = () => {
                                                     columnGap: "2rem",
                                                     justifyContent: "space-between",
                                                     alignItems: "center",
-                                                    [theme.breakpoints.down("md")]: {
+                                                    [theme.breakpoints.down("lg")]: {
                                                         flexDirection: "column",
                                                         rowGap: "1rem",
                                                     }
@@ -256,7 +309,7 @@ const PostMyAd = () => {
                                                         label="Fecha de contratación"
                                                         sx={{
                                                             width: "30rem",
-                                                            [theme.breakpoints.down("md")]: {
+                                                            [theme.breakpoints.down("lg")]: {
                                                                 width: "100%",
 
                                                             }
@@ -269,13 +322,12 @@ const PostMyAd = () => {
                                                     options={sectorCompany}
                                                     sx={{
                                                         width: "30rem",
-                                                        [theme.breakpoints.down("md")]: {
+                                                        [theme.breakpoints.down("lg")]: {
                                                             width: "100%",
                                                         }
                                                     }}
-
                                                     renderInput={(params) => (
-                                                        <TextField {...params} label="Sector" />
+                                                        <TextField {...params} label="Modalidad de trabajo" />
                                                     )}
                                                 />
                                             </Box>
@@ -286,7 +338,7 @@ const PostMyAd = () => {
                                                     columnGap: "2rem",
                                                     justifyContent: "space-between",
                                                     alignItems: "center",
-                                                    [theme.breakpoints.down("md")]: {
+                                                    [theme.breakpoints.down("lg")]: {
                                                         flexDirection: "column",
                                                         rowGap: "1rem",
                                                     }
@@ -298,7 +350,7 @@ const PostMyAd = () => {
                                                     options={sectorCompany}
                                                     sx={{
                                                         width: "20rem",
-                                                        [theme.breakpoints.down("md")]: {
+                                                        [theme.breakpoints.down("lg")]: {
                                                             width: "100%",
                                                         }
                                                     }}
@@ -307,18 +359,18 @@ const PostMyAd = () => {
                                                     )}
                                                 />
                                                 <Typography sx={{
-                                                    [theme.breakpoints.down("md")]: {
+                                                    [theme.breakpoints.down("lg")]: {
                                                         width: "100%",
                                                         textAlign: "left",
                                                     }
                                                 }} >Rango salarial</Typography>
                                                 <TextField label="Desde" sx={{
-                                                    [theme.breakpoints.down("md")]: {
+                                                    [theme.breakpoints.down("lg")]: {
                                                         width: "100%",
                                                     }
                                                 }} />
                                                 <TextField label="Hasta" sx={{
-                                                    [theme.breakpoints.down("md")]: {
+                                                    [theme.breakpoints.down("lg")]: {
                                                         width: "100%",
                                                     }
                                                 }} />
@@ -327,7 +379,7 @@ const PostMyAd = () => {
                                                     label="Ocultar salario"
                                                     sx={{
                                                         alignSelf: "flex-end",
-                                                        [theme.breakpoints.down("md")]: {
+                                                        [theme.breakpoints.down("lg")]: {
                                                             alignSelf: "flex-start",
                                                         }
                                                     }}
@@ -355,7 +407,7 @@ const PostMyAd = () => {
                                                         columnGap: "2rem",
                                                         justifyContent: "space-between",
                                                         alignItems: "center",
-                                                        [theme.breakpoints.down("md")]: {
+                                                        [theme.breakpoints.down("lg")]: {
                                                             flexDirection: "column",
                                                             rowGap: "1rem",
                                                         }
@@ -401,10 +453,14 @@ const PostMyAd = () => {
                                                 sx={{
                                                     width: "10rem",
                                                     alignSelf: "flex-end",
+                                                    [theme.breakpoints.down("lg")]: {
+                                                        width: "100%",
+                                                    }
                                                 }}
                                                 onClick={() => {
                                                     setTabValueHorizontal(1);
                                                 }}
+
                                             >
                                                 Siguiente
                                             </Button>
@@ -704,7 +760,13 @@ const PostMyAd = () => {
                                                 disablePortal
                                                 id="combo-box-demo"
                                                 options={questionType}
-                                                sx={{ width: "20rem" }}
+                                                sx={{
+                                                    width: "20rem",
+                                                    [theme.breakpoints.down("lg")]: {
+                                                        width: "100%",
+                                                    }
+
+                                                }}
                                                 renderInput={(params) => (
                                                     <TextField {...params} label="Tipo de pregunta" />
                                                 )}
@@ -719,17 +781,49 @@ const PostMyAd = () => {
                                         display: "flex",
                                         flexDirection: "column",
                                         rowGap: "2.1rem",
-                                        paddingTop: "1rem",
                                         width: "auto",
-                                        [theme.breakpoints.down("lg")]: {
-                                            paddingRight: "2rem",
-                                        },
                                     }}
                                 >
+                                    {isXXLDown && (
+                                        <div>
+                                            <IconButton
+                                                aria-label="more"
+                                                id="long-button"
+                                                aria-controls={open ? 'long-menu' : undefined}
+                                                aria-expanded={open ? 'true' : undefined}
+                                                aria-haspopup="true"
+                                                onClick={handleClickMoreOptions}
+                                            >
+                                                <MenuIcon />
+                                            </IconButton>
+                                            <Menu
+                                                id="long-menu"
+                                                MenuListProps={{
+                                                    'aria-labelledby': 'long-button',
+                                                }}
+                                                anchorEl={anchorEl}
+                                                open={open}
+                                                onClose={handleClose}
+                                            >
+                                                {options.map((option) => (
+                                                    <MenuItem key={option.label} selected={option.label === 'Pyxis'} onClick={() => {
+                                                        handleClose();
+                                                        setTabValueVertical(option.id);
+                                                    }}>
+                                                        {option.label}
+                                                    </MenuItem>
+                                                ))}
+                                            </Menu>
+                                        </div>
+                                    )}
+
                                     <Typography
                                         sx={{
                                             fontSize: "1.8rem",
                                             fontWeight: "bold",
+                                            [theme.breakpoints.down("mdd")]: {
+                                                textAlign: "center",
+                                            },
                                         }}
                                     >Fechas de publicación</Typography>
                                     <FormControlLabel
@@ -848,22 +942,47 @@ const PostMyAd = () => {
                                             display: "flex",
                                             flexDirection: "column",
                                             rowGap: "2.1rem",
-                                            paddingTop: "1rem",
                                             width: "auto",
                                             [theme.breakpoints.down("xxl")]: {
-                                                paddingRight: "2rem",
-                                            },
-                                            [theme.breakpoints.down("lg")]: {
                                                 //paddingRight: "2rem",
                                             },
                                             [theme.breakpoints.down("mdd")]: {
                                                 paddingRight: "0",
                                             },
-                                            [theme.breakpoints.down("smm")]: {
-                                                paddingRight: "3rem",
-                                            }
                                         }}
                                     >
+                                        {isXXLDown && (
+                                            <div>
+                                                <IconButton
+                                                    aria-label="more"
+                                                    id="long-button"
+                                                    aria-controls={open ? 'long-menu' : undefined}
+                                                    aria-expanded={open ? 'true' : undefined}
+                                                    aria-haspopup="true"
+                                                    onClick={handleClickMoreOptions}
+                                                >
+                                                    <MenuIcon />
+                                                </IconButton>
+                                                <Menu
+                                                    id="long-menu"
+                                                    MenuListProps={{
+                                                        'aria-labelledby': 'long-button',
+                                                    }}
+                                                    anchorEl={anchorEl}
+                                                    open={open}
+                                                    onClose={handleClose}
+                                                >
+                                                    {options.map((option) => (
+                                                        <MenuItem key={option.label} selected={option.label === 'Pyxis'} onClick={() => {
+                                                            handleClose();
+                                                            setTabValueVertical(option.id);
+                                                        }}>
+                                                            {option.label}
+                                                        </MenuItem>
+                                                    ))}
+                                                </Menu>
+                                            </div>
+                                        )}
                                         <Typography
                                             sx={{
                                                 fontSize: "1.8rem",
