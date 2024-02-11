@@ -108,7 +108,7 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/company/post-my-ad")}
               sx={{
                 display: "flex",
                 columnGap: "0.2rem",

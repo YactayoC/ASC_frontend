@@ -11,6 +11,7 @@ import RegisterComp from "../pages/auth/company/RegisterComp";
 import LoginComp from "../pages/auth/company/LoginComp";
 import MyAccountComp from "../pages/company/MyAccountComp";
 import MyAdsComp from "../pages/company/MyAdsComp";
+import PostMyAd from "../pages/company/PostMyAd";
 
 export const AppRouter = () => {
   return (
@@ -37,7 +38,7 @@ export const AppRouter = () => {
         <Route path="/auth/company/register" element={<RegisterComp />} />
         <Route path="/company/my-account" element={<MyAccountComp />} />
         <Route path="/company/my-ads" element={<MyAdsComp />} />
-
+        <Route path="/company/post-my-ad" element={<PostMyAd />} />
         {/* <Route
             path="/admin/*"
             element={
