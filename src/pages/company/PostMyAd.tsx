@@ -12,7 +12,6 @@ import {
     Button,
     RadioGroup,
     Radio,
-    ButtonGroup,
     ToggleButtonGroup,
     ToggleButton,
 } from "@mui/material";
@@ -34,7 +33,7 @@ const PostMyAd = () => {
     const [preview, setPreview] = useState(false);
     const [alignment, setAlignment] = useState('inscritos');
 
-    const handleChangeToogle = (event: React.MouseEvent<HTMLElement>, newAlignment: string) => {
+    const handleChangeToogle = (_event: React.MouseEvent<HTMLElement>, newAlignment: string) => {
         setAlignment(newAlignment);
     };
 
