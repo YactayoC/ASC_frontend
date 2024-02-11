@@ -850,16 +850,25 @@ const PostMyAd = () => {
                                             rowGap: "2.1rem",
                                             paddingTop: "1rem",
                                             width: "auto",
-                                            [theme.breakpoints.down("lg")]: {
+                                            [theme.breakpoints.down("xxl")]: {
                                                 paddingRight: "2rem",
                                             },
+                                            [theme.breakpoints.down("lg")]: {
+                                                //paddingRight: "2rem",
+                                            },
+                                            [theme.breakpoints.down("mdd")]: {
+                                                paddingRight: "0",
+                                            },
+                                            [theme.breakpoints.down("smm")]: {
+                                                paddingRight: "3rem",
+                                            }
                                         }}
                                     >
                                         <Typography
                                             sx={{
                                                 fontSize: "1.8rem",
                                                 fontWeight: "bold",
-                                                [theme.breakpoints.down("sm")]: {
+                                                [theme.breakpoints.down("mdd")]: {
                                                     textAlign: "center",
                                                 },
                                             }}
@@ -896,7 +905,7 @@ const PostMyAd = () => {
                                                     fontSize: "1rem",
                                                     [theme.breakpoints.down("mdd")]: {
                                                         //width: "100%",
-                                                        borderLeft: "0.8px solid rgba(0, 0, 0, 0.54) !important",
+                                                        borderLeft: "0.8px solid rgba(0, 0, 0, 0.12) !important",
                                                     },
                                                 }}
                                                 value="descartados"
@@ -910,7 +919,7 @@ const PostMyAd = () => {
                                                     fontSize: "1rem",
                                                     [theme.breakpoints.down("mdd")]: {
                                                         //width: "100%",
-                                                        borderLeft: "0.8px solid rgba(0, 0, 0, 0.54) !important",
+                                                        borderLeft: "0.8px solid rgba(0, 0, 0, 0.12) !important",
                                                     },
                                                 }}
                                                 value="finalistas"
@@ -924,7 +933,7 @@ const PostMyAd = () => {
                                                     fontSize: "1rem",
                                                     [theme.breakpoints.down("mdd")]: {
                                                         //width: "100%",
-                                                        borderLeft: "0.8px solid rgba(0, 0, 0, 0.54) !important",
+                                                        borderLeft: "0.8px solid rgba(0, 0, 0, 0.12) !important",
                                                     },
                                                 }}
                                                 value="contratados"
@@ -938,6 +947,11 @@ const PostMyAd = () => {
                                                     height: "5rem",
                                                     fontSize: "1rem",
                                                     marginLeft: "2rem",
+                                                    [theme.breakpoints.down("mdd")]: {
+                                                        //width: "100%",
+                                                        marginLeft: "0",
+                                                        marginTop: "1rem",
+                                                    },
                                                 }}
                                             >
                                                 <Box>
@@ -959,6 +973,9 @@ const PostMyAd = () => {
                                                 sx={{
                                                     fontSize: "1.6rem",
                                                     fontWeight: "bold",
+                                                    [theme.breakpoints.down("mdd")]: {
+                                                        textAlign: "center",
+                                                    },
                                                 }}
                                             >Envio de correo automático</Typography>
 
@@ -967,12 +984,22 @@ const PostMyAd = () => {
                                                     fontSize: "1.3rem",
                                                     fontWeight: "bold",
                                                     paddingLeft: "3rem",
+                                                    [theme.breakpoints.down("mdd")]: {
+                                                        paddingLeft: "0",
+                                                        textAlign: "center",
+                                                    },
                                                 }}
                                             >Seleccione la plantilla a enviar:</Typography>
                                             <RadioGroup
                                                 row
                                                 sx={{
                                                     paddingLeft: "7rem",
+                                                    [theme.breakpoints.down("mdd")]: {
+                                                        //display: "flex",
+                                                        flexDirection: "column",
+                                                        paddingLeft: "0",
+                                                        alignContent: "center",
+                                                    },
                                                 }}
                                             >
                                                 <FormControlLabel value="test" control={<Radio />} label="Pruebas Psicológica" />
@@ -996,17 +1023,38 @@ const PostMyAd = () => {
                                                     display: "flex",
                                                     columnGap: "1.2rem",
                                                     alignItems: "center",
+                                                    [theme.breakpoints.down("mdd")]: {
+                                                        flexDirection: "column",
+                                                        rowGap: "1rem",
+                                                        alignItems: "flex-start",
+                                                    },
                                                 }}
                                             >
                                                 <Button component="label" variant="contained"
                                                     sx={{
                                                         height: "4rem",
+                                                        [theme.breakpoints.down("mdd")]: {
+                                                            width: "100%",
+                                                            alignItems: "center",
+                                                        }
                                                     }}
                                                     startIcon={<CloudUploadIcon />}>
-                                                    Adjuntar archivo
+                                                    <Typography sx={{
+                                                        textAlign: "center",
+                                                        [theme.breakpoints.down("mdd")]: {
+                                                            width: "100%",
+                                                            textAlign: "center",
+                                                        }
+
+                                                    }}>Adjuntar archivo</Typography>
                                                     <VisuallyHiddenInput type="file" />
                                                 </Button>
-                                                <p>Formatos de archivo permitidos: .jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .ppt, .pptx y .pdf<br />Cada archivo puede tener un tamaño máximo de 5 MB</p>
+                                                <Typography sx={{
+                                                    [theme.breakpoints.down("mdd")]: {
+                                                        width: "100%",
+                                                        textAlign: "center",
+                                                    }
+                                                }}>Formatos de archivo permitidos: .jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .ppt, .pptx y .pdf<br />Cada archivo puede tener un tamaño máximo de 5 MB</Typography>
                                             </Box>
 
 
