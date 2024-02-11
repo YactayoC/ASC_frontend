@@ -30,8 +30,9 @@ import SearchJob from "../../components/common/SearchJob";
 const PostMyAd = () => {
     const [tabValueHorizontal, setTabValueHorizontal] = useState(0);
     const [tabValueVertical, setTabValueVertical] = useState(0);
-    const [preview, setPreview] = useState(false);
+    const [preview, setPreview] = useState(true);
     const [alignment, setAlignment] = useState('inscritos');
+    const [showSearchBar, setShowSearchBar] = useState(false);
 
     const handleChangeToogle = (_event: React.MouseEvent<HTMLElement>, newAlignment: string) => {
         setAlignment(newAlignment);
@@ -43,6 +44,8 @@ const PostMyAd = () => {
 
     const handleChangeVertical = (_e: any, newValue: number) => {
         setTabValueVertical(newValue);
+        setShowSearchBar(newValue === 0);
+
     };
 
     const handleChangePreview = () => {
@@ -63,6 +66,11 @@ const PostMyAd = () => {
         { label: "Otro" },
     ];
 
+    const questionType = [
+        { label: "Abierta" },
+        { label: "Cerrada" },
+    ];
+
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
         clipPath: 'inset(50%)',
@@ -75,23 +83,26 @@ const PostMyAd = () => {
         width: 1,
     });
 
-
     return (
         <Box>
             <HeaderButtons showLogo={true} />
             <HeaderMainPage />
-            <Box
-                sx={{
-                    width: "60%",
-                    paddingTop: "3rem",
-                    margin: "auto",
-                }}
-            >
-                <SearchJob />
-                <p style={{
-                    marginTop: "0.9rem",
-                }}>1800 perfiles encontrados</p>
-            </Box>
+            {showSearchBar ? (
+                <Box
+                    sx={{
+                        width: "60%",
+                        paddingTop: "3rem",
+                        margin: "auto",
+                    }}
+                >
+                    <SearchJob />
+                    <p style={{
+                        marginTop: "0.9rem",
+                    }}>1800 perfiles encontrados</p>
+                </Box>
+            ) : (
+                <></>
+            )}
             <Box
                 sx={{
                     display: "flex",
@@ -138,7 +149,9 @@ const PostMyAd = () => {
                                         }}
                                     >
                                         <Tab label="Perfil de puesto" value={0} />
-                                        <Tab label="Requisitos" value={1} />
+                                        <Tab onClick={() => {
+                                            setShowSearchBar(false)
+                                        }} label="Requisitos" value={1} />
                                         <Tab label="Cuestionario de preguntas" value={2} />
                                     </Tabs>
 
@@ -564,7 +577,7 @@ const PostMyAd = () => {
                                             <Autocomplete
                                                 disablePortal
                                                 id="combo-box-demo"
-                                                options={sectorCompany}
+                                                options={questionType}
                                                 sx={{ width: "20rem" }}
                                                 renderInput={(params) => (
                                                     <TextField {...params} label="Tipo de pregunta" />
