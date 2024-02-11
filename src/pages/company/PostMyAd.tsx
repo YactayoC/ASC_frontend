@@ -14,6 +14,7 @@ import {
     Radio,
     ToggleButtonGroup,
     ToggleButton,
+    Typography,
 } from "@mui/material";
 
 import { styled } from '@mui/material/styles';
@@ -26,6 +27,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import SearchJob from "../../components/common/SearchJob";
+import theme from "../../../theme";
 
 const PostMyAd = () => {
     const [tabValueHorizontal, setTabValueHorizontal] = useState(0);
@@ -88,6 +90,7 @@ const PostMyAd = () => {
             <HeaderButtons showLogo={true} />
             <HeaderMainPage />
             {showSearchBar ? (
+
                 <Box
                     sx={{
                         width: "60%",
@@ -96,12 +99,24 @@ const PostMyAd = () => {
                     }}
                 >
                     <SearchJob />
-                    <p style={{
+                    <Typography sx={{
                         marginTop: "0.9rem",
-                    }}>1800 perfiles encontrados</p>
+                    }}>1800 perfiles encontrados</Typography>
                 </Box>
             ) : (
-                <></>
+
+                <Box
+                    sx={{
+                        width: "60%",
+                        paddingTop: "3rem",
+                        margin: "auto",
+                    }}
+                >
+                    <SearchJob />
+                    <Typography sx={{
+                        marginTop: "0.9rem",
+                    }}>1800 perfiles encontrados</Typography>
+                </Box>
             )}
             <Box
                 sx={{
@@ -136,7 +151,7 @@ const PostMyAd = () => {
                             <Tab label="Proceso de selección" value={2} />
                         </Tabs>
 
-                        <Box sx={{ flexGrow: 1 }}>
+                        <Box sx={{ flexGrow: 1, width: "100%" }}>
                             {tabValueVertical === 0 && (
                                 <Box>
                                     <Tabs
@@ -163,6 +178,16 @@ const PostMyAd = () => {
                                                 rowGap: "2.1rem",
                                                 paddingTop: "1rem",
                                                 width: "auto",
+                                                [theme.breakpoints.down("xl")]: {
+                                                    paddingRight: "2rem",
+                                                },
+                                                [theme.breakpoints.down("md")]: {
+                                                    paddingRight: "0",
+                                                    rowGap: "1rem",
+                                                },
+                                                [theme.breakpoints.down("sm")]: {
+                                                    paddingRight: "2rem",
+                                                }
                                             }}
                                         >
                                             <FormControlLabel
@@ -170,6 +195,9 @@ const PostMyAd = () => {
                                                 label="Ocultar el nombre de la empresa"
                                                 sx={{
                                                     alignSelf: "flex-end",
+                                                    [theme.breakpoints.down("md")]: {
+                                                        alignSelf: "flex-start",
+                                                    }
                                                 }}
                                             />
                                             <Box
@@ -178,6 +206,10 @@ const PostMyAd = () => {
                                                     flexDirection: "row",
                                                     columnGap: "2rem",
                                                     justifyContent: "space-between",
+                                                    [theme.breakpoints.down("md")]: {
+                                                        flexDirection: "column",
+                                                        rowGap: "1rem",
+                                                    }
                                                 }}
                                             >
                                                 <TextField
@@ -189,9 +221,15 @@ const PostMyAd = () => {
                                                     disablePortal
                                                     id="combo-box-demo"
                                                     options={sectorCompany}
-                                                    sx={{ width: "20rem" }}
+                                                    sx={{
+                                                        width: "20rem",
+                                                        [theme.breakpoints.down("md")]: {
+                                                            width: "100%",
+                                                        }
+                                                    }}
+
                                                     renderInput={(params) => (
-                                                        <TextField {...params} label="Sector" />
+                                                        <TextField {...params} label="Área" />
                                                     )}
                                                 />
                                             </Box>
@@ -202,6 +240,10 @@ const PostMyAd = () => {
                                                     columnGap: "2rem",
                                                     justifyContent: "space-between",
                                                     alignItems: "center",
+                                                    [theme.breakpoints.down("md")]: {
+                                                        flexDirection: "column",
+                                                        rowGap: "1rem",
+                                                    }
                                                 }}
                                             >
                                                 <TextField
@@ -211,9 +253,13 @@ const PostMyAd = () => {
                                                 />
                                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                     <DatePicker
-                                                        label=""
+                                                        label="Fecha de contratación"
                                                         sx={{
                                                             width: "30rem",
+                                                            [theme.breakpoints.down("md")]: {
+                                                                width: "100%",
+
+                                                            }
                                                         }}
                                                     />
                                                 </LocalizationProvider>
@@ -221,7 +267,13 @@ const PostMyAd = () => {
                                                     disablePortal
                                                     id="combo-box-demo"
                                                     options={sectorCompany}
-                                                    sx={{ width: "30rem" }}
+                                                    sx={{
+                                                        width: "30rem",
+                                                        [theme.breakpoints.down("md")]: {
+                                                            width: "100%",
+                                                        }
+                                                    }}
+
                                                     renderInput={(params) => (
                                                         <TextField {...params} label="Sector" />
                                                     )}
@@ -234,25 +286,50 @@ const PostMyAd = () => {
                                                     columnGap: "2rem",
                                                     justifyContent: "space-between",
                                                     alignItems: "center",
+                                                    [theme.breakpoints.down("md")]: {
+                                                        flexDirection: "column",
+                                                        rowGap: "1rem",
+                                                    }
                                                 }}
                                             >
                                                 <Autocomplete
                                                     disablePortal
                                                     id="combo-box-demo"
                                                     options={sectorCompany}
-                                                    sx={{ width: "20rem" }}
+                                                    sx={{
+                                                        width: "20rem",
+                                                        [theme.breakpoints.down("md")]: {
+                                                            width: "100%",
+                                                        }
+                                                    }}
                                                     renderInput={(params) => (
                                                         <TextField {...params} label="Tipo de Jornada" />
                                                     )}
                                                 />
-                                                <label>Rango salarial</label>
-                                                <TextField label="Desde" />
-                                                <TextField label="Hasta" />
+                                                <Typography sx={{
+                                                    [theme.breakpoints.down("md")]: {
+                                                        width: "100%",
+                                                        textAlign: "left",
+                                                    }
+                                                }} >Rango salarial</Typography>
+                                                <TextField label="Desde" sx={{
+                                                    [theme.breakpoints.down("md")]: {
+                                                        width: "100%",
+                                                    }
+                                                }} />
+                                                <TextField label="Hasta" sx={{
+                                                    [theme.breakpoints.down("md")]: {
+                                                        width: "100%",
+                                                    }
+                                                }} />
                                                 <FormControlLabel
                                                     control={<Checkbox name="hideCompanyName" />}
                                                     label="Ocultar salario"
                                                     sx={{
                                                         alignSelf: "flex-end",
+                                                        [theme.breakpoints.down("md")]: {
+                                                            alignSelf: "flex-start",
+                                                        }
                                                     }}
                                                 />
                                             </Box>
@@ -263,15 +340,14 @@ const PostMyAd = () => {
                                                     rowGap: "1rem",
                                                 }}
                                             >
-                                                <label
-                                                    style={{
+                                                <Typography
+                                                    sx={{
                                                         fontSize: "1.1rem",
                                                         fontWeight: "bold",
                                                     }}
                                                 >
-                                                    {" "}
-                                                    Ubicación{" "}
-                                                </label>
+                                                    Ubicación
+                                                </Typography>
                                                 <Box
                                                     sx={{
                                                         display: "flex",
@@ -279,6 +355,10 @@ const PostMyAd = () => {
                                                         columnGap: "2rem",
                                                         justifyContent: "space-between",
                                                         alignItems: "center",
+                                                        [theme.breakpoints.down("md")]: {
+                                                            flexDirection: "column",
+                                                            rowGap: "1rem",
+                                                        }
                                                     }}
                                                 >
                                                     <Autocomplete
@@ -338,7 +418,11 @@ const PostMyAd = () => {
                                                 flexDirection: "column",
                                                 rowGap: "2rem",
                                                 paddingTop: "1rem",
-                                                width: "auto",
+                                                width: "100%",
+
+                                                [theme.breakpoints.down("mddd")]: {
+                                                    paddingRight: "2rem",
+                                                }
                                             }}
                                         >
                                             <FormControlLabel
@@ -352,6 +436,17 @@ const PostMyAd = () => {
                                                 sx={{
                                                     display: "flex",
                                                     columnGap: "1.2rem",
+                                                    width: "100%",
+                                                    [theme.breakpoints.down("lg")]: {
+                                                        flexDirection: "column",
+                                                        rowGap: "1rem",
+                                                        paddingLeft: "3rem",
+                                                    },
+                                                    [theme.breakpoints.down("md")]: {
+                                                        flexDirection: "column",
+                                                        rowGap: "1rem",
+                                                        paddingLeft: "3rem",
+                                                    }
                                                 }}
                                             >
                                                 <FormControlLabel
@@ -386,14 +481,14 @@ const PostMyAd = () => {
                                                 multiline
                                                 rows={5}
                                             />
-                                            <label
-                                                style={{
+                                            <Typography
+                                                sx={{
                                                     fontSize: "1.1rem",
                                                     fontWeight: "bold",
                                                 }}
                                             >
                                                 Rango de edad
-                                            </label>
+                                            </Typography>
                                             <Box
                                                 sx={{
                                                     display: "flex",
@@ -401,6 +496,10 @@ const PostMyAd = () => {
                                                     columnGap: "2rem",
                                                     justifyContent: "space-between",
                                                     alignItems: "center",
+                                                    [theme.breakpoints.down("lg")]: {
+                                                        flexDirection: "column",
+                                                        rowGap: "1rem",
+                                                    }
                                                 }}
                                             >
                                                 <TextField label="Mínimo" variant="outlined" fullWidth />
@@ -432,19 +531,23 @@ const PostMyAd = () => {
                                                     )}
                                                 />
                                             </Box>
-                                            <label
-                                                style={{
+                                            <Typography
+                                                sx={{
                                                     fontSize: "1.1rem",
                                                     fontWeight: "bold",
                                                 }}
                                             >
                                                 Formación complementaria (Opcional)
-                                            </label>
+                                            </Typography>
                                             <Box
                                                 sx={{
                                                     display: "flex",
                                                     flexDirection: "row",
                                                     columnGap: "10rem",
+                                                    [theme.breakpoints.down("lg")]: {
+                                                        flexDirection: "column",
+                                                        rowGap: "1rem",
+                                                    },
                                                 }}
                                             >
                                                 <Button
@@ -452,15 +555,17 @@ const PostMyAd = () => {
                                                     startIcon={<Add />}
                                                     sx={{
                                                         alignSelf: "center",
+                                                        [theme.breakpoints.down("lg")]: {
+                                                            alignSelf: "flex-start",
+                                                            width: "100%",
+                                                        }
                                                     }}
-                                                //onClick={() => setOpenModalExperience(true)}
                                                 >
                                                     Incluir estudios
                                                 </Button>
                                                 <Button
                                                     variant="outlined"
                                                     startIcon={<Add />}
-                                                //onClick={() => setOpenModalExperience(true)}
                                                 >
                                                     Idiomas (Opcional)
                                                 </Button>
@@ -471,21 +576,30 @@ const PostMyAd = () => {
                                                     flexDirection: "row",
                                                     columnGap: "2rem",
                                                     alignItems: "center",
+                                                    [theme.breakpoints.down("lg")]: {
+                                                        flexDirection: "column",
+                                                        rowGap: "1rem",
+                                                        alignItems: "flex-start",
+                                                    },
                                                 }}
                                             >
-                                                <label
-                                                    style={{
+                                                <Typography
+                                                    sx={{
                                                         fontSize: "1.1rem",
                                                         fontWeight: "bold",
                                                     }}
                                                 >
                                                     Habilidades (Opcional)
-                                                </label>
+                                                </Typography>
 
                                                 <Button
                                                     variant="outlined"
                                                     startIcon={<Add />}
-                                                //onClick={() => setOpenModalExperience(true)}
+                                                    sx={{
+                                                        [theme.breakpoints.down("lg")]: {
+                                                            width: "100%",
+                                                        }
+                                                    }}
                                                 >
                                                     Agregar habilidades
                                                 </Button>
@@ -496,6 +610,11 @@ const PostMyAd = () => {
                                                     flexDirection: "row",
                                                     columnGap: "2rem",
                                                     alignItems: "center",
+                                                    [theme.breakpoints.down("lg")]: {
+                                                        flexDirection: "column",
+                                                        rowGap: "1rem",
+                                                        alignItems: "flex-start",
+                                                    },
                                                 }}
                                             >
                                                 <FormControlLabel
@@ -507,6 +626,9 @@ const PostMyAd = () => {
                                                     variant="outlined"
                                                     sx={{
                                                         width: "20rem",
+                                                        [theme.breakpoints.down("lg")]: {
+                                                            width: "100%",
+                                                        }
                                                     }}
                                                 />
                                             </Box>
@@ -514,6 +636,10 @@ const PostMyAd = () => {
                                                 sx={{
                                                     display: "flex",
                                                     columnGap: "1.2rem",
+                                                    [theme.breakpoints.down("lg")]: {
+                                                        flexDirection: "column",
+                                                        rowGap: "1rem",
+                                                    },
                                                 }}
                                             >
                                                 <FormControlLabel
@@ -595,14 +721,17 @@ const PostMyAd = () => {
                                         rowGap: "2.1rem",
                                         paddingTop: "1rem",
                                         width: "auto",
+                                        [theme.breakpoints.down("lg")]: {
+                                            paddingRight: "2rem",
+                                        },
                                     }}
                                 >
-                                    <label
-                                        style={{
+                                    <Typography
+                                        sx={{
                                             fontSize: "1.8rem",
                                             fontWeight: "bold",
                                         }}
-                                    >Fechas de publicación</label>
+                                    >Fechas de publicación</Typography>
                                     <FormControlLabel
                                         control={<Checkbox name="hideCompanyName" />}
                                         label="Activar la publicación y/o desactivación automática"
@@ -611,6 +740,11 @@ const PostMyAd = () => {
                                         sx={{
                                             display: "flex",
                                             columnGap: "1.6rem",
+                                            width: "100%",
+                                            [theme.breakpoints.down("sm")]: {
+                                                flexDirection: "column",
+                                                rowGap: "1rem",
+                                            },
                                         }}
                                     >
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -618,6 +752,9 @@ const PostMyAd = () => {
                                                 label=""
                                                 sx={{
                                                     width: "25rem",
+                                                    [theme.breakpoints.down("sm")]: {
+                                                        width: "100%",
+                                                    },
                                                 }}
                                             />
                                         </LocalizationProvider>
@@ -625,17 +762,30 @@ const PostMyAd = () => {
                                             <DatePicker
                                                 label=""
                                                 sx={{
+
                                                     width: "25rem",
+                                                    [theme.breakpoints.down("sm")]: {
+                                                        width: "100%",
+                                                    },
                                                 }}
                                             />
                                         </LocalizationProvider>
                                     </Box>
 
-                                    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                                    <Box sx={{
+                                        display: "flex", justifyContent: "space-between",
+                                        [theme.breakpoints.down("lgg")]: {
+                                            flexDirection: "column",
+                                            rowGap: "1rem",
+                                        },
+                                    }}>
                                         <Button
                                             variant="contained"
                                             sx={{
                                                 width: "10rem",
+                                                [theme.breakpoints.down("lgg")]: {
+                                                    width: "100%",
+                                                },
                                             }}
                                             onClick={() => {
                                                 setTabValueVertical(0);
@@ -643,11 +793,20 @@ const PostMyAd = () => {
                                         >
                                             Retroceder
                                         </Button>
-                                        <Box sx={{ display: "flex", columnGap: "1.2rem" }}>
+                                        <Box sx={{
+                                            display: "flex", columnGap: "1.2rem",
+                                            [theme.breakpoints.down("lgg")]: {
+                                                flexDirection: "column",
+                                                rowGap: "1rem",
+                                            },
+                                        }}>
                                             <Button
                                                 variant="contained"
                                                 sx={{
                                                     width: "10rem",
+                                                    [theme.breakpoints.down("lgg")]: {
+                                                        width: "100%",
+                                                    },
                                                 }}
                                                 onClick={handleChangePreview}
                                             >
@@ -657,6 +816,9 @@ const PostMyAd = () => {
                                                 variant="contained"
                                                 sx={{
                                                     width: "10rem",
+                                                    [theme.breakpoints.down("lgg")]: {
+                                                        width: "100%",
+                                                    },
                                                 }}
                                             >
                                                 Publicar
@@ -665,6 +827,9 @@ const PostMyAd = () => {
                                                 variant="contained"
                                                 sx={{
                                                     width: "10rem",
+                                                    [theme.breakpoints.down("lgg")]: {
+                                                        width: "100%",
+                                                    },
                                                 }}
                                                 onClick={() => {
                                                     setTabValueVertical(2);
@@ -685,20 +850,34 @@ const PostMyAd = () => {
                                             rowGap: "2.1rem",
                                             paddingTop: "1rem",
                                             width: "auto",
+                                            [theme.breakpoints.down("lg")]: {
+                                                paddingRight: "2rem",
+                                            },
                                         }}
                                     >
-                                        <label
-                                            style={{
+                                        <Typography
+                                            sx={{
                                                 fontSize: "1.8rem",
                                                 fontWeight: "bold",
+                                                [theme.breakpoints.down("sm")]: {
+                                                    textAlign: "center",
+                                                },
                                             }}
-                                        >Etapas del proceso de selección</label>
+                                        >Etapas del proceso de selección</Typography>
                                         <ToggleButtonGroup
                                             color="primary"
                                             value={alignment}
                                             exclusive
                                             onChange={handleChangeToogle}
                                             aria-label="Platform"
+                                            sx={{
+                                                [theme.breakpoints.down("mdd")]: {
+                                                    flexDirection: "column",
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                    textAlign: "center",
+                                                },
+                                            }}
                                         >
                                             <ToggleButton
                                                 sx={{
@@ -715,6 +894,10 @@ const PostMyAd = () => {
                                                     width: "15rem",
                                                     height: "5rem",
                                                     fontSize: "1rem",
+                                                    [theme.breakpoints.down("mdd")]: {
+                                                        //width: "100%",
+                                                        borderLeft: "0.8px solid rgba(0, 0, 0, 0.54) !important",
+                                                    },
                                                 }}
                                                 value="descartados"
                                             >
@@ -725,6 +908,10 @@ const PostMyAd = () => {
                                                     width: "15rem",
                                                     height: "5rem",
                                                     fontSize: "1rem",
+                                                    [theme.breakpoints.down("mdd")]: {
+                                                        //width: "100%",
+                                                        borderLeft: "0.8px solid rgba(0, 0, 0, 0.54) !important",
+                                                    },
                                                 }}
                                                 value="finalistas"
                                             >
@@ -735,6 +922,10 @@ const PostMyAd = () => {
                                                     width: "15rem",
                                                     height: "5rem",
                                                     fontSize: "1rem",
+                                                    [theme.breakpoints.down("mdd")]: {
+                                                        //width: "100%",
+                                                        borderLeft: "0.8px solid rgba(0, 0, 0, 0.54) !important",
+                                                    },
                                                 }}
                                                 value="contratados"
                                             >
@@ -764,20 +955,20 @@ const PostMyAd = () => {
                                             }}
                                         >
 
-                                            <label
-                                                style={{
+                                            <Typography
+                                                sx={{
                                                     fontSize: "1.6rem",
                                                     fontWeight: "bold",
                                                 }}
-                                            >Envio de correo automático</label>
+                                            >Envio de correo automático</Typography>
 
-                                            <label
-                                                style={{
+                                            <Typography
+                                                sx={{
                                                     fontSize: "1.3rem",
                                                     fontWeight: "bold",
                                                     paddingLeft: "3rem",
                                                 }}
-                                            >Seleccione la plantilla a enviar:</label>
+                                            >Seleccione la plantilla a enviar:</Typography>
                                             <RadioGroup
                                                 row
                                                 sx={{
@@ -820,24 +1011,41 @@ const PostMyAd = () => {
 
 
                                         </Box>
-                                        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                                        <Box sx={{
+                                            display: "flex", justifyContent: "space-between",
+                                            [theme.breakpoints.down("lgg")]: {
+                                                flexDirection: "column",
+                                                rowGap: "1rem",
+                                            },
+                                        }}>
                                             <Button
                                                 variant="contained"
                                                 sx={{
                                                     width: "10rem",
+                                                    [theme.breakpoints.down("lgg")]: {
+                                                        width: "100%",
+                                                    },
                                                 }}
-
                                                 onClick={() => {
-                                                    setTabValueVertical(1);
+                                                    setTabValueVertical(0);
                                                 }}
                                             >
                                                 Retroceder
                                             </Button>
-                                            <Box sx={{ display: "flex", columnGap: "1.2rem" }}>
+                                            <Box sx={{
+                                                display: "flex", columnGap: "1.2rem",
+                                                [theme.breakpoints.down("lgg")]: {
+                                                    flexDirection: "column",
+                                                    rowGap: "1rem",
+                                                },
+                                            }}>
                                                 <Button
                                                     variant="contained"
                                                     sx={{
                                                         width: "10rem",
+                                                        [theme.breakpoints.down("lgg")]: {
+                                                            width: "100%",
+                                                        },
                                                     }}
                                                     onClick={handleChangePreview}
                                                 >
@@ -847,6 +1055,9 @@ const PostMyAd = () => {
                                                     variant="contained"
                                                     sx={{
                                                         width: "10rem",
+                                                        [theme.breakpoints.down("lgg")]: {
+                                                            width: "100%",
+                                                        },
                                                     }}
                                                 >
                                                     Publicar
@@ -855,6 +1066,12 @@ const PostMyAd = () => {
                                                     variant="contained"
                                                     sx={{
                                                         width: "10rem",
+                                                        [theme.breakpoints.down("lgg")]: {
+                                                            width: "100%",
+                                                        },
+                                                    }}
+                                                    onClick={() => {
+                                                        setTabValueVertical(2);
                                                     }}
                                                 >
                                                     Siguiente
@@ -876,31 +1093,48 @@ const PostMyAd = () => {
                             width: "100%",
                         }}
                     >
-                        <label
-                            style={{
+                        <Typography
+                            sx={{
                                 fontSize: "3.5rem",
                                 fontWeight: "bold",
                             }}
-                        >Titulo del aviso</label>
+                        >Titulo del aviso</Typography>
 
-                        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                        <Box sx={{
+                            display: "flex", justifyContent: "space-between",
+                            [theme.breakpoints.down("lgg")]: {
+                                flexDirection: "column",
+                                rowGap: "1rem",
+                            },
+                        }}>
                             <Button
                                 variant="contained"
                                 sx={{
                                     width: "10rem",
+                                    [theme.breakpoints.down("lgg")]: {
+                                        width: "100%",
+                                    },
                                 }}
                                 onClick={() => {
-                                    handleChangePreview();
-                                    setTabValueVertical(2);
+                                    setTabValueVertical(0);
                                 }}
                             >
                                 Retroceder
                             </Button>
-                            <Box sx={{ display: "flex", columnGap: "1.2rem" }}>
+                            <Box sx={{
+                                display: "flex", columnGap: "1.2rem",
+                                [theme.breakpoints.down("lgg")]: {
+                                    flexDirection: "column",
+                                    rowGap: "1rem",
+                                },
+                            }}>
                                 <Button
                                     variant="contained"
                                     sx={{
                                         width: "10rem",
+                                        [theme.breakpoints.down("lgg")]: {
+                                            width: "100%",
+                                        },
                                     }}
                                     onClick={handleChangePreview}
                                 >
@@ -910,6 +1144,9 @@ const PostMyAd = () => {
                                     variant="contained"
                                     sx={{
                                         width: "10rem",
+                                        [theme.breakpoints.down("lgg")]: {
+                                            width: "100%",
+                                        },
                                     }}
                                 >
                                     Publicar
@@ -918,6 +1155,12 @@ const PostMyAd = () => {
                                     variant="contained"
                                     sx={{
                                         width: "10rem",
+                                        [theme.breakpoints.down("lgg")]: {
+                                            width: "100%",
+                                        },
+                                    }}
+                                    onClick={() => {
+                                        setTabValueVertical(2);
                                     }}
                                 >
                                     Siguiente
