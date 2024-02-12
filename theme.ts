@@ -13,6 +13,7 @@ declare module "@mui/material/styles" {
     xll: true;
     xl: true;
     xxl: true;
+    xxxl: true;
   }
 }
 
@@ -35,6 +36,7 @@ const theme = createTheme({
       xll: 1250,
       xl: 1536,
       xxl: 1600,
+      xxxl: 1920,
     },
   },
 });

@@ -24,7 +24,9 @@ import { styled } from '@mui/material/styles';
 
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
-import { Add } from "@mui/icons-material";
+import { Add, Facebook, Twitter, LinkedIn } from "@mui/icons-material";
+
+
 import MenuIcon from '@mui/icons-material/Menu';
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -37,13 +39,16 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 const PostMyAd = () => {
     const [tabValueHorizontal, setTabValueHorizontal] = useState(0);
     const [tabValueVertical, setTabValueVertical] = useState(0);
+    const [tabSubValueVertical, setSubTabValueVertical] = useState(0);
     const [preview, setPreview] = useState(true);
     const [alignment, setAlignment] = useState('inscritos');
     const [showSearchBar, setShowSearchBar] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [enlace, setEnlace] = useState('');
+
     const open = Boolean(anchorEl);
 
-    const isXXLDown = useMediaQuery(theme.breakpoints.down('xxl'));
+    const isXXXLDown = useMediaQuery(theme.breakpoints.down('xxxl'));
 
     const handleChangeToogle = (_event: React.MouseEvent<HTMLElement>, newAlignment: string) => {
         setAlignment(newAlignment);
@@ -55,7 +60,12 @@ const PostMyAd = () => {
 
     const handleChangeVertical = (_e: any, newValue: number) => {
         setTabValueVertical(newValue);
-        setShowSearchBar(newValue === 0);
+        //setShowSearchBar(newValue === 0);
+    };
+
+    const handleChangeTabSubVertical = (_e: any, newValue: number) => {
+        setSubTabValueVertical(newValue);
+        //setShowSearchBar(newValue === 0);
     };
 
     const handleChangePreview = () => {
@@ -69,6 +79,20 @@ const PostMyAd = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const handleTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setEnlace(event.target.value);
+    };
+
+    const handleCopyTextField = async () => {
+        try {
+            await navigator.clipboard.writeText(enlace);
+            //alert('Enlace copiado al portapapeles!');
+        } catch (err) {
+            console.error('Error al copiar enlace: ', err);
+            //alert('Error al copiar el enlace.');
+        }
+    }
 
     const sectorCompany = [
         { label: "Tecnología" },
@@ -165,7 +189,7 @@ const PostMyAd = () => {
                                 marginTop: "4rem",
                                 borderRight: 1,
                                 borderColor: "divider",
-                                [theme.breakpoints.down("xxl")]: {
+                                [theme.breakpoints.down("xxxl")]: {
                                     display: "none",
                                 }
                             }}
@@ -178,7 +202,7 @@ const PostMyAd = () => {
                         <Box sx={{ flexGrow: 1, width: "100%" }}>
                             {tabValueVertical === 0 && (
                                 <Box>
-                                    {isXXLDown && (
+                                    {isXXXLDown && (
                                         <div>
                                             <IconButton
                                                 aria-label="more"
@@ -784,7 +808,7 @@ const PostMyAd = () => {
                                         width: "auto",
                                     }}
                                 >
-                                    {isXXLDown && (
+                                    {isXXXLDown && (
                                         <div>
                                             <IconButton
                                                 aria-label="more"
@@ -864,6 +888,212 @@ const PostMyAd = () => {
                                                 }}
                                             />
                                         </LocalizationProvider>
+
+                                    </Box>
+
+                                    <Typography
+                                        sx={{
+                                            fontSize: "1.4rem",
+                                            fontWeight: "bold",
+                                            [theme.breakpoints.down("mdd")]: {
+                                                textAlign: "center",
+                                            },
+                                        }}
+                                    >Datos de divulgación</Typography>
+
+                                    <Box>
+                                        <Tabs
+                                            value={tabSubValueVertical}
+                                            orientation="horizontal"
+                                            onChange={handleChangeTabSubVertical}
+                                        >
+                                            <Tab label="Redes sociales" value={0} />
+                                            <Tab label="Por correo electrónico" value={1} />
+                                        </Tabs>
+                                        {tabSubValueVertical === 0 && (
+                                            <>
+                                                <Box
+                                                    sx={{
+                                                        display: "flex",
+                                                        flexDirection: "column",
+                                                        padding: "2rem 0 2rem 5rem",
+                                                        rowGap: "1.5rem",
+                                                        width: "40%",
+                                                    }}
+                                                >
+                                                    <Box
+                                                        sx={{
+                                                            display: "flex",
+                                                            columnGap: "1.5rem",
+                                                            alignItems: "center",
+                                                            justifyContent: "space-between",
+                                                        }}
+                                                    >
+                                                        <Typography
+                                                            sx={{
+                                                                fontSize: "1.1rem",
+                                                                fontWeight: "bold",
+                                                            }}>
+                                                            Facebook
+                                                        </Typography>
+                                                        <Button component="label" variant="contained" startIcon={<Facebook />}
+                                                            sx={{
+                                                                backgroundColor: "#3b5998",
+                                                                "&:hover": {
+                                                                    backgroundColor: "#3b5998",
+                                                                }
+                                                            }}>
+                                                            Compartir
+                                                        </Button>
+                                                    </Box>
+                                                    <Box
+                                                        sx={{
+                                                            display: "flex",
+                                                            columnGap: "1.5rem",
+                                                            alignItems: "center",
+                                                            justifyContent: "space-between",
+                                                        }}
+                                                    >
+                                                        <Typography
+                                                            sx={{
+                                                                fontSize: "1.1rem",
+                                                                fontWeight: "bold",
+                                                            }}>
+                                                            Twitter
+                                                        </Typography>
+                                                        <Button component="label" variant="contained" startIcon={<Twitter />}
+                                                            sx={{
+                                                                backgroundColor: "#00acee",
+                                                                "&:hover": {
+                                                                    backgroundColor: "#00acee",
+                                                                }
+                                                            }}
+                                                        >
+                                                            Compartir
+                                                        </Button>
+                                                    </Box>
+                                                    <Box
+                                                        sx={{
+                                                            display: "flex",
+                                                            columnGap: "1.5rem",
+                                                            alignItems: "center",
+                                                            justifyContent: "space-between",
+                                                        }}
+                                                    >
+                                                        <Typography
+                                                            sx={{
+                                                                fontSize: "1.1rem",
+                                                                fontWeight: "bold",
+                                                            }}>
+                                                            LinkedIn
+                                                        </Typography>
+                                                        <Button component="label" variant="contained" startIcon={<LinkedIn />}
+                                                            sx={{
+                                                                backgroundColor: "#0e76a8",
+                                                                "&:hover": {
+                                                                    backgroundColor: "#0e76a8",
+                                                                }
+                                                            }}
+                                                        >
+                                                            Compartir
+                                                        </Button>
+                                                    </Box>
+                                                </Box>
+                                                <Box>
+
+                                                    <Typography
+                                                        sx={{
+                                                            fontSize: "1.1rem",
+                                                        }}>
+                                                        Su posición debe ser PUBLICADA antes de que se comparta en las redes sociales.
+                                                    </Typography>
+                                                </Box>
+                                            </>
+                                        )}
+                                        {tabSubValueVertical === 1 && (
+                                            <Box
+                                                sx={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    rowGap: "2rem",
+                                                    padding: "2rem 0 2rem 0",
+                                                }}
+                                            >
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: "1.2rem",
+                                                        fontWeight: "bold",
+                                                    }}
+                                                >Enlace para compartir</Typography>
+                                                <Box sx={{
+                                                    display: "flex",
+                                                    columnGap: "1.2rem",
+                                                    alignItems: "center",
+                                                }}>
+                                                    <TextField
+                                                        variant="outlined"
+                                                        label="Enlace"
+                                                        onChange={handleTextFieldChange}
+                                                        sx={{
+                                                            width: "70%",
+                                                        }}
+                                                    />
+                                                    <Button component="label" variant="contained" onClick={handleCopyTextField}>
+                                                        Copiar
+                                                    </Button>
+                                                </Box>
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: "1.1rem",
+                                                    }}>
+                                                    Accederá al enlace después de haber publicado el aviso.
+                                                </Typography>
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: "1.2rem",
+                                                        fontWeight: "bold",
+                                                    }}
+                                                >Publicar aviso mediante correo electrónico</Typography>
+                                                <Box sx={{
+                                                    display: "flex",
+                                                    columnGap: "1.2rem",
+                                                    alignItems: "center",
+                                                }}>
+                                                    <TextField
+                                                        variant="outlined"
+                                                        label="Enlace"
+                                                        onChange={handleTextFieldChange}
+                                                        sx={{
+                                                            width: "70%",
+                                                        }}
+                                                    />
+                                                    <Button component="label" variant="contained" onClick={handleCopyTextField}>
+                                                        Guardar
+                                                    </Button>
+                                                    <Button component="label" variant="contained" onClick={handleCopyTextField}>
+                                                        Enviar
+                                                    </Button>
+                                                </Box>
+
+                                                <FormControlLabel
+                                                    control={<Checkbox name="hideCompanyName" />}
+                                                    label="¿Desea personalizar su correo electrónico?"
+                                                />
+
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: "1.2rem",
+                                                        fontWeight: "bold",
+                                                    }}
+                                                >Editor de texto</Typography>
+                                                <TextField
+                                                    variant="outlined"
+                                                    multiline
+                                                    fullWidth
+                                                    rows={7}
+                                                />
+                                            </Box>
+                                        )}
                                     </Box>
 
                                     <Box sx={{
@@ -951,7 +1181,7 @@ const PostMyAd = () => {
                                             },
                                         }}
                                     >
-                                        {isXXLDown && (
+                                        {isXXXLDown && (
                                             <div>
                                                 <IconButton
                                                     aria-label="more"
@@ -1194,7 +1424,7 @@ const PostMyAd = () => {
                                                     },
                                                 }}
                                                 onClick={() => {
-                                                    setTabValueVertical(0);
+                                                    setTabValueVertical(1);
                                                 }}
                                             >
                                                 Retroceder
