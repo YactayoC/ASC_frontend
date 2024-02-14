@@ -341,21 +341,31 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
         />
         Postula aquí
       </Button>
-      <Button
-        variant="contained"
-        color="primary"
-        type="button"
-        onClick={() => {
-          setIsAuthenticated(!isAuthenticated);
-        }}
-        sx={{
-          display: "flex",
-          columnGap: "0.2rem",
-          alignItems: "center",
-        }}
-      >
-        {isAuthenticated ? "Cerrar sesión" : "Iniciar sesión"}
-      </Button>
+      {
+        /*
+        
+     
+        
+        
+    <Button
+      variant="contained"
+      color="primary"
+      type="button"
+      onClick={() => {
+        setIsAuthenticated(!isAuthenticated);
+      }}
+      sx={{
+        display: "flex",
+        columnGap: "0.2rem",
+        alignItems: "center",
+      }}
+    >
+      {isAuthenticated ? "Cerrar sesión" : "Iniciar sesión"}
+    </Button>
+
+        */
+
+      }
     </Box>
   );
 };

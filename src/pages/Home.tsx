@@ -15,8 +15,22 @@ import SearchJob from "../components/common/SearchJob";
 import HeaderButtons from "../components/candidate/HeaderButtons";
 import ButtonSocials from "../components/common/ButtonSocials";
 
+import useDataDefault from "../hooks/useDataDefault";
+import { useEffect } from "react";
+
 function Home() {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const { getDataDefault } = useDataDefault();
+
+  const handleData = async () => {
+    const data = await getDataDefault();
+    return data;
+  }
+
+  useEffect(() => {
+    handleData();
+  }, []);
 
   return (
     <>
