@@ -8,6 +8,7 @@ import {
   Container,
   Tabs,
   IconButton,
+  FormControl,
 } from "@mui/material";
 import {
   ArrowBack,
@@ -16,6 +17,8 @@ import {
 } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import theme from "../../../../theme";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { RegisterFormPostulant } from "../../../interfaces/Auth";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -23,19 +26,22 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
 
-  //   const handleChange = (event, newValue: number) => {
-  //     setTabValue(newValue);
-  //   };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormPostulant>();
 
-  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const onSubmit: SubmitHandler<RegisterFormPostulant> = (data) => {
+    handleNext();
+    console.log(data);
+  }
+
+  const handleInputsChange = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
-  };
-
-  const handleVerificationCodeChange = (
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
     setVerificationCode(event.target.value);
-  };
+
+  }
 
   const handleNext = () => {
     setTabValue(tabValue + 1);
@@ -131,42 +137,59 @@ const Register = () => {
         </Box>
         <Box>
           {tabValue === 0 && (
-            <Box
+            <FormControl
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 gap: "1rem",
                 justifyContent: "center",
               }}
+              component="form"
+              onSubmit={handleSubmit(onSubmit)}
             >
               <Typography variant="h5" align="left" gutterBottom>
                 Ingresa tu correo electrónico
               </Typography>
-              <TextField
-                label="Email"
-                variant="outlined"
-                fullWidth
-                value={email}
-                onChange={handleEmailChange}
-              />
-              <Button variant="contained" color="primary" onClick={handleNext}>
+              <Box>
+                <TextField
+                  label="Email"
+                  variant="outlined"
+                  fullWidth
+                  value={email}
+                  {...register("email", {
+                    required: true,
+                    pattern: /^\S+@\S+\.\S+$/,
+                  })}
+                  onChange={handleInputsChange}
+                />
+                {errors.email && (
+                  <Typography color="error" align="left" gutterBottom>
+                    Debes ingresar un correo electrónico válido
+                  </Typography>
+                )}
+              </Box>
+              <Button variant="contained" color="primary" /*onClick={handleNext}*/ type="submit" onClick={(e) => e.preventDefault}>
                 Continuar
               </Button>
+
               <Link to="/auth/candidate/login">
                 <Typography align="center" gutterBottom>
                   ¿Ya tienes una cuenta? Inicia sesión
                 </Typography>
               </Link>
-            </Box>
+            </FormControl>
           )}
           {tabValue === 1 && (
-            <Box
+            <FormControl
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 gap: "1rem",
                 justifyContent: "center",
               }}
+
+              component="form"
+              onSubmit={handleSubmit(onSubmit)}
             >
               <Typography variant="h5" align="center" gutterBottom>
                 Verificación de cuenta
@@ -175,31 +198,48 @@ const Register = () => {
                 Te enviamos un código a XXX@XXX.com. Recuerda revisar tu carpeta
                 Spam o Notificaciones.
               </Typography>
-              <TextField
-                label="Código de verificación"
-                variant="outlined"
-                fullWidth
-                value={verificationCode}
-                onChange={handleVerificationCodeChange}
-              />
-              <Button variant="contained" color="primary" onClick={handleNext}>
+              <Box>
+                <TextField
+                  label="Código de verificación"
+                  variant="outlined"
+                  fullWidth
+                  value={verificationCode}
+                  {...register("email_code", {
+                    required: true,
+                    //solo debe admitir números
+                    pattern: /^[0-9]*$/,
+                    minLength: 6,
+                  })}
+                  onChange={handleInputsChange}
+                />
+
+                {errors.email_code && (
+                  <Typography color="error" align="left" gutterBottom>
+                    Solo se admiten números y debe tener 6 dígitos
+                  </Typography>
+                )}
+              </Box>
+              <Button variant="contained" color="primary" type="submit" onClick={(e) => e.preventDefault}>
                 Continuar
               </Button>
               <Button variant="outlined" color="primary">
                 <Typography align="center" gutterBottom>
                   Reenviar código
                 </Typography>
+
               </Button>
-            </Box>
+            </FormControl>
           )}
           {tabValue === 2 && (
-            <Box
+            <FormControl
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 gap: "1rem",
                 justifyContent: "center",
               }}
+              component="form"
+              onSubmit={handleSubmit(onSubmit)}
             >
               <Typography variant="h5" align="center" gutterBottom>
                 Registra tus datos
@@ -207,13 +247,66 @@ const Register = () => {
               <Typography align="center" gutterBottom>
                 Asociaremos este nombre con
               </Typography>
-              <TextField label="Nombres" variant="outlined" fullWidth />
-              <TextField label="Apellidos" variant="outlined" fullWidth />
-              <TextField label="Password" variant="outlined" fullWidth />
-              <Button variant="contained" color="primary" onClick={handleRegister}>
+              <Box>
+                <TextField
+                  label="Nombres"
+                  variant="outlined"
+                  {...register("nombres", {
+                    required: true,
+                    minLength: 2,
+                  })
+                  }
+                  onChange={handleInputsChange}
+                  fullWidth
+                />
+                {errors.nombres && (
+                  <Typography
+                    color="error"
+                    align="left"
+                    gutterBottom
+                    {...register("nombres", {
+                      required: true,
+                      pattern: /^[a-zA-Z\s]*$/,
+                    })
+                    }
+                  >
+                    Debes ingresar tus dos nombres
+                  </Typography>
+                )}
+              </Box>
+              <Box>
+                <TextField
+                  label="Apellidos"
+                  variant="outlined"
+                  fullWidth
+                  {...register("apellidos", {
+                    required: true,
+                    pattern: /^[a-zA-Z\s]*$/,
+                  })
+                  }
+                />
+                {errors.apellidos && (
+                  <Typography color="error" align="left" gutterBottom>
+                    Debes ingresar tus dos apellidos
+                  </Typography>
+                )}
+              </Box>
+              <Box>
+                <TextField label="Password" variant="outlined" fullWidth />
+                {errors.password && (
+                  <Typography color="error" align="left" gutterBottom>
+                    Debes ingresar una contraseña
+                  </Typography>
+                )
+                }
+              </Box>
+              <Button variant="contained" color="primary" type="submit" onClick={(e) => {
+                handleRegister
+                e.preventDefault
+              }}>
                 Continuar
               </Button>
-            </Box>
+            </FormControl>
           )}
         </Box>
       </Container>

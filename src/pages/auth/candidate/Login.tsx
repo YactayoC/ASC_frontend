@@ -10,12 +10,24 @@ import {
 import { ArrowBack } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import theme from "../../../../theme";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { LoginForm } from "../../../interfaces/Auth"
 
 const Login = () => {
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
   const [email, setEmail] = useState("");
   const [passwrod, setPassword] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginForm>();
+
+  const onSubmit: SubmitHandler<FormData> = (data) => {
+    console.log(data);
+  };
 
   const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -84,12 +96,8 @@ const Login = () => {
       {/* Contenido */}
       <Container maxWidth="sm">
         <Box sx={{ width: "100%", marginBottom: "4rem" }}>
-          {/* <Tabs value={tabValue} centered>
-            {renderTabs()}
-          </Tabs> */}
         </Box>
         <Box>
-          {/* {tabValue === 0 && ( */}
           <Box
             sx={{
               display: "flex",
@@ -128,7 +136,6 @@ const Login = () => {
               Continuar
             </Button>
           </Box>
-          {/* )} */}
         </Box>
       </Container>
     </>
