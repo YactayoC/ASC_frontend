@@ -25,6 +25,9 @@ const Register = () => {
   const [tabValue, setTabValue] = useState(0);
   const [email, setEmail] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
+  const [nombres, setNombres] = useState("");
+  const [apellidos, setApellidos] = useState("");
+  const [password, setPassword] = useState("");
 
   const {
     register,
@@ -37,10 +40,20 @@ const Register = () => {
     console.log(data);
   }
 
-  const handleInputsChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
-    setVerificationCode(event.target.value);
+  }
 
+  const handleEmailCodeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setVerificationCode(event.target.value);
+  }
+
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setNombres(event.target.value);
+  }
+
+  const handleLastNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setApellidos(event.target.value);
   }
 
   const handleNext = () => {
@@ -160,7 +173,7 @@ const Register = () => {
                     required: true,
                     pattern: /^\S+@\S+\.\S+$/,
                   })}
-                  onChange={handleInputsChange}
+                  onChange={handleEmailChange}
                 />
                 {errors.email && (
                   <Typography color="error" align="left" gutterBottom>
@@ -210,7 +223,7 @@ const Register = () => {
                     pattern: /^[0-9]*$/,
                     minLength: 6,
                   })}
-                  onChange={handleInputsChange}
+                  onChange={handleEmailCodeChange}
                 />
 
                 {errors.email_code && (
@@ -253,10 +266,10 @@ const Register = () => {
                   variant="outlined"
                   {...register("nombres", {
                     required: true,
-                    minLength: 2,
+                    minLength: 10,
                   })
                   }
-                  onChange={handleInputsChange}
+                  onChange={handleNameChange}
                   fullWidth
                 />
                 {errors.nombres && (
@@ -267,8 +280,8 @@ const Register = () => {
                     {...register("nombres", {
                       required: true,
                       pattern: /^[a-zA-Z\s]*$/,
-                    })
-                    }
+                    })}
+                    onChange={handleNameChange}
                   >
                     Debes ingresar tus dos nombres
                   </Typography>
@@ -282,8 +295,8 @@ const Register = () => {
                   {...register("apellidos", {
                     required: true,
                     pattern: /^[a-zA-Z\s]*$/,
-                  })
-                  }
+                  })}
+                  onChange={handleLastNameChange}
                 />
                 {errors.apellidos && (
                   <Typography color="error" align="left" gutterBottom>
