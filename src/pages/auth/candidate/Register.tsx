@@ -23,11 +23,6 @@ import { RegisterFormPostulant } from "../../../interfaces/Auth";
 const Register = () => {
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
-  const [email, setEmail] = useState("");
-  const [verificationCode, setVerificationCode] = useState("");
-  const [nombres, setNombres] = useState("");
-  const [apellidos, setApellidos] = useState("");
-  const [password, setPassword] = useState("");
 
   const {
     register,
@@ -38,22 +33,10 @@ const Register = () => {
   const onSubmit: SubmitHandler<RegisterFormPostulant> = (data) => {
     handleNext();
     console.log(data);
-  }
 
-  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  }
-
-  const handleEmailCodeChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setVerificationCode(event.target.value);
-  }
-
-  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setNombres(event.target.value);
-  }
-
-  const handleLastNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setApellidos(event.target.value);
+    if (tabValue === 2) {
+      handleRegister();
+    }
   }
 
   const handleNext = () => {
@@ -74,7 +57,6 @@ const Register = () => {
               <RadioButtonUnchecked />
             )
           }
-        //   onClick={(e) => handleChange(e, i)}
         />
       );
     }
@@ -168,20 +150,22 @@ const Register = () => {
                   label="Email"
                   variant="outlined"
                   fullWidth
-                  value={email}
                   {...register("email", {
-                    required: true,
-                    pattern: /^\S+@\S+\.\S+$/,
+                    required: "Debes ingresar un correo electrónico válido",
+                    pattern: {
+                      value: /^\S+@\S+\.\S+$/,
+                      message: "Formato de correo electrónico no válido"
+                    },
+
                   })}
-                  onChange={handleEmailChange}
                 />
                 {errors.email && (
                   <Typography color="error" align="left" gutterBottom>
-                    Debes ingresar un correo electrónico válido
+                    {errors.email.message}
                   </Typography>
                 )}
               </Box>
-              <Button variant="contained" color="primary" /*onClick={handleNext}*/ type="submit" onClick={(e) => e.preventDefault}>
+              <Button variant="contained" color="primary" type="submit" onClick={(e) => e.preventDefault}>
                 Continuar
               </Button>
 
@@ -216,19 +200,22 @@ const Register = () => {
                   label="Código de verificación"
                   variant="outlined"
                   fullWidth
-                  value={verificationCode}
                   {...register("email_code", {
-                    required: true,
-                    //solo debe admitir números
-                    pattern: /^[0-9]*$/,
-                    minLength: 6,
+                    required: "Debes ingresar el código de verificación",
+                    pattern: {
+                      value: /^[0-9]+$/,
+                      message: "Solo se admiten números"
+                    },
+                    minLength: {
+                      value: 6,
+                      message: "El código debe tener 6 dígitos"
+                    }
                   })}
-                  onChange={handleEmailCodeChange}
                 />
 
                 {errors.email_code && (
                   <Typography color="error" align="left" gutterBottom>
-                    Solo se admiten números y debe tener 6 dígitos
+                    {errors.email_code.message}
                   </Typography>
                 )}
               </Box>
@@ -264,26 +251,19 @@ const Register = () => {
                 <TextField
                   label="Nombres"
                   variant="outlined"
-                  {...register("nombres", {
-                    required: true,
-                    minLength: 10,
-                  })
-                  }
-                  onChange={handleNameChange}
+                  autoComplete="off"
                   fullWidth
+                  {...register("nombres", {
+                    required: "Debe ingresar sus nombres",
+                    pattern: {
+                      value: /^[A-Za-z\s]+$/,
+                      message: "Solo se admiten letras",
+                    }
+                  })}
                 />
                 {errors.nombres && (
-                  <Typography
-                    color="error"
-                    align="left"
-                    gutterBottom
-                    {...register("nombres", {
-                      required: true,
-                      pattern: /^[a-zA-Z\s]*$/,
-                    })}
-                    onChange={handleNameChange}
-                  >
-                    Debes ingresar tus dos nombres
+                  <Typography color="error" align="left" gutterBottom>
+                    {errors.nombres.message}
                   </Typography>
                 )}
               </Box>
@@ -291,30 +271,45 @@ const Register = () => {
                 <TextField
                   label="Apellidos"
                   variant="outlined"
+                  type="text"
+                  autoComplete="off"
                   fullWidth
                   {...register("apellidos", {
-                    required: true,
-                    pattern: /^[a-zA-Z\s]*$/,
+                    required: "Debe ingresar sus apellidos",
+                    pattern: {
+                      value: /^[A-Za-z\s]+$/,
+                      message: "Debe ingresar sus apellidos",
+                    }
                   })}
-                  onChange={handleLastNameChange}
                 />
                 {errors.apellidos && (
                   <Typography color="error" align="left" gutterBottom>
-                    Debes ingresar tus dos apellidos
+                    {errors.apellidos.message}
                   </Typography>
                 )}
               </Box>
               <Box>
-                <TextField label="Password" variant="outlined" fullWidth />
+                <TextField
+                  label="Password"
+                  variant="outlined"
+                  autoComplete="onSubmit"
+                  fullWidth
+                  type="password"
+                  {...register("password", {
+                    required: "Debes ingresar una contraseña",
+                    pattern: {
+                      value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
+                      message: "Debes ingresar una contraseña"
+                    }
+                  })}
+                />
                 {errors.password && (
                   <Typography color="error" align="left" gutterBottom>
-                    Debes ingresar una contraseña
+                    {errors.password.message}
                   </Typography>
-                )
-                }
+                )}
               </Box>
               <Button variant="contained" color="primary" type="submit" onClick={(e) => {
-                handleRegister
                 e.preventDefault
               }}>
                 Continuar
