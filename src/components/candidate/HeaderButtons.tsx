@@ -178,6 +178,12 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
               <MenuItem onClick={() => handleClose("/candidate/my-cv")}>
                 Notificaciones
               </MenuItem>
+              <MenuItem onClick={() => {
+                setIsAuthenticated(!isAuthenticated);
+                handleClose("/")
+              }}>
+                {isAuthenticated ? "Cerrar sesión" : "Iniciar sesión"}
+              </MenuItem>
             </Menu>
           </Box>
         ) : (

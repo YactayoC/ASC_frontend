@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import {
   Tab,
   TextField,
@@ -184,7 +184,6 @@ const Register = () => {
                 gap: "1rem",
                 justifyContent: "center",
               }}
-
               component="form"
               onSubmit={handleSubmit(onSubmit)}
             >

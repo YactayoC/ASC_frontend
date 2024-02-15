@@ -10,6 +10,7 @@ import {
   IconButton,
   Grid,
   Autocomplete,
+  FormControl,
 } from "@mui/material";
 import {
   ArrowBack,
@@ -18,26 +19,32 @@ import {
 } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import theme from "../../../../theme";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { RegisterFormCompany } from "../../../interfaces/Auth";
 
 const RegisterComp = () => {
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
-  const [email, setEmail] = useState("");
-  const [verificationCode, setVerificationCode] = useState("");
 
-  //   const handleChange = (event, newValue: number) => {
-  //     setTabValue(newValue);
-  //   };
+  const {
+    register,
+    handleSubmit,
+    clearErrors,
+    formState: { errors },
+  } = useForm<RegisterFormCompany>();
 
-  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  };
+  const onSubmitCompany: SubmitHandler<RegisterFormCompany> = (data) => {
+    handleNext();
+    console.log(data);
 
-  const handleVerificationCodeChange = (
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
-    setVerificationCode(event.target.value);
-  };
+    if (tabValue === 2) {
+      handleRegisterComp();
+    }
+  }
+
+  const handleAutocompleteChange = () => {
+    clearErrors("sector_id");
+  }
 
   const handleNext = () => {
     setTabValue(tabValue + 1);
@@ -65,12 +72,6 @@ const RegisterComp = () => {
     return tabs;
   };
 
-  const handleRegisterComp = () => {
-    navigate("/company/my-ads");
-    localStorage.setItem("isCompany", "true");
-    localStorage.setItem("isAuthenticated", "true");
-  }
-
   const top100Films = [
     { label: "The Shawshank Redemption", year: 1994 },
     { label: "The Godfather", year: 1972 },
@@ -78,6 +79,12 @@ const RegisterComp = () => {
     { label: "The Dark Knight", year: 2008 },
     { label: "12 Angry", year: 1957 },
   ];
+
+  const handleRegisterComp = () => {
+    navigate("/company/my-ads");
+    localStorage.setItem("isCompany", "true");
+    localStorage.setItem("isAuthenticated", "true");
+  }
 
   return (
     <>
@@ -141,25 +148,40 @@ const RegisterComp = () => {
         </Box>
         <Box>
           {tabValue === 0 && (
-            <Box
+            <FormControl
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 gap: "1rem",
                 justifyContent: "center",
               }}
+              component="form"
+              onSubmit={handleSubmit(onSubmitCompany)}
             >
               <Typography variant="h5" align="left" gutterBottom>
                 Ingresa tu correo electrónico
               </Typography>
-              <TextField
-                label="Email"
-                variant="outlined"
-                fullWidth
-                value={email}
-                onChange={handleEmailChange}
-              />
-              <Button variant="contained" color="primary" onClick={handleNext}>
+              <Box>
+                <TextField
+                  label="Email"
+                  variant="outlined"
+                  fullWidth
+                  {...register("email", {
+                    required: "Debes ingresar un correo electrónico válido",
+                    pattern: {
+                      value: /^\S+@\S+\.\S+$/,
+                      message: "Formato de correo electrónico no válido"
+                    },
+
+                  })}
+                />
+                {errors.email && (
+                  <Typography color="error" align="left" gutterBottom>
+                    {errors.email.message}
+                  </Typography>
+                )}
+              </Box>
+              <Button variant="contained" color="primary" type="submit" onClick={(e) => e.preventDefault}>
                 Continuar
               </Button>
               <Link to="/auth/company/login">
@@ -167,7 +189,7 @@ const RegisterComp = () => {
                   ¿Ya tienes una cuenta? Inicia sesión
                 </Typography>
               </Link>
-            </Box>
+            </FormControl>
           )}
           {tabValue === 1 && (
             <Box
@@ -177,6 +199,8 @@ const RegisterComp = () => {
                 gap: "1rem",
                 justifyContent: "center",
               }}
+              component="form"
+              onSubmit={handleSubmit(onSubmitCompany)}
             >
               <Typography variant="h5" align="center" gutterBottom>
                 Verificación de cuenta
@@ -185,14 +209,30 @@ const RegisterComp = () => {
                 Te enviamos un código a XXX@XXX.com. Recuerda revisar tu carpeta
                 Spam o Notificaciones.
               </Typography>
-              <TextField
-                label="Código de verificación"
-                variant="outlined"
-                fullWidth
-                value={verificationCode}
-                onChange={handleVerificationCodeChange}
-              />
-              <Button variant="contained" color="primary" onClick={handleNext}>
+              <Box>
+                <TextField
+                  label="Código de verificación"
+                  variant="outlined"
+                  fullWidth
+                  {...register("email_code", {
+                    required: "Debes ingresar el código de verificación",
+                    pattern: {
+                      value: /^[0-9]+$/,
+                      message: "Solo se admiten números"
+                    },
+                    minLength: {
+                      value: 6,
+                      message: "El código debe tener 6 dígitos"
+                    }
+                  })}
+                />
+                {errors.email_code && (
+                  <Typography color="error" align="left" gutterBottom>
+                    {errors.email_code.message}
+                  </Typography>
+                )}
+              </Box>
+              <Button variant="contained" color="primary" type="submit" onClick={(e) => e.preventDefault}>
                 Continuar
               </Button>
               <Button variant="outlined" color="primary">
@@ -203,13 +243,15 @@ const RegisterComp = () => {
             </Box>
           )}
           {tabValue === 2 && (
-            <Box
+            <FormControl
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 gap: "1rem",
                 justifyContent: "center",
               }}
+              component="form"
+              onSubmit={handleSubmit(onSubmitCompany)}
             >
               <Typography variant="h5" align="center" gutterBottom>
                 Registra tus datos
@@ -217,45 +259,166 @@ const RegisterComp = () => {
               <Typography align="center" gutterBottom>
                 Asociaremos este nombre con
               </Typography>
-              <TextField label="Nombres y apellidos" variant="outlined" fullWidth />
+              <Box>
+                <TextField
+                  label="Nombres y apellidos"
+                  variant="outlined"
+                  fullWidth
+                  {...register("full_name", {
+                    required: "Debes ingresar tu nombre y apellido",
+                    pattern: {
+                      value: /^[A-Za-z\s]+$/,
+                      message: "Solo se admiten letras"
+                    }
+                  })}
+                />
+                {errors.full_name && (
+                  <Typography color="error" align="left" gutterBottom>
+                    {errors.full_name.message}
+                  </Typography>
+                )}
+              </Box>
               <Grid container spacing={2}>
                 <Grid item xs={4}>
-                  <TextField label="Contraseña" variant="outlined" fullWidth type="password" />
-                </Grid>
-                <Grid item xs={8}>
-                  <TextField label="Sector" variant="outlined" fullWidth />
-                </Grid>
-                <Grid item xs={4}>
-                  <TextField label="Nombre comercial" variant="outlined" fullWidth />
-                </Grid>
-                <Grid item xs={8}>
-                  <TextField label="Razón social" variant="outlined" fullWidth />
-                </Grid>
-                <Grid item xs={4}>
-                  <Autocomplete
-                    disablePortal
-                    id="combo-box-demo"
-                    options={top100Films}
-                    sx={{ width: "fullWidth" }}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Sector" />
+                  <Box>
+                    <TextField
+                      label="Password"
+                      variant="outlined"
+                      autoComplete="onSubmit"
+                      fullWidth
+                      type="password"
+                      {...register("password", {
+                        required: "Debes ingresar una contraseña",
+                        pattern: {
+                          value: /^(?=.*[A-Za-z])[A-Za-z\d]{8,}$/,
+                          message: "Debes ingresar una contraseña"
+                        }
+                      })}
+                    />
+                    {errors.password && (
+                      <Typography color="error" align="left" gutterBottom>
+                        {errors.password.message}
+                      </Typography>
                     )}
-                  />
+                  </Box>
                 </Grid>
                 <Grid item xs={8}>
-                  <TextField
-                    id="outlined-multiline-static"
-                    label="Descripción"
-                    multiline
-                    sx={{ width: "100%" }}
-                    rows={6}
-                  />
+                  <Box>
+                    <TextField
+                      label="Celular"
+                      variant="outlined"
+                      fullWidth
+                      {...register("phone", {
+                        required: "Debes ingresar tu número de celular",
+                        pattern: {
+                          value: /^[0-9]+$/,
+                          message: "Solo se admiten números"
+                        }
+                      })}
+                    />
+                    {errors.phone && (
+                      <Typography color="error" align="left" gutterBottom>
+                        {errors.phone.message}
+                      </Typography>
+                    )}
+                  </Box>
+                </Grid>
+                <Grid item xs={4}>
+                  <Box>
+                    <TextField
+                      label="Nombre comercial"
+                      variant="outlined"
+                      fullWidth
+                      {...register("nombre_comercial", {
+                        required: "Debes ingresar el nombre comercial",
+                        pattern: {
+                          value: /^[A-Za-z0-9\s.,¡!¿?@€$%^&*()_\-=+]+$/,
+                          message: "Solo se admiten letras"
+                        }
+                      })}
+                    />
+                    {errors.nombre_comercial && (
+                      <Typography color="error" align="left" gutterBottom>
+                        {errors.nombre_comercial.message}
+                      </Typography>
+                    )}
+                  </Box>
+                </Grid>
+                <Grid item xs={8}>
+                  <Box>
+                    <TextField
+                      label="Razón social"
+                      variant="outlined"
+                      fullWidth
+                      {...register("razon_social", {
+                        required: "Debes ingresar la razón social",
+                        pattern: {
+                          value: /^[A-Za-z0-9\s.,¡!¿?@€$%^&*()_\-=+]+$/,
+                          message: "Solo se admiten letras"
+                        }
+                      })}
+                    />
+                    {errors.razon_social && (
+                      <Typography color="error" align="left" gutterBottom>
+                        {errors.razon_social.message}
+                      </Typography>
+                    )}
+                  </Box>
+                </Grid>
+                <Grid item xs={4}>
+                  <Box>
+                    <Autocomplete
+                      id="combo-box-demo"
+                      options={top100Films}
+                      sx={{ width: "fullWidth" }}
+                      getOptionLabel={(option) => option.label}
+                      renderInput={(params) => (
+                        <TextField {...params} label="Sector" {...register("sector_id", {
+                          required: "Debes seleccionar un sector",
+                          pattern: {
+                            //quie el value adminte numeros
+                            value: /^[A-Za-z0-9\s.,¡:!¿?@€$%^&*()_\-=+]+$/,
+                            message: "Solo se admiten letras"
+                          }
+                        })} />
+                      )}
+                      onChange={handleAutocompleteChange}
+                    />
+                    {errors.sector_id && (
+                      <Typography color="error" align="left" gutterBottom>
+                        {errors.sector_id.message}
+                      </Typography>
+                    )}
+                  </Box>
+                </Grid>
+                <Grid item xs={8}>
+                  <Box>
+                    <TextField
+                      id="outlined-multiline-static"
+                      label="Descripción"
+                      multiline
+                      sx={{ width: "100%" }}
+                      rows={4}
+                      {...register("descripcion", {
+                        required: "Debes ingresar una descripción",
+                        pattern: {
+                          value: /^[A-Za-z0-9\s.,¡!¿?@€$%^&*()_\-=+]+$/,
+                          message: ""
+                        }
+                      })}
+                    />
+                    {errors.descripcion && (
+                      <Typography color="error" align="left" gutterBottom>
+                        {errors.descripcion.message}
+                      </Typography>
+                    )}
+                  </Box>
                 </Grid>
               </Grid>
-              <Button variant="contained" color="primary" onClick={handleRegisterComp}>
+              <Button variant="contained" color="primary" type="submit" onClick={(e) => e.preventDefault}>
                 Continuar
               </Button>
-            </Box>
+            </FormControl>
           )}
         </Box>
       </Container>
