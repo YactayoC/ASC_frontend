@@ -298,7 +298,7 @@ const Register = () => {
                   {...register("password", {
                     required: "Debes ingresar una contraseña",
                     pattern: {
-                      value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
+                      value: /^(?=.*[A-Za-z])[A-Za-z\d]{8,}$/,
                       message: "Debes ingresar una contraseña"
                     }
                   })}

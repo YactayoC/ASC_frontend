@@ -178,7 +178,6 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
               <MenuItem onClick={() => handleClose("/candidate/my-cv")}>
                 Notificaciones
               </MenuItem>
-              <MenuItem onClick={() => handleClose("/")}>Cerrar sesion</MenuItem>
             </Menu>
           </Box>
         ) : (
@@ -269,24 +268,15 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
               <MenuItem onClick={() => handleClose("/candidate/my-cv")}>
                 Mi CV
               </MenuItem>
-              <MenuItem onClick={() => handleClose("/")}>Cerrar sesion</MenuItem>
+              <MenuItem onClick={() => {
+                setIsAuthenticated(!isAuthenticated);
+                handleClose("/")
+              }}>
+                {isAuthenticated ? "Cerrar sesión" : "Iniciar sesión"}
+              </MenuItem>
             </Menu>
           </Box>
         )}
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            setIsAuthenticated(!isAuthenticated);
-          }}
-          sx={{
-            display: "flex",
-            columnGap: "0.2rem",
-            alignItems: "center",
-          }}
-        >
-          {isAuthenticated ? "Cerrar sesión" : "Iniciar sesión"}
-        </Button>
       </Box>
     );
   }
@@ -341,31 +331,7 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
         />
         Postula aquí
       </Button>
-      {
-        /*
-        
-     
-        
-        
-    <Button
-      variant="contained"
-      color="primary"
-      type="button"
-      onClick={() => {
-        setIsAuthenticated(!isAuthenticated);
-      }}
-      sx={{
-        display: "flex",
-        columnGap: "0.2rem",
-        alignItems: "center",
-      }}
-    >
-      {isAuthenticated ? "Cerrar sesión" : "Iniciar sesión"}
-    </Button>
 
-        */
-
-      }
     </Box>
   );
 };
