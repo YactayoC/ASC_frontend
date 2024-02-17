@@ -42,23 +42,6 @@ import SearchJob from "../../components/common/SearchJob";
 import theme from "../../../theme";
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-interface Respuesta {
-    id: number;
-    respuesta: string;
-    peso: string;
-}
-
-interface Pregunta {
-    id: number;
-    pregunta: string;
-    respuestas: Respuesta[];
-}
-
-interface PreguntaAbierta {
-    id: number;
-    pregunta: string;
-}
-
 const PostMyAd = () => {
     const [tabValueHorizontal, setTabValueHorizontal] = useState(0);
     const [tabValueVertical, setTabValueVertical] = useState(0);
@@ -163,6 +146,8 @@ const PostMyAd = () => {
 
     const handleChangeVertical = (_e: any, newValue: number) => {
         setTabValueVertical(newValue);
+        setPreguntaAbiertas([]);
+        setPreguntas([]);
     };
 
     const handleChangeTabSubVertical = (_e: any, newValue: number) => {
@@ -932,9 +917,11 @@ const PostMyAd = () => {
                                                     )}
                                                 />
                                                 {selectComboBox === "Cerrada" && (
-                                                    <IconButton onClick={handleAddClosedQuestion}>
-                                                        <AddTask />
-                                                    </IconButton>
+                                                    <Button
+                                                        onClick={handleAddClosedQuestion}
+                                                    >
+                                                        Agregar pregunta
+                                                    </Button>
                                                 )}
                                             </Box>
 
