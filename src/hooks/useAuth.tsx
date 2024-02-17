@@ -1,27 +1,54 @@
 import apiClient from "../api/ApiClient";
+import { userAtom } from "../store/user";
+import { useAtom } from "jotai";
 
 const useAuth = () => {
-    async function login(email: string, password: string) {
-        try {
-            const response = await apiClient.post("/login", {
-                email,
-                password,
-            });
 
-            const data = response.data;
-            if (data.error) {
-                return data.error;
+    const [userLogin, setUserLogin] = useAtom(userAtom);
+
+    const registerIncompleteCandidate = async (data: any) => {
+        try {
+            const response: any = await apiClient.post("/auth/register-incomplete-candidate", data);
+
+            const responseData = response.data;
+
+            return {
+                response: responseData,
+                status: response.status,
+                ok: true
             }
-            localStorage.setItem('token', data.token);
-            return data;
         }
         catch (err) {
-            return err;
+            console.log(err);
         }
-    }   
+    }
+
+    const loginCandidate = async (data: any) => {
+        try {
+            const response: any = await apiClient.post("/auth/login/candidate", data);
+
+            const responseData = response.data;
+
+            setUserLogin({
+                ...userLogin,
+                names: responseData.name,
+                email: responseData.email,
+            })
+
+            return {
+                response: responseData,
+                status: response.status,
+                ok: true
+            };
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
 
     return {
-        login
+        registerIncompleteCandidate,
+        loginCandidate
     }
 }
 

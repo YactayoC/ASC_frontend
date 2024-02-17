@@ -1,4 +1,3 @@
-import { ChangeEvent, useState } from "react";
 import {
   TextField,
   Button,
@@ -6,28 +5,39 @@ import {
   Typography,
   Container,
   IconButton,
+  FormControl,
 } from "@mui/material";
+
 import { ArrowBack } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import theme from "../../../../theme";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { LoginForm } from "../../../interfaces/Auth";
+import { useState } from "react";
+import useAuth from "../../../hooks/useAuth";
 
 const LoginComp = () => {
+  const [dataForm, setDataForm] = useState<LoginForm>({} as LoginForm);
   const navigate = useNavigate();
-  const [tabValue, setTabValue] = useState(0);
-  const [email, setEmail] = useState("");
-  const [passwrod, setPassword] = useState("");
+  const { loginCandidate } = useAuth();
 
-  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginForm>();
+
+  const onSubmitData: SubmitHandler<LoginForm> = (data) => {
+    setDataForm(data);
+    handleLogin();
   };
 
-  const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  };
-
-  const handleNext = () => {
-    setTabValue(tabValue + 1);
-  };
+  const handleLogin = async () => {
+    await loginCandidate(dataForm);
+    localStorage.setItem("isAuthenticated", "true");
+    localStorage.setItem("isCompany", "true");
+    navigate("/company/my-ads");
+  }
 
   return (
     <>
@@ -84,52 +94,76 @@ const LoginComp = () => {
       {/* Contenido */}
       <Container maxWidth="sm">
         <Box sx={{ width: "100%", marginBottom: "4rem" }}>
-          {/* <Tabs value={tabValue} centered>
-            {renderTabs()}
-          </Tabs> */}
         </Box>
-        <Box>
-          {/* {tabValue === 0 && ( */}
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              rowGap: "2rem",
-            }}
-          >
+
+        <FormControl
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            rowGap: "2rem",
+          }}
+          component="form"
+          onSubmit={handleSubmit(onSubmitData)}
+        >
+          <Box>
+            <Typography variant="h5" align="left" gutterBottom>
+              Ingresa tu correo electrónico
+            </Typography>
             <Box>
-              <Typography variant="h5" align="left" gutterBottom>
-                Ingresa tu correo electrónico
-              </Typography>
               <TextField
                 label="Email"
                 variant="outlined"
                 fullWidth
-                value={email}
-                onChange={handleEmailChange}
+                {...register("email", {
+                  required: "Este campo es requerido",
+                  pattern: {
+                    value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
+                    message: "Email inválido",
+                  },
+                })
+                }
               />
+              {errors.email && (
+                <Typography variant="caption" color="red">
+                  {errors.email.message}
+                </Typography>
+              )}
             </Box>
+          </Box>
+          <Box>
+            <Typography variant="h5" align="left" gutterBottom>
+              Ingresa tu contraseña
+            </Typography>
             <Box>
-              <Typography variant="h5" align="left" gutterBottom>
-                Ingresa tu contraseña
-              </Typography>
               <TextField
                 label="Contraseña"
                 variant="outlined"
                 fullWidth
                 type="password"
-                value={passwrod}
-                onChange={handlePasswordChange}
+                {...register("password", {
+                  required: "Este campo es requerido",
+                  minLength: {
+                    value: 1,
+                    message: "La contraseña debe tener al menos 1 caracteres",
+                  },
+                })
+                }
               />
+              {errors.password && (
+                <Typography variant="caption" color="red">
+                  {errors.password.message}
+                </Typography>
+              )}
             </Box>
-
-            <Button variant="contained" color="primary" onClick={handleNext}>
-              Continuar
-            </Button>
           </Box>
-          {/* )} */}
-        </Box>
+
+          <Button variant="contained" color="primary" type="submit" onClick={(e) => {
+            e.preventDefault
+          }}>
+            Continuar
+          </Button>
+        </FormControl>
       </Container>
     </>
   );

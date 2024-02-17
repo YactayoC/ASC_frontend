@@ -1,6 +1,6 @@
 import HeaderButtons from "../../components/candidate/HeaderButtons";
 import { HeaderMainPage } from "../../components/layout/HeaderMainPage";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
     Box,
     Tab,
@@ -18,15 +18,21 @@ import {
     IconButton,
     Menu,
     MenuItem,
+    Table,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TableBody,
+    TableCell,
 } from "@mui/material";
 
 import { styled } from '@mui/material/styles';
 
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
-import { Add, Facebook, Twitter, LinkedIn } from "@mui/icons-material";
+import { Add, Facebook, Twitter, LinkedIn, Delete, Edit, AddTask } from "@mui/icons-material";
 
-
+import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -35,6 +41,23 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import SearchJob from "../../components/common/SearchJob";
 import theme from "../../../theme";
 import useMediaQuery from '@mui/material/useMediaQuery';
+
+interface Respuesta {
+    id: number;
+    respuesta: string;
+    peso: string;
+}
+
+interface Pregunta {
+    id: number;
+    pregunta: string;
+    respuestas: Respuesta[];
+}
+
+interface PreguntaAbierta {
+    id: number;
+    pregunta: string;
+}
 
 const PostMyAd = () => {
     const [tabValueHorizontal, setTabValueHorizontal] = useState(0);
@@ -45,6 +68,82 @@ const PostMyAd = () => {
     const [showSearchBar, setShowSearchBar] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const [enlace, setEnlace] = useState('');
+    const [preguntas, setPreguntas] = useState<Pregunta[]>([]);
+    const [preguntaAbiertas, setPreguntaAbiertas] = useState<PreguntaAbierta[]>([]);
+    const [selectComboBox, setSelectComboBox] = useState('' as string);
+
+    //INSERTAR PREGUNTAS CERRADAS CON RESPUESTAS DINAMICAS
+    const handleQuestionCloseChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, preguntaIndex: number) => {
+        const newPreguntas = [...preguntas];
+        newPreguntas[preguntaIndex].pregunta = event.target.value;
+        setPreguntas(newPreguntas);
+    };
+
+    const handleResponseChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, preguntaIndex: number, respuestaIndex: number) => {
+        const newPreguntas = [...preguntas];
+        newPreguntas[preguntaIndex].respuestas[respuestaIndex].respuesta = event.target.value;
+        setPreguntas(newPreguntas);
+    };
+
+    const handlePesoChange = (value: string | null, preguntaIndex: number, respuestaIndex: number) => {
+        if (value !== null) {
+            const newPreguntas = [...preguntas];
+            newPreguntas[preguntaIndex].respuestas[respuestaIndex].peso = value;
+            setPreguntas(newPreguntas);
+        }
+    };
+
+    const handleRemoveRespuesta = (preguntaIndex: number, respuestaIndex: number) => {
+        const newPreguntas = [...preguntas];
+        // Verifica si es la última pregunta y si tiene una sola respuesta
+        if (newPreguntas.length === 1 && newPreguntas[preguntaIndex].respuestas.length === 1) {
+            return
+        } else {
+            newPreguntas[preguntaIndex].respuestas.splice(respuestaIndex, 1);
+            if (newPreguntas[preguntaIndex].respuestas.length === 0) {
+                newPreguntas.splice(preguntaIndex, 1);
+            }
+            setPreguntas(newPreguntas);
+        }
+    };
+
+    const handleAddResponse = (preguntaIndex: number) => {
+        const newRespuesta: Respuesta = { id: Date.now(), respuesta: '', peso: '' };
+        const newPreguntas = [...preguntas];
+        newPreguntas[preguntaIndex].respuestas.push(newRespuesta);
+        setPreguntas(newPreguntas);
+    };
+
+    const handleAddClosedQuestion = () => {
+        const newQuestion: Pregunta = {
+            id: Date.now(), // Asegúrate de que este ID sea único
+            pregunta: '',
+            respuestas: [{ id: Date.now(), respuesta: '', peso: '' }] // Agregar una respuesta inicial vacía
+        };
+        setPreguntas([...preguntas, newQuestion]);
+    };
+
+    //PREGUNTAS ABIERTAS
+    const handleAddQuestionOpen = () => {
+        const newQuestion: PreguntaAbierta = {
+            id: Date.now(), // Asegúrate de que este ID sea único
+            pregunta: '',
+        };
+        setPreguntaAbiertas([...preguntaAbiertas, newQuestion]);
+    };
+
+    const handleRemoveClosedQuestion = (preguntaIndex: number) => {
+        if (preguntaAbiertas.length === 1) {
+            return
+        }
+        setPreguntaAbiertas(prevPreguntas => prevPreguntas.filter((_, index) => index !== preguntaIndex));
+    };
+
+    const handleQuestionOpenChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, preguntaIndex: number) => {
+        const newPreguntas = [...preguntaAbiertas];
+        newPreguntas[preguntaIndex].pregunta = event.target.value;
+        setPreguntaAbiertas(newPreguntas);
+    }
 
     const open = Boolean(anchorEl);
 
@@ -56,16 +155,18 @@ const PostMyAd = () => {
 
     const handleChange = (_e: any, newValue: number) => {
         setTabValueHorizontal(newValue);
+        if (newValue !== 2) { // Si no es la pestaña "Cuestionario de preguntas"
+            setSelectComboBox(''); // Restablece el selectComboBox
+            setPreguntas([]); // Restablece las preguntas
+        }
     };
 
     const handleChangeVertical = (_e: any, newValue: number) => {
         setTabValueVertical(newValue);
-        //setShowSearchBar(newValue === 0);
     };
 
     const handleChangeTabSubVertical = (_e: any, newValue: number) => {
         setSubTabValueVertical(newValue);
-        //setShowSearchBar(newValue === 0);
     };
 
     const handleChangePreview = () => {
@@ -94,6 +195,25 @@ const PostMyAd = () => {
         }
     }
 
+    const handleSelectComboBox = (_event: React.ChangeEvent<{}>, value: string | null) => {
+        if (value) {
+            setSelectComboBox(value);
+            setPreguntas([
+                {
+                    id: Date.now(),
+                    pregunta: '',
+                    respuestas: [{ id: Date.now(), respuesta: '', peso: '' }]
+                }
+            ]);
+            setPreguntaAbiertas([
+                {
+                    id: Date.now(),
+                    pregunta: '',
+                }
+            ]);
+        }
+    };
+
     const sectorCompany = [
         { label: "Tecnología" },
         { label: "Salud" },
@@ -108,8 +228,14 @@ const PostMyAd = () => {
     ];
 
     const questionType = [
-        { label: "Abierta" },
         { label: "Cerrada" },
+        { label: "Abierta" },
+    ];
+
+
+    const questionWeight = [
+        { label: "0" },
+        { label: "1" },
     ];
 
     const VisuallyHiddenInput = styled('input')({
@@ -129,6 +255,8 @@ const PostMyAd = () => {
         { id: 1, label: "Datos de la publicación" },
         { id: 2, label: "Proceso de selección" },
     ];
+
+
 
     return (
         <Box>
@@ -777,24 +905,166 @@ const PostMyAd = () => {
                                                 flexDirection: "column",
                                                 rowGap: "2rem",
                                                 paddingTop: "2rem",
-                                                width: "auto",
+                                                justifyContent: "flex-end",
                                             }}
                                         >
-                                            <Autocomplete
-                                                disablePortal
-                                                id="combo-box-demo"
-                                                options={questionType}
+                                            <Box
                                                 sx={{
-                                                    width: "20rem",
-                                                    [theme.breakpoints.down("lg")]: {
-                                                        width: "100%",
-                                                    }
-
+                                                    width: "100%",
+                                                    display: "flex",
+                                                    justifyContent: "space-between",
                                                 }}
-                                                renderInput={(params) => (
-                                                    <TextField {...params} label="Tipo de pregunta" />
+                                            >
+                                                <Autocomplete
+                                                    disablePortal
+                                                    disableClearable
+                                                    id="combo-box-demo"
+                                                    options={questionType}
+                                                    onInputChange={handleSelectComboBox}
+                                                    sx={{
+                                                        width: "20rem",
+                                                        [theme.breakpoints.down("lg")]: {
+                                                            width: "100%",
+                                                        }
+                                                    }}
+                                                    renderInput={(params) => (
+                                                        <TextField {...params} label="Tipo de pregunta" />
+                                                    )}
+                                                />
+                                                {selectComboBox === "Cerrada" && (
+                                                    <IconButton onClick={handleAddClosedQuestion}>
+                                                        <AddTask />
+                                                    </IconButton>
                                                 )}
-                                            />
+                                            </Box>
+
+                                            {selectComboBox === "Cerrada" && preguntas.map((pregunta, preguntaIndex) => (
+                                                <TableContainer component={Paper} key={pregunta.id}>
+                                                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                                        <TableHead>
+                                                            <TableRow>
+                                                                <TableCell>Pregunta / Respuestas</TableCell>
+                                                                <TableCell>Tiempo / Peso</TableCell>
+                                                                <TableCell align="right">Acciones</TableCell>
+                                                            </TableRow>
+                                                        </TableHead>
+                                                        <TableBody>
+                                                            {/* Fila para la pregunta */}
+                                                            <TableRow>
+                                                                <TableCell component="th" scope="row">
+                                                                    <TextField
+                                                                        fullWidth
+                                                                        label="Pregunta"
+                                                                        variant="outlined"
+                                                                        value={pregunta.pregunta}
+                                                                        onChange={(e) => handleQuestionCloseChange(e, preguntaIndex)}
+                                                                        sx={{
+                                                                            width: "30rem",
+                                                                        }}
+                                                                    />
+                                                                </TableCell>
+                                                                <TableCell />
+                                                                <TableCell align="right">
+                                                                    {/* Botones de acción para la pregunta */}
+                                                                </TableCell>
+                                                            </TableRow>
+                                                            {/* Filas para las respuestas */}
+                                                            {pregunta.respuestas.map((respuesta, respuestaIndex) => (
+                                                                <TableRow key={respuesta.id}>
+                                                                    <TableCell>
+                                                                        <TextField
+                                                                            fullWidth
+                                                                            label="Respuesta"
+                                                                            variant="outlined"
+                                                                            value={respuesta.respuesta}
+                                                                            onChange={(e) => handleResponseChange(e, preguntaIndex, respuestaIndex)}
+                                                                            sx={{ width: "20rem" }}
+                                                                        />
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        <Box
+                                                                            sx={{
+                                                                                display: "flex",
+                                                                                columnGap: "1.2rem",
+                                                                                alignItems: "center",
+                                                                            }}
+                                                                        >
+                                                                            <Autocomplete
+                                                                                disablePortal
+                                                                                value={respuesta.peso}
+                                                                                onChange={(_e, newValue) => handlePesoChange(newValue, preguntaIndex, respuestaIndex)}
+                                                                                options={questionWeight.map(option => option.label)}
+                                                                                renderInput={(params) => <TextField {...params} label="Peso" />}
+                                                                                sx={{ width: "20rem" }}
+                                                                            />
+
+                                                                            <IconButton
+                                                                                onClick={() => handleAddResponse(preguntaIndex)}
+                                                                            >
+                                                                                <Add />
+                                                                            </IconButton>
+                                                                        </Box>
+                                                                    </TableCell>
+                                                                    <TableCell align="right">
+                                                                        {/* Botones de acción para cada respuesta */}
+                                                                        <IconButton>
+                                                                            <Edit />
+                                                                        </IconButton>
+                                                                        <IconButton onClick={() => handleRemoveRespuesta(preguntaIndex, respuestaIndex)}>
+                                                                            <Delete />
+                                                                        </IconButton>
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            ))}
+                                                        </TableBody>
+                                                    </Table>
+                                                    {/* Botón para agregar respuesta a la pregunta actual */}
+                                                </TableContainer>
+                                            ))}
+                                            {selectComboBox === "Abierta" && preguntaAbiertas.map((preguntaAbierta, preguntaIndex) => (
+                                                <TableContainer component={Paper} key={preguntaAbierta.id}>
+                                                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                                        <TableHead>
+                                                            <TableRow>
+                                                                <TableCell>Pregunta</TableCell>
+                                                                <TableCell align="right">Acciones</TableCell>
+                                                            </TableRow>
+                                                        </TableHead>
+                                                        <TableBody>
+                                                            <TableRow>
+                                                                <TableCell component="th" scope="row">
+                                                                    <TextField
+                                                                        fullWidth
+                                                                        label="Pregunta"
+                                                                        variant="outlined"
+                                                                        value={preguntaAbierta.pregunta}
+                                                                        onChange={(e) => handleQuestionOpenChange(e, preguntaIndex)}
+                                                                        sx={{
+                                                                            width: "30rem",
+                                                                        }}
+                                                                    />
+
+                                                                </TableCell>
+                                                                <TableCell align="right">
+                                                                    <IconButton
+                                                                        onClick={() => handleAddQuestionOpen()}
+                                                                    >
+                                                                        <Add />
+                                                                    </IconButton>
+                                                                    <IconButton>
+                                                                        <Edit />
+                                                                    </IconButton>
+                                                                    <IconButton
+                                                                        onClick={() => handleRemoveClosedQuestion(preguntaIndex)}
+                                                                    >
+                                                                        <Delete />
+                                                                    </IconButton>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        </TableBody>
+                                                    </Table>
+                                                </TableContainer>
+                                            ))}
                                         </Box>
                                     )}
                                 </Box>

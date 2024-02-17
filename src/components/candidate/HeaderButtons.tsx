@@ -276,6 +276,8 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
               </MenuItem>
               <MenuItem onClick={() => {
                 setIsAuthenticated(!isAuthenticated);
+                localStorage.removeItem("isCompany");
+                localStorage.removeItem("isAuthenticated");
                 handleClose("/")
               }}>
                 {isAuthenticated ? "Cerrar sesión" : "Iniciar sesión"}
