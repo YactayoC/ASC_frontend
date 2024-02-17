@@ -19,6 +19,7 @@ import useDataDefault from "../hooks/useDataDefault";
 import { useEffect } from "react";
 
 function Home() {
+
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const { getDataDefault } = useDataDefault();

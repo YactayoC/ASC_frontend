@@ -14,12 +14,11 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { LoginForm } from "../../../interfaces/Auth"
 
 import useAuth from "../../../hooks/useAuth";
-import { useState } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
   const { loginCandidate } = useAuth();
-  const [dataForm, setDataForm] = useState<LoginForm>({} as LoginForm);
+  //const [dataForm, setDataForm] = useState<LoginForm>({} as LoginForm);
 
   const {
     register,
@@ -28,12 +27,13 @@ const Login = () => {
   } = useForm<LoginForm>();
 
   const onSubmitData: SubmitHandler<LoginForm> = (data) => {
-    setDataForm(data);
-    handleLogin();
+    handleLogin(data);
   };
 
-  const handleLogin = async () => {
-    await loginCandidate(dataForm);
+  const handleLogin = async (dataForm: LoginForm) => {
+    const response = await loginCandidate(dataForm);
+    console.log(response?.response)
+    localStorage.setItem("userLogin", JSON.stringify(response?.response));
     localStorage.setItem("isAuthenticated", "true");
     localStorage.setItem("isCompany", "false");
     navigate("/");

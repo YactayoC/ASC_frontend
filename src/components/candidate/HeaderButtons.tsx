@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import theme from "../../../theme";
 import { MouseEvent, useEffect, useState } from "react";
 
+// import { useAtom } from "jotai";
+// import { userAtom } from "../../store/user";
+
 interface Props {
   showLogo?: boolean;
 }
@@ -14,6 +17,9 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [verifyCompany, setVerifyCompany] = useState<boolean>(false);
+  //const [userLogin, setUserLogin] = useAtom(userAtom);
+
+  //console.log(userLogin)
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -179,6 +185,8 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
                 Notificaciones
               </MenuItem>
               <MenuItem onClick={() => {
+                localStorage.setItem("isAuthenticated", "true");
+                localStorage.removeItem("userLogin");
                 setIsAuthenticated(!isAuthenticated);
                 handleClose("/")
               }}>
@@ -258,6 +266,9 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
                   backgroundColor: "primary.main",
                   cursor: "pointer",
                   color: "white",
+                  width: "auto",
+                  paddingRight: "0.5rem",
+                  paddingLeft: "0.5rem",
                   fontWeight: "bold",
                   paddingBlock: "0.5rem",
                   textAlign: "center",
@@ -266,7 +277,7 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
                   },
                 }}
               >
-                Luis de Tomas
+                Hermenejildo Jose
               </Box>
               <MenuItem onClick={() => handleClose("/candidate/my-account")}>
                 Mi cuenta

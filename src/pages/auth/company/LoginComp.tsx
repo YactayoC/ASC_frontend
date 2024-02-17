@@ -13,13 +13,12 @@ import { useNavigate } from "react-router-dom";
 import theme from "../../../../theme";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { LoginForm } from "../../../interfaces/Auth";
-import { useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 
 const LoginComp = () => {
-  const [dataForm, setDataForm] = useState<LoginForm>({} as LoginForm);
+  //const [dataForm, setDataForm] = useState<LoginForm>({} as LoginForm);
   const navigate = useNavigate();
-  const { loginCandidate } = useAuth();
+  const { loginCompany } = useAuth();
 
   const {
     register,
@@ -28,12 +27,13 @@ const LoginComp = () => {
   } = useForm<LoginForm>();
 
   const onSubmitData: SubmitHandler<LoginForm> = (data) => {
-    setDataForm(data);
-    handleLogin();
+    handleLogin(data);
   };
 
-  const handleLogin = async () => {
-    await loginCandidate(dataForm);
+  const handleLogin = async (dataForm: LoginForm) => {
+    const response = await loginCompany(dataForm);
+    console.log(response?.response)
+    localStorage.setItem("userLogin", JSON.stringify(response?.response));
     localStorage.setItem("isAuthenticated", "true");
     localStorage.setItem("isCompany", "true");
     navigate("/company/my-ads");
