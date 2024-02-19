@@ -185,7 +185,8 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
                 Notificaciones
               </MenuItem>
               <MenuItem onClick={() => {
-                localStorage.setItem("isAuthenticated", "true");
+                localStorage.removeItem("isCompany");
+                localStorage.removeItem("isAuthenticated");
                 localStorage.removeItem("userLogin");
                 setIsAuthenticated(!isAuthenticated);
                 handleClose("/")
