@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import theme from "../../../../theme";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { LoginForm } from "../../../interfaces/Auth";
-import useAuth from "../../../hooks/useAuth";
+import useAuth from "../../../hooks/Auth/useAuth";
 
 const LoginComp = () => {
   //const [dataForm, setDataForm] = useState<LoginForm>({} as LoginForm);

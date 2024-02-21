@@ -19,10 +19,14 @@ import { Link, useNavigate } from "react-router-dom";
 import theme from "../../../../theme";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { RegisterFormPostulant } from "../../../interfaces/Auth";
+import useVerificationEmail from "../../../hooks/Email/useVerificationEmail";
+import useAuth from "../../../hooks/Auth/useAuth";
 
 const Register = () => {
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
+  const { sendVerificationEmail, verifyCodeEmail } = useVerificationEmail();
+  const { registerCompleteCandidate } = useAuth();
 
   const {
     register,
@@ -32,11 +36,19 @@ const Register = () => {
 
   const onSubmit: SubmitHandler<RegisterFormPostulant> = (data) => {
     handleNext();
-    console.log(data);
+
+    if (tabValue === 0) {
+      handleSendVerificationEmail(data);
+    }
+
+    if (tabValue === 1) {
+      handleVerifyCodeEmail(data)
+    }
 
     if (tabValue === 2) {
-      handleRegister();
+      handleRegisterInfoCandidate(data)
     }
+
   }
 
   const handleNext = () => {
@@ -64,10 +76,36 @@ const Register = () => {
     return tabs;
   };
 
-  const handleRegister = () => {
-    navigate("/");
-    localStorage.setItem("isCompany", "false");
-    localStorage.setItem("isAuthenticated", "true");
+  const handleSendVerificationEmail = async (data: any) => {
+    try {
+      const response = await sendVerificationEmail(data);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleVerifyCodeEmail = async (data: any) => {
+    try {
+      const response = await verifyCodeEmail(data);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleRegisterInfoCandidate = async (data: any) => {
+    try {
+      //console.log(data)
+      const response = await registerCompleteCandidate(data);
+      navigate("/");
+      localStorage.setItem("userInfo", JSON.stringify(response?.response.data));
+      localStorage.setItem("isCompany", "false");
+      localStorage.setItem("isAuthenticated", "true");
+
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -165,7 +203,9 @@ const Register = () => {
                   </Typography>
                 )}
               </Box>
-              <Button variant="contained" color="primary" type="submit" onClick={(e) => e.preventDefault}>
+              <Button variant="contained" color="primary" type="submit" onClick={(e) => {
+                e.preventDefault
+              }}>
                 Continuar
               </Button>
 

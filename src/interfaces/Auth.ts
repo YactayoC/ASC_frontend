@@ -14,11 +14,11 @@ export interface RegisterFormPostulant {
 export interface RegisterFormCompany {
   email: string;
   email_code: number;
-  full_name: string;
+  nombre_completo: string;
   password: string;
   nombre_comercial: string;
   sector_id: number;
-  phone: string;
+  movil: string;
   razon_social: string;
-  descripcion: string;
+  descripcion_empresa: string;
 }

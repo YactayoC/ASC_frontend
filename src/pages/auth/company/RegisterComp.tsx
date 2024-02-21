@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import {
   Tab,
   TextField,
@@ -19,17 +19,22 @@ import {
 } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import theme from "../../../../theme";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { RegisterFormCompany } from "../../../interfaces/Auth";
+import useAuth from "../../../hooks/Auth/useAuth";
+import useVerificationEmail from "../../../hooks/Email/useVerificationEmail";
 
 const RegisterComp = () => {
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
+  const { registerCompleteCompany } = useAuth();
+  const { sendVerificationEmailCompany, verifyCodeEmailCompany } = useVerificationEmail();
 
   const {
     register,
     handleSubmit,
     clearErrors,
+    control,
     formState: { errors },
   } = useForm<RegisterFormCompany>();
 
@@ -37,13 +42,18 @@ const RegisterComp = () => {
     handleNext();
     console.log(data);
 
-    if (tabValue === 2) {
-      handleRegisterComp();
+    if (tabValue === 0) {
+      //enviar email_code y email
+      handleSendVerificationEmail(data);
     }
-  }
 
-  const handleAutocompleteChange = () => {
-    clearErrors("sector_id");
+    if (tabValue === 1) {
+      handleVerifyCodeEmail(data);
+    }
+
+    if (tabValue === 2) {
+      handleRegisterInfoCandidate(data);
+    }
   }
 
   const handleNext = () => {
@@ -73,17 +83,44 @@ const RegisterComp = () => {
   };
 
   const top100Films = [
-    { label: "The Shawshank Redemption", year: 1994 },
-    { label: "The Godfather", year: 1972 },
-    { label: "The Godfather: Part II", year: 1974 },
-    { label: "The Dark Knight", year: 2008 },
-    { label: "12 Angry", year: 1957 },
+    { label: "The Shawshank Redemption", id: 1 },
+    { label: "The Godfather", id: 2 },
+    { label: "The Godfather: Part II", id: 3 },
+    { label: "The Dark Knight", id: 4 },
+    { label: "12 Angry", id: 5 },
   ];
 
-  const handleRegisterComp = () => {
-    navigate("/company/my-ads");
-    localStorage.setItem("isCompany", "true");
-    localStorage.setItem("isAuthenticated", "true");
+  const handleSendVerificationEmail = async (data: any) => {
+    try {
+      const response = await sendVerificationEmailCompany(data);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleVerifyCodeEmail = async (data: any) => {
+    try {
+      const response = await verifyCodeEmailCompany(data);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleRegisterInfoCandidate = async (data: any) => {
+    try {
+      console.log(data)
+      const response = await registerCompleteCompany(data);
+      console.log(response)
+      navigate("auth/company/register");
+      //localStorage.setItem("userInfo", JSON.stringify(response?.response.data));
+      localStorage.setItem("isCompany", "true");
+      localStorage.setItem("isAuthenticated", "true");
+
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -264,7 +301,7 @@ const RegisterComp = () => {
                   label="Nombres y apellidos"
                   variant="outlined"
                   fullWidth
-                  {...register("full_name", {
+                  {...register("nombre_completo", {
                     required: "Debes ingresar tu nombre y apellido",
                     pattern: {
                       value: /^[A-Za-z\s]+$/,
@@ -272,9 +309,9 @@ const RegisterComp = () => {
                     }
                   })}
                 />
-                {errors.full_name && (
+                {errors.nombre_completo && (
                   <Typography color="error" align="left" gutterBottom>
-                    {errors.full_name.message}
+                    {errors.nombre_completo.message}
                   </Typography>
                 )}
               </Box>
@@ -308,7 +345,7 @@ const RegisterComp = () => {
                       label="Celular"
                       variant="outlined"
                       fullWidth
-                      {...register("phone", {
+                      {...register("movil", {
                         required: "Debes ingresar tu número de celular",
                         pattern: {
                           value: /^[0-9]+$/,
@@ -316,9 +353,9 @@ const RegisterComp = () => {
                         }
                       })}
                     />
-                    {errors.phone && (
+                    {errors.movil && (
                       <Typography color="error" align="left" gutterBottom>
-                        {errors.phone.message}
+                        {errors.movil.message}
                       </Typography>
                     )}
                   </Box>
@@ -367,28 +404,31 @@ const RegisterComp = () => {
                 </Grid>
                 <Grid item xs={4}>
                   <Box>
-                    <Autocomplete
-                      id="combo-box-demo"
-                      options={top100Films}
-                      sx={{ width: "fullWidth" }}
-                      getOptionLabel={(option) => option.label}
-                      renderInput={(params) => (
-                        <TextField {...params} label="Sector" {...register("sector_id", {
-                          required: "Debes seleccionar un sector",
-                          pattern: {
-                            //quie el value adminte numeros
-                            value: /^[A-Za-z0-9\s.,¡:!¿?@€$%^&*()_\-=+]+$/,
-                            message: "Solo se admiten letras"
-                          }
-                        })} />
+                    <Controller
+                      name="sector_id"
+                      control={control}
+                      rules={{ required: 'Este campo es requerido' }}
+                      render={({ field }) => (
+                        <Autocomplete
+                          {...field}
+                          disablePortal
+                          id="combo-box-demo"
+                          options={top100Films}
+                          value={top100Films.find(option => option.id === field.value) || null}
+                          sx={{ width: "fullWidth" }}
+                          onChange={(_, data) => field.onChange(data ? data.id : '')}
+                          getOptionLabel={(option) => option.label}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label="Sector"
+                              error={!!errors.sector_id}
+                              helperText={errors.sector_id ? errors.sector_id.message : ''}
+                            />
+                          )}
+                        />
                       )}
-                      onChange={handleAutocompleteChange}
                     />
-                    {errors.sector_id && (
-                      <Typography color="error" align="left" gutterBottom>
-                        {errors.sector_id.message}
-                      </Typography>
-                    )}
                   </Box>
                 </Grid>
                 <Grid item xs={8}>
@@ -399,7 +439,7 @@ const RegisterComp = () => {
                       multiline
                       sx={{ width: "100%" }}
                       rows={4}
-                      {...register("descripcion", {
+                      {...register("descripcion_empresa", {
                         required: "Debes ingresar una descripción",
                         pattern: {
                           value: /^[A-Za-z0-9\s.,¡!¿?@€$%^&*()_\-=+]+$/,
@@ -407,9 +447,9 @@ const RegisterComp = () => {
                         }
                       })}
                     />
-                    {errors.descripcion && (
+                    {errors.descripcion_empresa && (
                       <Typography color="error" align="left" gutterBottom>
-                        {errors.descripcion.message}
+                        {errors.descripcion_empresa.message}
                       </Typography>
                     )}
                   </Box>

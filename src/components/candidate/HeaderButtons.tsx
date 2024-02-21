@@ -12,14 +12,13 @@ interface Props {
   showLogo?: boolean;
 }
 
+
 const HeaderButtons = ({ showLogo = false }: Props) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [verifyCompany, setVerifyCompany] = useState<boolean>(false);
-  //const [userLogin, setUserLogin] = useAtom(userAtom);
-
-  //console.log(userLogin)
+  const userInfo = localStorage.getItem("userInfo");
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -187,11 +186,11 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
               <MenuItem onClick={() => {
                 localStorage.removeItem("isCompany");
                 localStorage.removeItem("isAuthenticated");
-                localStorage.removeItem("userLogin");
+                localStorage.removeItem("userInfo");
                 setIsAuthenticated(!isAuthenticated);
                 handleClose("/")
               }}>
-                {isAuthenticated ? "Cerrar sesión" : "Iniciar sesión"}
+                Cerrar sesión
               </MenuItem>
             </Menu>
           </Box>
@@ -278,7 +277,7 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
                   },
                 }}
               >
-                Hermenejildo Jose
+                {userInfo ? JSON.parse(userInfo).nombresC : "Usuario"}
               </Box>
               <MenuItem onClick={() => handleClose("/candidate/my-account")}>
                 Mi cuenta
@@ -288,11 +287,12 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
               </MenuItem>
               <MenuItem onClick={() => {
                 setIsAuthenticated(!isAuthenticated);
+                localStorage.removeItem("userInfo");
                 localStorage.removeItem("isCompany");
                 localStorage.removeItem("isAuthenticated");
                 handleClose("/")
               }}>
-                {isAuthenticated ? "Cerrar sesión" : "Iniciar sesión"}
+                Cerrar sesión
               </MenuItem>
             </Menu>
           </Box>
