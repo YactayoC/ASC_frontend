@@ -17,6 +17,7 @@ const useVerificationEmail = () => {
       };
     } catch (err) {
       console.log(err);
+      throw err;
     }
   };
   
@@ -36,6 +37,7 @@ const useVerificationEmail = () => {
       };
     } catch (err) {
       console.log(err);
+      throw err;
     }
   };
 
@@ -55,6 +57,7 @@ const useVerificationEmail = () => {
       };
     } catch (err) {
       console.log(err);
+      throw err;
     }
   };
 
@@ -74,6 +77,7 @@ const useVerificationEmail = () => {
       };
     } catch (err) {
       console.log(err);
+      throw err;
     }
   }
 

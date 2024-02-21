@@ -24,6 +24,7 @@ import { EditOutlined } from "@mui/icons-material";
 const MyAccount = () => {
   const [tabValue, setTabValue] = useState(0);
   const [openModalEmail, setOpenModalEmail] = useState(false);
+  const userInfo = localStorage.getItem("userInfo");
 
   const handleOpenModalEmail = () => {
     setOpenModalEmail(true);
@@ -106,7 +107,7 @@ const MyAccount = () => {
                 fontSize: "1.2rem",
               }}
             >
-              Luis De Tomas, aquí podrás gestionar tu cuenta.
+              {userInfo ? JSON.parse(userInfo).nombresC : "Usuario empresarial"}, aquí podrás gestionar tu cuenta.
             </Typography>
 
             <Box
@@ -145,7 +146,7 @@ const MyAccount = () => {
                   }}
                 >
                   <Typography variant="h5" gutterBottom>
-                    Luis De Tomas
+                    {userInfo ? JSON.parse(userInfo).nombresC : ""} {userInfo ? JSON.parse(userInfo).apellidosC : ""}
                   </Typography>
                   <IconButton onClick={handleOpenModalEmail}>
                     <EditOutlined />
@@ -159,7 +160,7 @@ const MyAccount = () => {
                   }}
                 >
                   <Typography variant="body1" gutterBottom>
-                    luis_de_tomas@gmail.com
+                  {userInfo ? JSON.parse(userInfo).emailCandidate : ""}
                   </Typography>
                   <IconButton onClick={handleOpenModalEmail}>
                     <EditOutlined />

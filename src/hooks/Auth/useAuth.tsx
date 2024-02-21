@@ -17,6 +17,7 @@ const useAuth = () => {
         }
         catch (err) {
             console.log(err);
+            throw err;
         }
     }
 
@@ -34,6 +35,7 @@ const useAuth = () => {
         }
         catch (err) {
             console.log(err);
+            throw err;
         }
     }
 
@@ -51,6 +53,7 @@ const useAuth = () => {
         }
         catch (err) {
             console.log(err);
+            throw err;
         }
     }
 
@@ -69,6 +72,7 @@ const useAuth = () => {
         }
         catch (err) {
             console.log(err);
+            throw err;
         }
     }
 
@@ -86,6 +90,7 @@ const useAuth = () => {
         }
         catch (err) {
             console.log(err);
+            throw err;
         }
     }
 
@@ -103,6 +108,7 @@ const useAuth = () => {
         }
         catch (err) {
             console.log(err);
+            throw err;
         }
     }
 

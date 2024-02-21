@@ -33,26 +33,29 @@ const RegisterComp = () => {
   const {
     register,
     handleSubmit,
-    clearErrors,
     control,
     formState: { errors },
   } = useForm<RegisterFormCompany>();
 
   const onSubmitCompany: SubmitHandler<RegisterFormCompany> = (data) => {
-    handleNext();
-    console.log(data);
+    try {
+      //handleNext();
 
-    if (tabValue === 0) {
-      //enviar email_code y email
-      handleSendVerificationEmail(data);
+      if (tabValue === 0) {
+        //enviar email_code y email
+        handleSendVerificationEmail(data);
+      }
+
+      if (tabValue === 1) {
+        handleVerifyCodeEmail(data);
+      }
+
+      if (tabValue === 2) {
+        handleRegisterInfoCandidate(data);
+      }
     }
-
-    if (tabValue === 1) {
-      handleVerifyCodeEmail(data);
-    }
-
-    if (tabValue === 2) {
-      handleRegisterInfoCandidate(data);
+    catch (err) {
+      console.log(err);
     }
   }
 
@@ -93,9 +96,14 @@ const RegisterComp = () => {
   const handleSendVerificationEmail = async (data: any) => {
     try {
       const response = await sendVerificationEmailCompany(data);
-      console.log(response);
+      console.log(response)
+      //em caso sea exitoso la peticion
+      if (response.ok) {
+        handleNext();
+      }
+
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
@@ -103,6 +111,11 @@ const RegisterComp = () => {
     try {
       const response = await verifyCodeEmailCompany(data);
       console.log(response);
+      
+      if (response.ok) {
+        handleNext();
+      }
+
     } catch (error) {
       console.log(error);
     }
@@ -110,11 +123,10 @@ const RegisterComp = () => {
 
   const handleRegisterInfoCandidate = async (data: any) => {
     try {
-      console.log(data)
       const response = await registerCompleteCompany(data);
       console.log(response)
-      navigate("auth/company/register");
-      //localStorage.setItem("userInfo", JSON.stringify(response?.response.data));
+      navigate("/");
+      localStorage.setItem("userInfo", JSON.stringify(response?.response.data));
       localStorage.setItem("isCompany", "true");
       localStorage.setItem("isAuthenticated", "true");
 

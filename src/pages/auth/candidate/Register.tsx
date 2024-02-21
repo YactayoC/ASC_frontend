@@ -35,18 +35,23 @@ const Register = () => {
   } = useForm<RegisterFormPostulant>();
 
   const onSubmit: SubmitHandler<RegisterFormPostulant> = (data) => {
-    handleNext();
+    try {
+      //handleNext();
 
-    if (tabValue === 0) {
-      handleSendVerificationEmail(data);
+      if (tabValue === 0) {
+        handleSendVerificationEmail(data);
+      }
+
+      if (tabValue === 1) {
+        handleVerifyCodeEmail(data)
+      }
+
+      if (tabValue === 2) {
+        handleRegisterInfoCandidate(data)
+      }
     }
-
-    if (tabValue === 1) {
-      handleVerifyCodeEmail(data)
-    }
-
-    if (tabValue === 2) {
-      handleRegisterInfoCandidate(data)
+    catch (error) {
+      console.log(error);
     }
 
   }
@@ -80,6 +85,11 @@ const Register = () => {
     try {
       const response = await sendVerificationEmail(data);
       console.log(response);
+
+      if (response?.ok) {
+        handleNext();
+      }
+
     } catch (error) {
       console.log(error);
     }
@@ -88,7 +98,12 @@ const Register = () => {
   const handleVerifyCodeEmail = async (data: any) => {
     try {
       const response = await verifyCodeEmail(data);
-      console.log(response);
+
+      if (response?.ok) {
+        handleNext();
+      }
+
+      //console.log(response);
     } catch (error) {
       console.log(error);
     }

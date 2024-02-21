@@ -1,7 +1,7 @@
 import apiClient from "../api/ApiClient";
 
 const useDataDefault = () => {
-    
+
     async function getDataDefault() {
         try {
             //QUIERO QUE HAGA LA PETICION Y ME IMPRIMA EN FORMATO JSON LA DATA 
@@ -11,7 +11,8 @@ const useDataDefault = () => {
             return data;
         }
         catch (err) {
-            return err;
+            console.log(err);
+            throw err;
         }
     }
 
@@ -19,6 +20,6 @@ const useDataDefault = () => {
         getDataDefault
     }
 
-}   
+}
 
 export default useDataDefault;

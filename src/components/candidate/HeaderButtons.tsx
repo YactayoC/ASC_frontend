@@ -168,6 +168,8 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
                   cursor: "pointer",
                   color: "white",
                   fontWeight: "bold",
+                  paddingRight: "0.5rem",
+                  paddingLeft: "0.5rem",
                   paddingBlock: "0.5rem",
                   textAlign: "center",
                   "&:hover": {
@@ -175,7 +177,7 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
                   },
                 }}
               >
-                CTA Empresarial
+                {userInfo ? JSON.parse(userInfo).nombre_comercial : "Usuario empresarial"}
               </Box>
               <MenuItem onClick={() => handleClose("/company/my-account")}>
                 Editar perfil

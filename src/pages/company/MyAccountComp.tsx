@@ -13,7 +13,6 @@ import {
   Autocomplete,
 } from "@mui/material";
 
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -25,6 +24,7 @@ import { useState } from "react";
 const MyAccountComp = () => {
   const [tabValue, setTabValue] = useState(0);
   const [openModalEmail, setOpenModalEmail] = useState(false);
+  const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
 
   const handleCloseModalEmail = () => {
     setOpenModalEmail(false);
@@ -41,17 +41,22 @@ const MyAccountComp = () => {
   };
 
   const sectorCompany = [
-    { label: "Tecnología" },
-    { label: "Salud" },
-    { label: "Educación" },
-    { label: "Finanzas" },
-    { label: "Recursos Humanos" },
-    { label: "Ventas" },
-    { label: "Marketing" },
-    { label: "Diseño" },
-    { label: "Ingeniería" },
-    { label: "Otro" },
+    { label: "Tecnología", sector_id : 1 },
+    { label: "Salud", sector_id : 2 },
+    { label: "Educación", sector_id : 3 },
+    { label: "Finanzas", sector_id : 4 },
+    { label: "Comercio", sector_id : 5 },
+    { label: "Turismo", sector_id : 6 },
+    { label: "Industria", sector_id : 7 },
+    { label: "Construcción", sector_id : 8 },
+    { label: "Alimentación", sector_id : 9 },
+    { label: "Transporte", sector_id : 10 },
+    { label: "Servicios", sector_id : 11 },
+    { label: "Otros", sector_id : 12 },
   ];
+
+  const defaultSectorId = userInfo.sector_id;
+  const defaultSector = sectorCompany.find(sector => sector.sector_id === defaultSectorId);
 
   return (
     <>
@@ -134,10 +139,6 @@ const MyAccountComp = () => {
                   width: "20rem",
                   height: "20rem",
                   cursor: "pointer",
-
-                  //HAZLO REPONSIVE
-
-
                 }}
               />
             </Box>
@@ -189,6 +190,7 @@ const MyAccountComp = () => {
                   <TextField
                     label="Razon social"
                     variant="outlined"
+                    defaultValue={userInfo.razonsocial}
                     type="text"
                     fullWidth
                   />
@@ -196,6 +198,7 @@ const MyAccountComp = () => {
                     disablePortal
                     id="combo-box-demo"
                     options={sectorCompany}
+                    defaultValue={defaultSector}
                     sx={{
                       width: "30rem",
 
@@ -248,6 +251,7 @@ const MyAccountComp = () => {
                     variant="outlined"
                     type="text"
                     fullWidth
+                    defaultValue={userInfo.emailCompa}
                   />
                 </Box>
                 <Box
@@ -272,6 +276,7 @@ const MyAccountComp = () => {
                     label="Móvil"
                     variant="outlined"
                     type="text"
+                    defaultValue={userInfo.movil}
                     fullWidth
                   />
                   <TextField
@@ -304,6 +309,7 @@ const MyAccountComp = () => {
                         width: "100%",
                       },
                     }}
+                    
                     renderInput={(params) => (
                       <TextField {...params} label="Departamento" />
                     )}
@@ -334,6 +340,7 @@ const MyAccountComp = () => {
                   id="outlined-multiline-static"
                   label="Descripción"
                   multiline
+                  defaultValue={userInfo.descripcion_empresa}
                   fullWidth
                   rows={7}
                 />
