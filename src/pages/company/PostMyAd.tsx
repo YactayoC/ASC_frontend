@@ -1,6 +1,6 @@
 import HeaderButtons from "../../components/candidate/HeaderButtons";
 import { HeaderMainPage } from "../../components/layout/HeaderMainPage";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Box,
     Tab,
@@ -24,13 +24,15 @@ import {
     TableRow,
     TableBody,
     TableCell,
+    Snackbar,
+    Alert
 } from "@mui/material";
 
 import { styled } from '@mui/material/styles';
 
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
-import { Add, Facebook, Twitter, LinkedIn, Delete, Edit, AddTask } from "@mui/icons-material";
+import { Add, Facebook, Twitter, LinkedIn, Delete, Edit } from "@mui/icons-material";
 
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -54,6 +56,20 @@ const PostMyAd = () => {
     const [preguntas, setPreguntas] = useState<Pregunta[]>([]);
     const [preguntaAbiertas, setPreguntaAbiertas] = useState<PreguntaAbierta[]>([]);
     const [selectComboBox, setSelectComboBox] = useState('' as string);
+    const [openBar, setOpenBar] = useState(false);
+
+    //ABRIR / CERRAR SNACKBAR
+    const handleClick = () => {
+        setOpenBar(true);
+    };
+
+    const handleCloseSnackBar = (_event: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenBar(false);
+    };
 
     //INSERTAR PREGUNTAS CERRADAS CON RESPUESTAS DINAMICAS
     const handleQuestionCloseChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, preguntaIndex: number) => {
@@ -98,21 +114,29 @@ const PostMyAd = () => {
     };
 
     const handleAddClosedQuestion = () => {
-        const newQuestion: Pregunta = {
-            id: Date.now(), // Asegúrate de que este ID sea único
-            pregunta: '',
-            respuestas: [{ id: Date.now(), respuesta: '', peso: '' }] // Agregar una respuesta inicial vacía
-        };
-        setPreguntas([...preguntas, newQuestion]);
+        if (preguntas.length < 20) { // Verifica si ya hay menos de 20 preguntas cerradas
+            const newQuestion: Pregunta = {
+                id: Date.now(), // Asegúrate de que este ID sea único
+                pregunta: '',
+                respuestas: [{ id: Date.now(), respuesta: '', peso: '' }] // Agregar una respuesta inicial vacía
+            };
+            setPreguntas([...preguntas, newQuestion]);
+        } else {
+            handleClick();
+        }
     };
 
     //PREGUNTAS ABIERTAS
     const handleAddQuestionOpen = () => {
-        const newQuestion: PreguntaAbierta = {
-            id: Date.now(), // Asegúrate de que este ID sea único
-            pregunta: '',
-        };
-        setPreguntaAbiertas([...preguntaAbiertas, newQuestion]);
+        if (preguntaAbiertas.length < 20) { // Verifica si ya hay menos de 20 preguntas abiertas
+            const newQuestion: PreguntaAbierta = {
+                id: Date.now(), // Asegúrate de que este ID sea único
+                pregunta: '',
+            };
+            setPreguntaAbiertas([...preguntaAbiertas, newQuestion]);
+        } else {
+            handleClick();
+        }
     };
 
     const handleRemoveClosedQuestion = (preguntaIndex: number) => {
@@ -241,7 +265,17 @@ const PostMyAd = () => {
         { id: 2, label: "Proceso de selección" },
     ];
 
-
+    useEffect(() => {
+        let timer: any;
+        if (openBar) {
+            // Establece un temporizador para cerrar el Snackbar después de 2 segundos
+            timer = setTimeout(handleCloseSnackBar, 3000);
+        }
+        return () => {
+            // Limpia el temporizador si el componente se desmonta o si el Snackbar se cierra antes de tiempo
+            clearTimeout(timer);
+        };
+    }, [openBar]);
 
     return (
         <Box>
@@ -898,6 +932,11 @@ const PostMyAd = () => {
                                                     width: "100%",
                                                     display: "flex",
                                                     justifyContent: "space-between",
+                                                    [theme.breakpoints.down("mdd")]: {
+                                                        flexDirection: "column",
+                                                        justifyContent: "flex-end",
+                                                        rowGap: "1rem",
+                                                    }
                                                 }}
                                             >
                                                 <Autocomplete
@@ -927,7 +966,7 @@ const PostMyAd = () => {
 
                                             {selectComboBox === "Cerrada" && preguntas.map((pregunta, preguntaIndex) => (
                                                 <TableContainer component={Paper} key={pregunta.id}>
-                                                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                                    <Table aria-label="simple table">
                                                         <TableHead>
                                                             <TableRow>
                                                                 <TableCell>Pregunta / Respuestas</TableCell>
@@ -1005,6 +1044,25 @@ const PostMyAd = () => {
                                                             ))}
                                                         </TableBody>
                                                     </Table>
+                                                    {openBar && (
+
+                                                        <Snackbar
+                                                            open={openBar}
+                                                            sx={{
+                                                                width: "100%",
+                                                                display: "flex",
+                                                                justifyContent: "center",
+                                                            }}
+                                                            autoHideDuration={1000}>
+
+                                                            <Alert
+
+                                                                onClose={handleCloseSnackBar}
+                                                                severity="error">
+                                                                Se permiten hasta 20 preguntas
+                                                            </Alert>
+                                                        </Snackbar>
+                                                    )}
                                                     {/* Botón para agregar respuesta a la pregunta actual */}
                                                 </TableContainer>
                                             ))}
@@ -1050,6 +1108,26 @@ const PostMyAd = () => {
                                                             </TableRow>
                                                         </TableBody>
                                                     </Table>
+
+                                                    {openBar && (
+
+                                                        <Snackbar
+                                                            open={openBar}
+                                                            sx={{
+                                                                width: "100%",
+                                                                display: "flex",
+                                                                justifyContent: "center",
+                                                            }}
+                                                            autoHideDuration={1000}>
+
+                                                            <Alert
+
+                                                                onClose={handleCloseSnackBar}
+                                                                severity="error">
+                                                                Se permiten hasta 20 preguntas 
+                                                            </Alert>
+                                                        </Snackbar>
+                                                    )}
                                                 </TableContainer>
                                             ))}
                                         </Box>
