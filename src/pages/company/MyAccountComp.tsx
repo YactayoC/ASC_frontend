@@ -55,7 +55,7 @@ const MyAccountComp = () => {
     { label: "Otros", sector_id : 12 },
   ];
 
-  const defaultSectorId = userInfo.sector_id;
+  const defaultSectorId = userInfo.sector_idComp;
   const defaultSector = sectorCompany.find(sector => sector.sector_id === defaultSectorId);
 
   return (
@@ -190,7 +190,7 @@ const MyAccountComp = () => {
                   <TextField
                     label="Razon social"
                     variant="outlined"
-                    defaultValue={userInfo.razonsocial}
+                    defaultValue={userInfo.razon_socialC}
                     type="text"
                     fullWidth
                   />
@@ -213,6 +213,8 @@ const MyAccountComp = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Fecha de fundación"
+                      //defaultValue={userInfo.fecha_fundacion ? new Date(userInfo.fecha_fundacion) : new Date()}
+                      format="DD/MM/YYYY"
                       sx={{
                         width: "80%",
                         [theme.breakpoints.down("mdd")]: {
@@ -239,11 +241,13 @@ const MyAccountComp = () => {
                     variant="outlined"
                     type="text"
                     fullWidth
+                    defaultValue={userInfo.ruc}
                   />
                   <TextField
                     label="Web"
                     variant="outlined"
                     type="text"
+                    defaultValue={userInfo.sitio_web}
                     fullWidth
                   />
                   <TextField
@@ -251,7 +255,7 @@ const MyAccountComp = () => {
                     variant="outlined"
                     type="text"
                     fullWidth
-                    defaultValue={userInfo.emailCompa}
+                    defaultValue={userInfo.emailCompany}
                   />
                 </Box>
                 <Box
@@ -271,12 +275,13 @@ const MyAccountComp = () => {
                     variant="outlined"
                     type="text"
                     fullWidth
+                    defaultValue={userInfo.telefono}
                   />
                   <TextField
                     label="Móvil"
                     variant="outlined"
                     type="text"
-                    defaultValue={userInfo.movil}
+                    defaultValue={userInfo.movilComp}
                     fullWidth
                   />
                   <TextField
@@ -284,6 +289,7 @@ const MyAccountComp = () => {
                     variant="outlined"
                     type="text"
                     fullWidth
+                    defaultValue={userInfo.pais}
                   />
                 </Box>
                 <Box
@@ -334,13 +340,14 @@ const MyAccountComp = () => {
                     variant="outlined"
                     type="text"
                     fullWidth
+                    defaultValue={userInfo.direccion}
                   />
                 </Box>
                 <TextField
                   id="outlined-multiline-static"
                   label="Descripción"
                   multiline
-                  defaultValue={userInfo.descripcion_empresa}
+                  defaultValue={userInfo.descriptionCompany}
                   fullWidth
                   rows={7}
                 />

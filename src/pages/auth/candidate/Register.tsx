@@ -114,7 +114,7 @@ const Register = () => {
       //console.log(data)
       const response = await registerCompleteCandidate(data);
       navigate("/");
-      localStorage.setItem("userInfo", JSON.stringify(response?.response.data));
+      //localStorage.setItem("userInfo", JSON.stringify(response?.response.data));
       localStorage.setItem("isCompany", "false");
       localStorage.setItem("isAuthenticated", "true");
 

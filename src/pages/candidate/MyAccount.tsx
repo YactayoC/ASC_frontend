@@ -44,6 +44,9 @@ const MyAccount = () => {
     handleCloseModalEmail(); // Cierra el modal después de enviar el formulario
   };
 
+  const createdAt = userInfo ? JSON.parse(userInfo).created_at : "";
+  const formattedDate = createdAt ? new Date(createdAt).toLocaleDateString('es-ES') : "";
+
   return (
     <>
       <HeaderButtons showLogo={true} />
@@ -160,7 +163,7 @@ const MyAccount = () => {
                   }}
                 >
                   <Typography variant="body1" gutterBottom>
-                  {userInfo ? JSON.parse(userInfo).emailCandidate : ""}
+                    {userInfo ? JSON.parse(userInfo).emailCandidate : ""}
                   </Typography>
                   <IconButton onClick={handleOpenModalEmail}>
                     <EditOutlined />
@@ -168,7 +171,7 @@ const MyAccount = () => {
                 </Box>
 
                 <Typography variant="body1" color="#a7a7a7">
-                  Miembro desde: 12/12/2021
+                  Miembro desde: {formattedDate}
                 </Typography>
               </Box>
             </Box>

@@ -1,7 +1,13 @@
 import apiClient from "../../api/ApiClient";
+import { useAtom } from "jotai";
+import { userAtomPostulant, userAtomCompany } from "../../store/user";
 
 const useAuth = () => {
-    
+
+
+    const [_userP, setUserAtomP] = useAtom(userAtomPostulant);
+    const [_userC, setUserAtomC] = useAtom(userAtomCompany);
+
     //CANDIDATE
     const registerIncompleteCandidate = async (data: any) => {
         try {
@@ -27,6 +33,10 @@ const useAuth = () => {
 
             const responseData = response.data;
 
+            localStorage.setItem("userInfo", JSON.stringify(responseData.data));
+
+            setUserAtomP(responseData.data)
+
             return {
                 response: responseData,
                 status: response.status,
@@ -44,6 +54,10 @@ const useAuth = () => {
             const response: any = await apiClient.post("/auth/login/candidate", data);
 
             const responseData = response.data;
+
+            setUserAtomP(responseData.data);
+
+            localStorage.setItem("userInfo", JSON.stringify(responseData.data));
 
             return {
                 response: responseData,
@@ -82,6 +96,10 @@ const useAuth = () => {
 
             const responseData = response.data;
 
+            localStorage.setItem("userInfo", JSON.stringify(responseData.data));
+
+            setUserAtomC(responseData.data)
+
             return {
                 response: responseData,
                 status: response.status,
@@ -99,6 +117,10 @@ const useAuth = () => {
             const response: any = await apiClient.post("/auth/login/company", data);
 
             const responseData = response.data;
+
+            localStorage.setItem("userInfo", JSON.stringify(responseData.data));
+
+            setUserAtomC(responseData.data)
 
             return {
                 response: responseData,

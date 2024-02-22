@@ -5,20 +5,20 @@ import { useNavigate } from "react-router-dom";
 import theme from "../../../theme";
 import { MouseEvent, useEffect, useState } from "react";
 
-// import { useAtom } from "jotai";
-// import { userAtom } from "../../store/user";
+import { useAtom } from "jotai";
+import { userAtomCompany, userAtomPostulant } from "../../store/user";
 
 interface Props {
   showLogo?: boolean;
 }
-
 
 const HeaderButtons = ({ showLogo = false }: Props) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [verifyCompany, setVerifyCompany] = useState<boolean>(false);
-  const userInfo = localStorage.getItem("userInfo");
+  const [userP] = useAtom(userAtomPostulant);
+  const [userC] = useAtom(userAtomCompany);
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -177,7 +177,7 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
                   },
                 }}
               >
-                {userInfo ? JSON.parse(userInfo).nombre_comercial : "Usuario empresarial"}
+                {userC?.nombre_Company}
               </Box>
               <MenuItem onClick={() => handleClose("/company/my-account")}>
                 Editar perfil
@@ -279,7 +279,7 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
                   },
                 }}
               >
-                {userInfo ? JSON.parse(userInfo).nombresC : "Usuario"}
+                {userP?.nombresC}
               </Box>
               <MenuItem onClick={() => handleClose("/candidate/my-account")}>
                 Mi cuenta

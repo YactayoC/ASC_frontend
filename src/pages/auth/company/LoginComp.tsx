@@ -33,7 +33,6 @@ const LoginComp = () => {
   const handleLogin = async (dataForm: LoginForm) => {
     const response = await loginCompany(dataForm);
     console.log(response?.response)
-    localStorage.setItem("userInfo", JSON.stringify(response?.response.data));
     localStorage.setItem("isAuthenticated", "true");
     localStorage.setItem("isCompany", "true");
     navigate("/company/my-ads");
