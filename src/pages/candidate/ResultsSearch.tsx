@@ -21,7 +21,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { Facebook, Share, WhatsApp } from "@mui/icons-material";
 import dayjs from "dayjs";
@@ -36,17 +36,18 @@ import { Oferta } from "../../interfaces/Jobs";
 const ResultsSearch = () => {
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { value, location } = useParams();
+  const { value } = useParams();
   const [buttonOrderBy, setButtonOrderBy] = useState("recientes");
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedJob, setSelectedJob] = useState<Oferta>();
+  const [selectedJob, setSelectedJob] = useState<Oferta | undefined>(jobs.length > 0 ? jobs[0] : undefined);
+  const [selectedWorkMode, setSelectedWorkMode] = useState("");
+
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const itemsPerPage = 5;
   const totalPages = Math.ceil(jobs.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentJobs = jobs.slice(startIndex, endIndex);
+  const currentJobs = jobs.slice(startIndex, startIndex + itemsPerPage);
 
   const handleNextPage = () => {
     setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
@@ -70,6 +71,13 @@ const ResultsSearch = () => {
   const handleShareInstagram = () => {
     handleClose();
   };
+
+  useEffect(() => {
+    if (jobs.length > 0) {
+      setSelectedJob(jobs[0]);
+    }
+  }, []);
+
 
   return (
     <>
@@ -301,12 +309,14 @@ const ResultsSearch = () => {
                   <Card
                     key={prob.oferta_id}
                     sx={{
-                      border: "1px solid #e0e0e0",
+                      //border: "1px solid #e0e0e0",
+                      border: selectedJob?.oferta_id === prob.oferta_id ? "1px solid #0d3878" : "1px solid #e0e0e0",
+                      boxShadow: selectedJob?.oferta_id === prob.oferta_id ? "0px 0px 4px #0d3878" : "",
+                      transition: "border-color 0.3s ease",
                     }}
                   >
                     <CardActionArea
                       onClick={() => {
-                        //console.log("OFERTA SELECCIONADA")
                         setSelectedJob(prob);
                         if (isSmallScreen) {
                           setOpen(true);
@@ -597,14 +607,14 @@ const ResultsSearch = () => {
                     <Box>
                       <Typography variant="h6">{selectedJob.nombre_puesto}</Typography>
                       <Link
-                        href="https://www.google.com"
+                        href={selectedJob.empresa?.sitio_web}
                         target="_blank"
                         sx={{
                           width: "fit-content",
                           fontSize: "1rem",
                         }}
                       >
-                        Google
+                        {selectedJob.empresa?.nombre_completo}
                       </Link>
                     </Box>
                     <img
@@ -622,7 +632,7 @@ const ResultsSearch = () => {
                       fontSize: "1rem",
                     }}
                   >
-                    Colombia, Bogotá
+                    {selectedJob.empresa?.direccion}
                   </Typography>
                   <Box
                     sx={{
@@ -701,11 +711,7 @@ const ResultsSearch = () => {
                       color: "##313944",
                     }}
                   >
-                    Somos una empresa con larga trayectoria en el mercado Retail y
-                    manejo de tiendas en reconocidas marcas deportivas a nivel
-                    internacional, tales como CAT, CONVERSE, FILA, MERRELL, UMBRO
-                    Y COLISEUM, ofrecemos variedad de productos de calzado y
-                    textil.
+                    {selectedJob.descripcion}
                   </Typography>
                 </Box>
               )}
