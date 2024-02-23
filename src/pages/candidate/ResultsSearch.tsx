@@ -12,11 +12,9 @@ import {
   FormControl,
   Grid,
   IconButton,
-  InputLabel,
   Link,
   Menu,
   MenuItem,
-  Select,
   Switch,
   TextField,
   Typography,
@@ -33,7 +31,7 @@ import theme from "../../../theme";
 import SearchJob from "../../components/common/SearchJob";
 import { jobs } from "../../seed/resultsSearchJob";
 import SwipperableDr from "../../components/common/SwipperableDr";
-import { Oferta } from "../../interfaces/Jobs";
+import { Jornada, ModalidadTrabajo, Oferta } from "../../interfaces/Jobs";
 
 const ResultsSearch = () => {
   const [open, setOpen] = useState(false);
@@ -42,14 +40,31 @@ const ResultsSearch = () => {
   const [buttonOrderBy, setButtonOrderBy] = useState("recientes");
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedJob, setSelectedJob] = useState<Oferta | undefined>(jobs.length > 0 ? jobs[0] : undefined);
-  // const [selectedModalidad, setSelectedModalidad] = useState(0);
+  const [selectModalidad, setSelectModalidad] = useState<number | null>(null);
+  const [selectJornada, setSelectJornada] = useState<number | null>(null);
 
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const itemsPerPage = 5;
-  const totalPages = Math.ceil(jobs.length / itemsPerPage);
+
+  const handleModalidadChange = (_event: any, newValue: ModalidadTrabajo | null) => {
+    setSelectModalidad(newValue ? newValue.id : null);
+  };
+  
+  const handleJornadaChange = (_event: any, newValue: Jornada | null) => {
+    setSelectJornada(newValue ? newValue.id : null);
+  };
+
+  const filteredJobs = jobs.filter((job) => {
+    return (
+      (!selectModalidad || job.modalidad_trabajo_id.id === selectModalidad) &&
+      (!selectJornada || job.jornada_id.id === selectJornada)
+    );
+  });
+
+  const totalPages = Math.ceil(filteredJobs.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentJobs = jobs.slice(startIndex, startIndex + itemsPerPage);
+  const currentJobs = filteredJobs.slice(startIndex, startIndex + itemsPerPage);
 
   const handleNextPage = () => {
     setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
@@ -74,15 +89,19 @@ const ResultsSearch = () => {
     handleClose();
   };
 
-  const modalidad_trabajo = [
+  const modalidad_trabajo: ModalidadTrabajo[] = [
     { id: 1, nombre: "Presencial" },
     { id: 2, nombre: "Remoto" },
     { id: 3, nombre: "Híbrido" },
   ];
 
-  // const filteredJobs = selectedModalidad
-  //   ? jobs.filter(job => job.modalidad_trabajo_id?.id === selectedModalidad)
-  //   : jobs;
+  const tipo_jornada: Jornada[] = [
+    { id: 1, nombre: "A Tiempo completo" },
+    { id: 2, nombre: "A Tiempo parcial" },
+    { id: 3, nombre: "Por horas" },
+    { id: 4, nombre: "Beca/Prácticas" },
+  ];
+
 
   useEffect(() => {
     if (jobs.length > 0) {
@@ -146,16 +165,14 @@ const ResultsSearch = () => {
             <FormControl fullWidth>
               <Autocomplete
                 disablePortal
-                disableClearable
+                //disableClearable
                 id="combo-box-demo"
                 options={modalidad_trabajo}
+                onChange={handleModalidadChange}
                 getOptionLabel={(option) => option.nombre}
                 renderInput={(params) => (
                   <TextField {...params} label="Modalidad de trabajo" />
                 )}
-                // onChange={(event, newValue) => {
-                //   setSelectedModalidad(newValue?.id);
-                // }}
               />
             </FormControl>
           </Box>
@@ -168,20 +185,18 @@ const ResultsSearch = () => {
             }}
           >
             <FormControl fullWidth>
-              <InputLabel id="select-modalidad-trabajo">
-                Tipo de jornada
-              </InputLabel>
-              <Select
-                labelId="select-modalidad-trabajo"
-                id="demo-simple-select"
-                value={10}
-                label="Tipo de jornada"
-              // onChange={handleChange}
-              >
-                <MenuItem value={10}>Jornada Completa</MenuItem>
-                <MenuItem value={20}>Part Time</MenuItem>
-                <MenuItem value={30}>Rotativo</MenuItem>
-              </Select>
+
+              <Autocomplete
+                disablePortal
+                //disableClearable
+                id="combo-box-demo"
+                onChange={handleJornadaChange}
+                options={tipo_jornada}
+                getOptionLabel={(option) => option.nombre}
+                renderInput={(params) => (
+                  <TextField {...params} label="Tipo de jornada" />
+                )}
+              />
             </FormControl>
           </Box>
           <Box
@@ -193,16 +208,14 @@ const ResultsSearch = () => {
             }}
           >
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Fecha"
-                  defaultValue={dayjs(new Date())}
-                  format="DD/MM/YYYY"
-                  sx={{
-                    width: "100%",
-                  }}
-                />
-              </LocalizationProvider>
+              <DatePicker
+                label="Fecha"
+                defaultValue={dayjs(new Date())}
+                format="DD/MM/YYYY"
+                sx={{
+                  width: "100%",
+                }}
+              />
             </LocalizationProvider>
           </Box>
         </Box>
