@@ -23,6 +23,7 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { RegisterFormCompany } from "../../../interfaces/Auth";
 import useAuth from "../../../hooks/Auth/useAuth";
 import useVerificationEmail from "../../../hooks/Email/useVerificationEmail";
+import { sectorCompany } from "../../../seed/sectorsCompany";
 
 const RegisterComp = () => {
   const navigate = useNavigate();
@@ -85,14 +86,6 @@ const RegisterComp = () => {
     return tabs;
   };
 
-  const top100Films = [
-    { label: "The Shawshank Redemption", id: 1 },
-    { label: "The Godfather", id: 2 },
-    { label: "The Godfather: Part II", id: 3 },
-    { label: "The Dark Knight", id: 4 },
-    { label: "12 Angry", id: 5 },
-  ];
-
   const handleSendVerificationEmail = async (data: any) => {
     try {
       const response = await sendVerificationEmailCompany(data);
@@ -111,7 +104,7 @@ const RegisterComp = () => {
     try {
       const response = await verifyCodeEmailCompany(data);
       console.log(response);
-      
+
       if (response.ok) {
         handleNext();
       }
@@ -425,8 +418,8 @@ const RegisterComp = () => {
                           {...field}
                           disablePortal
                           id="combo-box-demo"
-                          options={top100Films}
-                          value={top100Films.find(option => option.id === field.value) || null}
+                          options={sectorCompany}
+                          value={sectorCompany.find(option => option.id === field.value) || null}
                           sx={{ width: "fullWidth" }}
                           onChange={(_, data) => field.onChange(data ? data.id : '')}
                           getOptionLabel={(option) => option.label}

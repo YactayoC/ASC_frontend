@@ -31,6 +31,7 @@ import theme from "../../../theme";
 import SearchJob from "../../components/common/SearchJob";
 import { jobs } from "../../seed/resultsSearchJob";
 import SwipperableDr from "../../components/common/SwipperableDr";
+import { Oferta } from "../../interfaces/Jobs";
 
 const ResultsSearch = () => {
   const [open, setOpen] = useState(false);
@@ -38,6 +39,7 @@ const ResultsSearch = () => {
   const { value, location } = useParams();
   const [buttonOrderBy, setButtonOrderBy] = useState("recientes");
   const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedJob, setSelectedJob] = useState<Oferta>();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const itemsPerPage = 5;
@@ -45,8 +47,6 @@ const ResultsSearch = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentJobs = jobs.slice(startIndex, endIndex);
-
-  console.log(location);
 
   const handleNextPage = () => {
     setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
@@ -132,7 +132,7 @@ const ResultsSearch = () => {
                 id="demo-simple-select"
                 value={10}
                 label="Modalidad de trabajo"
-                // onChange={handleChange}
+              // onChange={handleChange}
               >
                 <MenuItem value={10}>Remoto</MenuItem>
                 <MenuItem value={20}>Hibrido</MenuItem>
@@ -157,7 +157,7 @@ const ResultsSearch = () => {
                 id="demo-simple-select"
                 value={10}
                 label="Tipo de jornada"
-                // onChange={handleChange}
+              // onChange={handleChange}
               >
                 <MenuItem value={10}>Jornada Completa</MenuItem>
                 <MenuItem value={20}>Part Time</MenuItem>
@@ -297,14 +297,17 @@ const ResultsSearch = () => {
                 }}
               >
                 {currentJobs.slice(0, 5).map((prob) => (
+                  //console.log(currentJobs), // <--- This is the line that I added to debug
                   <Card
-                    key={prob.id}
+                    key={prob.oferta_id}
                     sx={{
                       border: "1px solid #e0e0e0",
                     }}
                   >
                     <CardActionArea
                       onClick={() => {
+                        //console.log("OFERTA SELECCIONADA")
+                        setSelectedJob(prob);
                         if (isSmallScreen) {
                           setOpen(true);
                         }
@@ -317,37 +320,37 @@ const ResultsSearch = () => {
                           rowGap: "0.5rem",
                         }}
                       >
-                        <Typography variant="h6">{prob.jobTitle}</Typography>
+                        <Typography variant="h6">{prob.nombre_puesto}</Typography>
                         <Link
-                          href={prob.companyLink}
+                          href={prob.empresa?.sitio_web}
                           target="_blank"
                           sx={{
                             width: "fit-content",
                             fontSize: "1rem",
                           }}
                         >
-                          {prob.companyName}
+                          {prob.empresa?.nombre_completo}
                         </Link>
                         <Typography
                           sx={{
                             fontSize: "1rem",
                           }}
                         >
-                          {prob.location}
+                          {prob.empresa?.direccion}
                         </Typography>
                         <Typography
                           sx={{
                             fontSize: "1rem",
                           }}
                         >
-                          Modalidad de trabajo: {prob.workMode}
+                          Modalidad de trabajo: {prob.modalidad_trabajo_id?.nombre}
                         </Typography>
                         <Typography
                           sx={{
                             fontSize: "1rem",
                           }}
                         >
-                          Tipo de jornada: {prob.workType}
+                          Tipo de jornada: {prob.jornada_id?.nombre}
                         </Typography>
                         <Typography
                           sx={{
@@ -355,7 +358,7 @@ const ResultsSearch = () => {
                             color: "#a7a7a7",
                           }}
                         >
-                          Fecha: {prob.date}
+                          Fecha: {prob.fecha_publicacion_automatica}
                         </Typography>
                       </CardContent>
                     </CardActionArea>
@@ -572,138 +575,140 @@ const ResultsSearch = () => {
                 },
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  padding: "1rem",
-                  border: "1px solid #e0e0e0",
-                  height: "100%",
-                }}
-              >
+              {selectedJob && (
+                //console.log(selectedJob.nombre_puesto), // <--- This is the line that I added to debug
                 <Box
                   sx={{
                     display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "start",
-                    columnGap: "1rem",
+                    flexDirection: "column",
+                    padding: "1rem",
+                    border: "1px solid #e0e0e0",
+                    height: "100%",
                   }}
                 >
-                  <Box>
-                    <Typography variant="h6">Desarrollador Frontend</Typography>
-                    <Link
-                      href="https://www.google.com"
-                      target="_blank"
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "start",
+                      columnGap: "1rem",
+                    }}
+                  >
+                    <Box>
+                      <Typography variant="h6">{selectedJob.nombre_puesto}</Typography>
+                      <Link
+                        href="https://www.google.com"
+                        target="_blank"
+                        sx={{
+                          width: "fit-content",
+                          fontSize: "1rem",
+                        }}
+                      >
+                        Google
+                      </Link>
+                    </Box>
+                    <img
+                      src="
+                    https://cdn.pixabay.com/photo/2021/08/10/15/36/microsoft-6536268_1280.png"
+                      alt=""
+                      style={{
+                        width: "3rem",
+                        height: "3rem",
+                      }}
+                    />
+                  </Box>
+                  <Typography
+                    sx={{
+                      fontSize: "1rem",
+                    }}
+                  >
+                    Colombia, Bogotá
+                  </Typography>
+                  <Box
+                    sx={{
+                      marginTop: "1rem",
+                      display: "flex",
+                      columnGap: "1rem",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="large"
                       sx={{
                         width: "fit-content",
-                        fontSize: "1rem",
+                        borderRadius: "20px",
                       }}
                     >
-                      Google
-                    </Link>
+                      Postularme
+                    </Button>
+                    <IconButton
+                      color="primary"
+                      aria-label="upload picture"
+                      onClick={(e: any) => setAnchorEl(e.currentTarget)}
+                    >
+                      <Share />
+                    </IconButton>
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                    >
+                      <MenuItem
+                        onClick={handleShareFacebook}
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          columnGap: "0.5rem",
+                        }}
+                      >
+                        <Facebook />
+                        <Typography
+                          component={"span"}
+                          sx={{
+                            fontSize: "0.9rem",
+                          }}
+                        >
+                          Facebook
+                        </Typography>
+                      </MenuItem>
+                      <MenuItem
+                        onClick={handleShareInstagram}
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          columnGap: "0.5rem",
+                        }}
+                      >
+                        <WhatsApp />
+                        <Typography
+                          component={"span"}
+                          sx={{
+                            fontSize: "0.9rem",
+                          }}
+                        >
+                          Whatsapp
+                        </Typography>
+                      </MenuItem>
+                    </Menu>
                   </Box>
-                  <img
-                    src="
-                    https://cdn.pixabay.com/photo/2021/08/10/15/36/microsoft-6536268_1280.png"
-                    alt=""
-                    style={{
-                      width: "3rem",
-                      height: "3rem",
-                    }}
-                  />
-                </Box>
-
-                <Typography
-                  sx={{
-                    fontSize: "1rem",
-                  }}
-                >
-                  Colombia, Bogotá
-                </Typography>
-                <Box
-                  sx={{
-                    marginTop: "1rem",
-                    display: "flex",
-                    columnGap: "1rem",
-                    alignItems: "center",
-                  }}
-                >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="large"
+                  <Divider sx={{ marginTop: "1rem" }} />
+                  <Typography
                     sx={{
-                      width: "fit-content",
-                      borderRadius: "20px",
+                      marginTop: "1rem",
+                      fontWeight: 400,
+                      color: "##313944",
                     }}
                   >
-                    Postularme
-                  </Button>
-                  <IconButton
-                    color="primary"
-                    aria-label="upload picture"
-                    onClick={(e: any) => setAnchorEl(e.currentTarget)}
-                  >
-                    <Share />
-                  </IconButton>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                  >
-                    <MenuItem
-                      onClick={handleShareFacebook}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        columnGap: "0.5rem",
-                      }}
-                    >
-                      <Facebook />
-                      <Typography
-                        component={"span"}
-                        sx={{
-                          fontSize: "0.9rem",
-                        }}
-                      >
-                        Facebook
-                      </Typography>
-                    </MenuItem>
-                    <MenuItem
-                      onClick={handleShareInstagram}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        columnGap: "0.5rem",
-                      }}
-                    >
-                      <WhatsApp />
-                      <Typography
-                        component={"span"}
-                        sx={{
-                          fontSize: "0.9rem",
-                        }}
-                      >
-                        Whatsapp
-                      </Typography>
-                    </MenuItem>
-                  </Menu>
+                    Somos una empresa con larga trayectoria en el mercado Retail y
+                    manejo de tiendas en reconocidas marcas deportivas a nivel
+                    internacional, tales como CAT, CONVERSE, FILA, MERRELL, UMBRO
+                    Y COLISEUM, ofrecemos variedad de productos de calzado y
+                    textil.
+                  </Typography>
                 </Box>
-                <Divider sx={{ marginTop: "1rem" }} />
-                <Typography
-                  sx={{
-                    marginTop: "1rem",
-                    fontWeight: 400,
-                    color: "##313944",
-                  }}
-                >
-                  Somos una empresa con larga trayectoria en el mercado Retail y
-                  manejo de tiendas en reconocidas marcas deportivas a nivel
-                  internacional, tales como CAT, CONVERSE, FILA, MERRELL, UMBRO
-                  Y COLISEUM, ofrecemos variedad de productos de calzado y
-                  textil.
-                </Typography>
-              </Box>
+              )}
             </Grid>
           </Grid>
         </Box>
