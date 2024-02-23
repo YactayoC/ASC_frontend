@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import {
+  Autocomplete,
   Box,
   Button,
   ButtonGroup,
@@ -17,6 +18,7 @@ import {
   MenuItem,
   Select,
   Switch,
+  TextField,
   Typography,
   useMediaQuery,
 } from "@mui/material";
@@ -40,7 +42,7 @@ const ResultsSearch = () => {
   const [buttonOrderBy, setButtonOrderBy] = useState("recientes");
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedJob, setSelectedJob] = useState<Oferta | undefined>(jobs.length > 0 ? jobs[0] : undefined);
-  const [selectedWorkMode, setSelectedWorkMode] = useState("");
+  // const [selectedModalidad, setSelectedModalidad] = useState(0);
 
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -71,6 +73,16 @@ const ResultsSearch = () => {
   const handleShareInstagram = () => {
     handleClose();
   };
+
+  const modalidad_trabajo = [
+    { id: 1, nombre: "Presencial" },
+    { id: 2, nombre: "Remoto" },
+    { id: 3, nombre: "Híbrido" },
+  ];
+
+  // const filteredJobs = selectedModalidad
+  //   ? jobs.filter(job => job.modalidad_trabajo_id?.id === selectedModalidad)
+  //   : jobs;
 
   useEffect(() => {
     if (jobs.length > 0) {
@@ -132,20 +144,19 @@ const ResultsSearch = () => {
             }}
           >
             <FormControl fullWidth>
-              <InputLabel id="select-modalidad-trabajo">
-                Modalidad de trabajo
-              </InputLabel>
-              <Select
-                labelId="select-modalidad-trabajo"
-                id="demo-simple-select"
-                value={10}
-                label="Modalidad de trabajo"
-              // onChange={handleChange}
-              >
-                <MenuItem value={10}>Remoto</MenuItem>
-                <MenuItem value={20}>Hibrido</MenuItem>
-                <MenuItem value={30}>Presencial</MenuItem>
-              </Select>
+              <Autocomplete
+                disablePortal
+                disableClearable
+                id="combo-box-demo"
+                options={modalidad_trabajo}
+                getOptionLabel={(option) => option.nombre}
+                renderInput={(params) => (
+                  <TextField {...params} label="Modalidad de trabajo" />
+                )}
+                // onChange={(event, newValue) => {
+                //   setSelectedModalidad(newValue?.id);
+                // }}
+              />
             </FormControl>
           </Box>
           <Box
