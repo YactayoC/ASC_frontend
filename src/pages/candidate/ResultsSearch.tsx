@@ -36,12 +36,13 @@ import { Jornada, ModalidadTrabajo, Oferta } from "../../interfaces/Jobs";
 const ResultsSearch = () => {
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { value } = useParams();
+  const { value, location } = useParams();
   const [buttonOrderBy, setButtonOrderBy] = useState("recientes");
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedJob, setSelectedJob] = useState<Oferta | undefined>(jobs.length > 0 ? jobs[0] : undefined);
   const [selectModalidad, setSelectModalidad] = useState<number | null>(null);
   const [selectJornada, setSelectJornada] = useState<number | null>(null);
+  console.log(value, location);
 
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -58,8 +59,10 @@ const ResultsSearch = () => {
   const filteredJobs = jobs.filter((job) => {
     return (
       (!selectModalidad || job.modalidad_trabajo_id.id === selectModalidad) &&
-      (!selectJornada || job.jornada_id.id === selectJornada)
-    );
+      (!selectJornada || job.jornada_id.id === selectJornada) &&
+      (job.nombre_puesto.toLowerCase().includes((value ?? '').toLowerCase()) ||
+        job.empresa.nombre_completo.toLowerCase().includes((value ?? '').toLowerCase()))
+    ); 
   });
 
   const totalPages = Math.ceil(filteredJobs.length / itemsPerPage);
@@ -127,7 +130,7 @@ const ResultsSearch = () => {
           gutterBottom
           color="#a7a7a7"
         >
-          Existen 1800 ofertas de empleo de 40 empresas
+          Existen {filteredJobs.length} ofertas de empleo de 40 empresas
         </Typography>
       </Container>
       <Container
@@ -257,7 +260,7 @@ const ResultsSearch = () => {
                 maxWidth: "25rem",
               }}
             >
-              340 vacantes sobre <strong>{value}</strong>
+              {filteredJobs.length} {filteredJobs.length === 1 ? "vacante" : "vacantes"} sobre <strong>{value}</strong>
             </Typography>
 
             <Box
@@ -462,17 +465,17 @@ const ResultsSearch = () => {
                   >
                     <Box>
                       <Typography variant="h6">
-                        Desarrollador Frontend
+                        {selectedJob?.nombre_puesto}
                       </Typography>
                       <Link
-                        href="https://www.google.com"
+                        href={selectedJob?.empresa?.sitio_web}
                         target="_blank"
                         sx={{
                           width: "fit-content",
                           fontSize: "1rem",
                         }}
                       >
-                        Google
+                        {selectedJob?.empresa?.nombre_completo}
                       </Link>
                     </Box>
                     <img
@@ -491,7 +494,7 @@ const ResultsSearch = () => {
                       fontSize: "1rem",
                     }}
                   >
-                    Colombia, Bogotá
+                    {selectedJob?.empresa?.direccion}
                   </Typography>
                   <Box
                     sx={{
@@ -570,30 +573,7 @@ const ResultsSearch = () => {
                       color: "##313944",
                     }}
                   >
-                    Somos una empresa con larga trayectoria en el mercado Retail
-                    y manejo de tiendas en reconocidas marcas deportivas a nivel
-                    internacional, tales como CAT, CONVERSE, FILA, MERRELL,
-                    UMBRO Y COLISEUM, ofrecemos variedad de productos de calzado
-                    y textil. Somos una empresa con larga trayectoria en el
-                    mercado Retail y manejo de tiendas en reconocidas marcas
-                    deportivas a nivel internacional, tales como CAT, CONVERSE,
-                    FILA, MERRELL, UMBRO Y COLISEUM, ofrecemos variedad de
-                    productos de calzado y manejo de tiendas en reconocidas
-                    marcas deportivas a nivel internacional, tales como CAT,
-                    CONVERSE, FILA, MERRELL, UMBRO Y COLISEUM, ofrecemos
-                    variedad de productos de calzado y textil. Somos una empresa
-                    con larga trayectoria en el mercado Retail y manejo de
-                    tiendas en reconocidas marcas deportivas a nivel
-                    internacional, tales como CAT, CONVERSE, FILA, MERRELL,
-                    UMBRO Y COLISEUM, ofrecemos variedad de productos de calzado
-                    y manejo de tiendas en reconocidas marcas deportivas a nivel
-                    internacional, tales como CAT, CONVERSE, FILA, MERRELL,
-                    UMBRO Y COLISEUM, ofrecemos variedad de productos de calzado
-                    y textil. Somos una empresa con larga trayectoria en el
-                    mercado Retail y manejo de tiendas en reconocidas marcas
-                    deportivas a nivel internacional, tales como CAT, CONVERSE,
-                    FILA, MERRELL, UMBRO Y COLISEUM, ofrecemos variedad de
-                    productos de calzado y
+                   {selectedJob?.descripcion}
                   </Typography>
                 </Box>
               </SwipperableDr>

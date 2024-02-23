@@ -16,7 +16,7 @@ interface Option {
   label: string;
 }
 
-const top100Films: Option[] = [
+const locations: Option[] = [
   { label: "Chilca" },
   { label: "Lima" },
   { label: "Ica" },
@@ -92,7 +92,7 @@ const SearchJob = () => {
               selectOnFocus
               handleHomeEndKeys
               freeSolo
-              options={top100Films}
+              options={locations}
               value={{ label: location }}
               onChange={(_e, value: any) => setLocation(value?.label || "")}
               renderInput={(params) => (

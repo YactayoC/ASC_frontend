@@ -1,0 +1,5 @@
+const useCandidate = () => {
+    
+
+    return location;
+}
