@@ -11,16 +11,8 @@ import { useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
 import { atomSearch } from "../../store/atomSearch";
 import { ToastContainer, toast } from "react-toastify";
+import { seedLocations } from "../../seed/locations";
 
-interface Option {
-  label: string;
-}
-
-const locations: Option[] = [
-  { label: "Chilca" },
-  { label: "Lima" },
-  { label: "Ica" },
-];
 
 const SearchJob = () => {
   const navigate = useNavigate();
@@ -28,21 +20,35 @@ const SearchJob = () => {
   const [location, setLocation] = useState("");
   const [valueAtomSearch, setValueAtomSearch] = useAtom(atomSearch);
 
+  console.log(valueAtomSearch)
+
+  const flatOptions = seedLocations.flatMap(departamento =>
+    departamento.provincias.map(provincia => ({
+      //ubigeo: provincia.nombre_provincia,
+      nombre_provincia: provincia.nombre_provincia,
+      nombre_departamento: departamento.nombre_departamento,
+    }))
+  );
+
+
   const onSearch = (e: any) => {
     e.preventDefault();
 
-    if (search.length > 0) {
+    if (search.length > 0 && location) {
       setValueAtomSearch({
         value: search,
         location: location,
       });
+
+      // Guarda los valores en el localStorage incluyendo el valor actual de 'location'
       localStorage.setItem(
         "searchValue",
         JSON.stringify({ value: search, location: location })
       );
+
       navigate(`/candidate/search/${search}/${location}`);
     } else {
-      return toast.error("Ingrese un puesto para buscar", {
+      toast.error("Ingrese un puesto para buscar", {
         closeOnClick: true,
         autoClose: 2000,
         theme: "colored",
@@ -86,23 +92,23 @@ const SearchJob = () => {
           </Grid>
           <Grid item xs={12} md={4}>
             <Autocomplete
+              id="grouped-demo"
               fullWidth
-              disablePortal
-              id="combo-box-ubicacion"
-              selectOnFocus
-              handleHomeEndKeys
-              freeSolo
-              options={locations}
-              value={{ label: location }}
-              onChange={(_e, value: any) => setLocation(value?.label || "")}
-              renderInput={(params) => (
+              options={flatOptions}
+              groupBy={(option) => option.nombre_departamento}
+              getOptionLabel={(option) => `${option.nombre_departamento} - ${option.nombre_provincia}`}
+              onChange={(event, newValue) => {
+                const locationValue = newValue ? `${newValue.nombre_departamento} - ${newValue.nombre_provincia}` : '';
+                setLocation(locationValue);
+              }}
+              renderInput={(params) =>
                 <TextField
                   {...params}
                   label="Ubicación"
                   fullWidth
-                  value={location}
                   sx={{
                     backgroundColor: "#fff",
+                    width: "100%",
                   }}
                   InputProps={{
                     ...params.InputProps,
@@ -113,6 +119,11 @@ const SearchJob = () => {
                     ),
                   }}
                 />
+              }
+              renderOption={(props, option) => (
+                <li {...props}>
+                  {option.nombre_provincia}
+                </li>
               )}
             />
           </Grid>
@@ -121,7 +132,7 @@ const SearchJob = () => {
               variant="contained"
               color="primary"
               type="submit"
-              // onClick={onSearch}
+              //onClick={onSearch}
               fullWidth
               sx={{
                 height: "100%",

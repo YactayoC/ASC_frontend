@@ -1,10 +1,7 @@
-export interface Departamentos {
-    id: number;
+export interface UbigeoLocation {
+    ubigeo: number;
     nombre_departamento: string;
-}
-
-export interface Provincia {
-    id: number;
     nombre_provincia: string;
-    id_departamento: number;
-}
+    nombre_distrito: string;
+  }
+  
