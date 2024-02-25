@@ -42,7 +42,7 @@ const ResultsSearch = () => {
   const [selectedJob, setSelectedJob] = useState<any>(jobs.length > 0 ? jobs[0] : undefined);
   const [selectModalidad, setSelectModalidad] = useState<number | null>(null);
   const [selectJornada, setSelectJornada] = useState<number | null>(null);
-  const [selectedDate, setSelectedDate] = useState(dayjs());
+  const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
 
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -60,13 +60,16 @@ const ResultsSearch = () => {
 
     const locationMatchId = location ? job.empresa.provincia.id === parseInt(location) : true;
     const matchesArea = featuredArea ? job.area.id === parseInt(featuredArea) : true;
+  
+
     return (
       locationMatchId &&
       matchesArea &&
       (!selectModalidad || job.modalidad_trabajo_id.id === selectModalidad) &&
       (!selectJornada || job.jornada_id.id === selectJornada) &&
       (job.nombre_puesto.toLowerCase().includes((value ?? '').toLowerCase()) ||
-        job.empresa.nombre_completo.toLowerCase().includes((value ?? '').toLowerCase()))
+        job.empresa.nombre_completo.toLowerCase().includes((value ?? '').toLowerCase())) &&
+      (selectedDate === dayjs(job.fecha_creacion).toISOString().split('T')[0])
     );
   });
 
@@ -97,6 +100,15 @@ const ResultsSearch = () => {
     handleClose();
   };
 
+  const handleDateChange = (newValue: any) => {
+    // Convierte el timestamp (newValue) a un string legible usando dayjs
+    //const dateStringFormat = dayjs(newValue).format("DD-MM-YYYY");
+    const dateStringNoFormat = dayjs(newValue).format("YYYY-MM-DD");
+    //console.log(dateStringNoFormat); // Imprime la fecha en formato 'YYYY-MM-DD'
+    //console.log(dateStringFormat)
+    setSelectedDate(dateStringNoFormat);
+  }
+
   const modalidad_trabajo: ModalidadTrabajo[] = [
     { id: 1, nombre: "Presencial" },
     { id: 2, nombre: "Remoto" },
@@ -112,15 +124,21 @@ const ResultsSearch = () => {
 
 
   useEffect(() => {
-    if (filteredJobs.length > 0) {
-      // Establece la primera oferta de la lista filtrada como la seleccionada.
+    // Verifica si el trabajo seleccionado actualmente sigue estando en los trabajos filtrados
+    const isSelectedJobStillValid = filteredJobs.find(job => job.oferta_id === selectedJob?.oferta_id);
+
+    if (!isSelectedJobStillValid && filteredJobs.length > 0) {
+      // Si el trabajo seleccionado ya no es válido y hay trabajos filtrados, selecciona el primero
       setSelectedJob(filteredJobs[0]);
-    } else {
-      // Si no hay ofertas filtradas, establece el trabajo seleccionado como undefined o maneja la ausencia de ofertas.
+    } else if (!isSelectedJobStillValid && filteredJobs.length === 0) {
+      // Si no hay trabajos filtrados, resetea el trabajo seleccionado a undefined
       setSelectedJob(undefined);
     }
+    // No cambies el trabajo seleccionado si sigue siendo válido
   }, [filteredJobs]);
 
+
+  // console.log(fechaSolo); // "2023-03-15"
 
   return (
     <>
@@ -222,11 +240,7 @@ const ResultsSearch = () => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label="Fecha"
-                onChange={(newValue) => {
-                  // Convierte el timestamp (newValue) a un string legible usando dayjs
-                  const dateString = dayjs(newValue).format("YYYY-MM-DD");
-                  console.log(dateString); // Imprime la fecha en formato 'YYYY-MM-DD'
-                }}
+                onChange={handleDateChange}
                 defaultValue={dayjs(new Date())}
                 format="DD/MM/YYYY"
                 maxDate={dayjs(new Date())}
@@ -356,7 +370,6 @@ const ResultsSearch = () => {
                     }}
                   >
                     {currentJobs.slice(0, 5).map((prob) => (
-                      //console.log(currentJobs), // <--- This is the line that I added to debug
                       <Card
                         key={prob.oferta_id}
                         sx={{
@@ -419,12 +432,6 @@ const ResultsSearch = () => {
                                 color: "#a7a7a7",
                               }}
                             >
-                              {/*
-                              
-                              dayjs(newValue).format("YYYY-MM-DD");
-                              
-                              */}
-
                               Fecha: {dayjs(prob.fecha_publicacion_automatica).format("DD-MM-YYYY")}
                               {/* Fecha: {prob.fecha_publicacion_automatica} */}
                             </Typography>
@@ -432,7 +439,6 @@ const ResultsSearch = () => {
                         </CardActionArea>
                       </Card>
                     ))}
-
                     <Box
                       sx={{
                         display: "flex",

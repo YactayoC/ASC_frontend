@@ -29,7 +29,7 @@ function Home() {
     return data;
   }
 
-  //console.log(jobAreasTop)
+  // Cadena de fecha y hora recibida
 
   useEffect(() => {
     handleData();
