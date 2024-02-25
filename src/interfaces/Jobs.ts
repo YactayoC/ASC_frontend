@@ -5,8 +5,8 @@ export interface Empresa {
   rubro: number;
   nombre_completo: string;
   pais: string;
-  departamento_id: number;
-  provincia_id: number;
+  departamento: Departamento;
+  provincia: Provincia;
   direccion: string;
   email: string;
   password: string;
@@ -33,7 +33,7 @@ export interface Oferta {
   empresa: Empresa;
   jornada_id: Jornada;
   modalidad_trabajo_id: ModalidadTrabajo;
-  area_id: number;
+  area: AreaTrabajo;
   genero_id: number;
   tiempo_experiencia_id: number;
   nivel_educacion_id: number;
@@ -46,8 +46,8 @@ export interface Oferta {
   tipo_moneda_id: number;
   ocultar_salario: boolean;
   pais_id: number;
-  departamento_id: number;
-  provincia_id: number;
+  departamento: Departamento;
+  provincia: Provincia;
   distrito_id: number;
   descripcion: string;
   rango_edad_min: string;
@@ -56,4 +56,20 @@ export interface Oferta {
   fecha_publicacion_automatica: string;
   estado_oferta_id: number;
   tipo_contrato_id: number;
+}
+
+export interface Departamento {
+  id: number;
+  nombre: string;
+}
+
+export interface Provincia {
+  id: number;
+  nombre: string;
+  //departamento_id: number;
+}
+
+export interface AreaTrabajo {
+  id: number;
+  nombre: string;
 }

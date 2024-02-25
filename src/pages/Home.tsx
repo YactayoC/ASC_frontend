@@ -14,7 +14,7 @@ import ChatButton from "../components/common/Chat";
 import SearchJob from "../components/common/SearchJob";
 import HeaderButtons from "../components/candidate/HeaderButtons";
 import ButtonSocials from "../components/common/ButtonSocials";
-
+import { jobAreasTop } from "../seed/jobAreas";
 import useDataDefault from "../hooks/useDataDefault";
 import { useEffect } from "react";
 
@@ -28,6 +28,8 @@ function Home() {
     const data = await getDataDefault();
     return data;
   }
+
+  //console.log(jobAreasTop)
 
   useEffect(() => {
     handleData();
@@ -110,39 +112,13 @@ function Home() {
               direction={{ xs: "column", sm: "row" }}
               spacing={{ xs: 1, sm: 2 }}
             >
-              <ListItem sx={{ width: "fit-content" }}>
-                <Link href="/finanzas" color="inherit" underline="hover">
-                  <ListItemText primary="Finanzas" />
-                </Link>
-              </ListItem>
-              <ListItem sx={{ width: "fit-content" }}>
-                <Link href="/ventas" color="inherit" underline="hover">
-                  <ListItemText primary="Ventas" />
-                </Link>
-              </ListItem>
-              <ListItem sx={{ width: "fit-content" }}>
-                <Link
-                  href="/atencion-al-cliente"
-                  color="inherit"
-                  underline="hover"
-                >
-                  <ListItemText primary="Atención al cliente" />
-                </Link>
-              </ListItem>
-              <ListItem sx={{ width: "fit-content" }}>
-                <Link href="/marketing" color="inherit" underline="hover">
-                  <ListItemText primary="Marketing" />
-                </Link>
-              </ListItem>
-              <ListItem sx={{ width: "fit-content" }}>
-                <Link
-                  href="/informatica-y-computacion"
-                  color="inherit"
-                  underline="hover"
-                >
-                  <ListItemText primary="Informatica y computación" />
-                </Link>
-              </ListItem>
+              {jobAreasTop.map((area) => (
+                <ListItem key={area.id} sx={{ width: "fit-content" }}>
+                  <Link href={`/candidate/search/featured-area/${area.id}`} color="inherit" underline="hover">
+                    <ListItemText primary={area.name} />
+                  </Link>
+                </ListItem>
+              ))}
             </Stack>
           </Box>
         </Container>

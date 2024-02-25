@@ -18,61 +18,63 @@ const SearchJob = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [location, setLocation] = useState("");
-  const [valueAtomSearch, setValueAtomSearch] = useAtom(atomSearch);
-
-  console.log(valueAtomSearch)
+  const [_valueAtomSearch, setValueAtomSearch] = useAtom(atomSearch);
+  const [locationLabel, setLocationLabel] = useState(""); // Para la etiqueta de visualización
+  //console.log(valueAtomSearch)
 
   const flatOptions = seedLocations.flatMap(departamento =>
     departamento.provincias.map(provincia => ({
-      //ubigeo: provincia.nombre_provincia,
+      provincia_id: provincia.provincia_id,
+      label: `${departamento.nombre_departamento} - ${provincia.nombre_provincia}`,
       nombre_provincia: provincia.nombre_provincia,
       nombre_departamento: departamento.nombre_departamento,
     }))
   );
 
+  useEffect(() => {
+    // Fetch stored search values from localStorage
+    const storedSearch = localStorage.getItem('searchValue');
+    if (storedSearch) {
+      const { value, location } = JSON.parse(storedSearch);
+      setSearch(value); // Populate the search field with stored value
+      setLocation(location); // Populate the location state with stored ID
+
+      // Update the displayed label for the location
+      const matchingOption = flatOptions.find(option => String(option.provincia_id) === location);
+      if (matchingOption) {
+        setLocationLabel(matchingOption.label);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    // Update the displayed label for the location
+    const matchingOption = flatOptions.find(option => String(option.provincia_id) === location);
+    if (matchingOption) {
+      setLocationLabel(matchingOption.label);
+    }
+  }, [location]);
 
   const onSearch = (e: any) => {
     e.preventDefault();
+    const trimmedSearch = search.trim();
 
-    if (search.length > 0 && location) {
-      setValueAtomSearch({
-        value: search,
-        location: location,
-      });
-
-      // Guarda los valores en el localStorage incluyendo el valor actual de 'location'
-      localStorage.setItem(
-        "searchValue",
-        JSON.stringify({ value: search, location: location })
-      );
-
-      navigate(`/candidate/search/${search}/${location}`);
-    } else {
-      toast.error("Ingrese un puesto para buscar", {
+    if (!trimmedSearch || !location) {
+      toast.error('Ingrese un puesto y una ubicación para buscar', {
         closeOnClick: true,
         autoClose: 2000,
-        theme: "colored",
+        theme: 'colored',
       });
+      return;
     }
+
+    // Actualiza el átomo y localStorage con el valor y ubicación actuales
+    setValueAtomSearch({ value: trimmedSearch, location });
+    localStorage.setItem('searchValue', JSON.stringify({ value: trimmedSearch, location }));
+
+    // Navega a la página de resultados de búsqueda
+    navigate(`/candidate/search/${trimmedSearch}/${location}/`);
   };
-
-  useEffect(() => {
-    if (valueAtomSearch.value.length > 0) {
-      setSearch(valueAtomSearch.value);
-    }
-    if (valueAtomSearch.location.length > 0) {
-      setLocation(valueAtomSearch.location);
-    }
-  }, [valueAtomSearch]);
-
-  useEffect(() => {
-    const searchValue = localStorage.getItem("searchValue");
-    if (searchValue) {
-      const value = JSON.parse(searchValue);
-      setSearch(value.value);
-      setLocation(value.location);
-    }
-  }, []);
 
   return (
     <>
@@ -84,7 +86,10 @@ const SearchJob = () => {
               variant="outlined"
               label="Puesto"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                console.log(e.target.value); // Para depuración
+                setSearch(e.target.value);
+              }}
               sx={{
                 backgroundColor: "#fff",
               }}
@@ -95,11 +100,18 @@ const SearchJob = () => {
               id="grouped-demo"
               fullWidth
               options={flatOptions}
+              value={flatOptions.find(option => option.label === locationLabel) || null}
               groupBy={(option) => option.nombre_departamento}
-              getOptionLabel={(option) => `${option.nombre_departamento} - ${option.nombre_provincia}`}
-              onChange={(event, newValue) => {
-                const locationValue = newValue ? `${newValue.nombre_departamento} - ${newValue.nombre_provincia}` : '';
-                setLocation(locationValue);
+              getOptionLabel={(option) => option.label}
+              onChange={(_event, newValue) => {
+                // Obtiene el ID y el label de la nueva ubicación seleccionada
+                const newLocationValue = newValue ? String(newValue.provincia_id) : '';
+                const newLocationLabel = newValue ? newValue.label : '';
+
+                // Actualiza el estado y localStorage con los nuevos valores
+                setLocation(newLocationValue);
+                setLocationLabel(newLocationLabel); // Esto garantiza que el label se actualice para mostrar el valor correcto
+
               }}
               renderInput={(params) =>
                 <TextField

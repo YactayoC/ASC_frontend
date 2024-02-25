@@ -1,8 +1,10 @@
 export const seedLocations = [
   {
+    departamento_id: 1,
     nombre_departamento: "Amazonas",
     provincias: [
       {
+        provincia_id: 101,
         nombre_provincia: "Chachapoyas",
         distritos: [
           {
@@ -92,6 +94,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 102,
         nombre_provincia: "Bagua",
         distritos: [
           {
@@ -121,6 +124,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 103,
         nombre_provincia: "Bongara",
         distritos: [
           {
@@ -174,6 +178,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 104,
         nombre_provincia: "Luya",
         distritos: [
           {
@@ -271,6 +276,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 105,
         nombre_provincia: "Rodriguez de Mendoza",
         distritos: [
           {
@@ -324,6 +330,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 106,
         nombre_provincia: "Condorcanqui",
         distritos: [
           {
@@ -341,6 +348,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 107,
         nombre_provincia: "Utcubamba",
         distritos: [
           {
@@ -376,9 +384,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 2,
     nombre_departamento: "Ancash",
     provincias: [
       {
+        provincia_id: 201,
         nombre_provincia: "Huaraz",
         distritos: [
           {
@@ -432,6 +442,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 202,
         nombre_provincia: "Aija",
         distritos: [
           {
@@ -457,6 +468,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 203,
         nombre_provincia: "Bolognesi",
         distritos: [
           {
@@ -522,6 +534,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 204,
         nombre_provincia: "Carhuaz",
         distritos: [
           {
@@ -571,6 +584,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 205,
         nombre_provincia: "Casma",
         distritos: [
           {
@@ -592,6 +606,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 206,
         nombre_provincia: "Corongo",
         distritos: [
           {
@@ -625,6 +640,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 207,
         nombre_provincia: "Huaylas",
         distritos: [
           {
@@ -670,6 +686,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 208,
         nombre_provincia: "Huari",
         distritos: [
           {
@@ -739,6 +756,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 209,
         nombre_provincia: "Mariscal Luzuriaga",
         distritos: [
           {
@@ -776,6 +794,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 210,
         nombre_provincia: "Pallasca",
         distritos: [
           {
@@ -825,6 +844,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 211,
         nombre_provincia: "Pomabamba",
         distritos: [
           {
@@ -846,6 +866,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 212,
         nombre_provincia: "Recuay",
         distritos: [
           {
@@ -891,6 +912,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 213,
         nombre_provincia: "Santa",
         distritos: [
           {
@@ -932,6 +954,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 214,
         nombre_provincia: "Sihuas",
         distritos: [
           {
@@ -977,6 +1000,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 215,
         nombre_provincia: "Yungay",
         distritos: [
           {
@@ -1014,6 +1038,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 216,
         nombre_provincia: "Antonio Raymondi",
         distritos: [
           {
@@ -1043,6 +1068,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 217,
         nombre_provincia: "Carlos Fermin Fitzca",
         distritos: [
           {
@@ -1060,6 +1086,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 218,
         nombre_provincia: "Asuncion",
         distritos: [
           {
@@ -1073,6 +1100,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 219,
         nombre_provincia: "Huarmey",
         distritos: [
           {
@@ -1098,6 +1126,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 220,
         nombre_provincia: "Ocros",
         distritos: [
           {
@@ -1145,9 +1174,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 3,
     nombre_departamento: "Apurimac",
     provincias: [
       {
+        provincia_id: 301,
         nombre_provincia: "Abancay",
         distritos: [
           {
@@ -1189,6 +1220,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 302,
         nombre_provincia: "Aymaraes",
         distritos: [
           {
@@ -1262,6 +1294,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 303,
         nombre_provincia: "Andahuaylas",
         distritos: [
           {
@@ -1343,6 +1376,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 304,
         nombre_provincia: "Antabamba",
         distritos: [
           {
@@ -1376,6 +1410,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 305,
         nombre_provincia: "Cotabambas",
         distritos: [
           {
@@ -1405,6 +1440,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 306,
         nombre_provincia: "Grau",
         distritos: [
           {
@@ -1466,6 +1502,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 307,
         nombre_provincia: "Chincheros",
         distritos: [
           {
@@ -1505,9 +1542,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 4,
     nombre_departamento: "Arequipa",
     provincias: [
       {
+        provincia_id: 401,
         nombre_provincia: "Arequipa",
         distritos: [
           {
@@ -1629,6 +1668,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 402,
         nombre_provincia: "Caylloma",
         distritos: [
           {
@@ -1714,6 +1754,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 403,
         nombre_provincia: "Camana",
         distritos: [
           {
@@ -1751,6 +1792,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 404,
         nombre_provincia: "Caraveli",
         distritos: [
           {
@@ -1808,6 +1850,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 405,
         nombre_provincia: "Castilla",
         distritos: [
           {
@@ -1869,6 +1912,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 406,
         nombre_provincia: "Condesuyos",
         distritos: [
           {
@@ -1906,6 +1950,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 407,
         nombre_provincia: "Islay",
         distritos: [
           {
@@ -1935,6 +1980,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 408,
         nombre_provincia: "La Union",
         distritos: [
           {
@@ -1986,9 +2032,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 5,
     nombre_departamento: "Ayacucho",
     provincias: [
       {
+        provincia_id: 501,
         nombre_provincia: "Huamanga",
         distritos: [
           {
@@ -2054,6 +2102,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 502,
         nombre_provincia: "Cangallo",
         distritos: [
           {
@@ -2083,6 +2132,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 503,
         nombre_provincia: "Huanta",
         distritos: [
           {
@@ -2120,6 +2170,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 504,
         nombre_provincia: "La Mar",
         distritos: [
           {
@@ -2161,6 +2212,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 505,
         nombre_provincia: "Lucanas",
         distritos: [
           {
@@ -2250,6 +2302,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 506,
         nombre_provincia: "Parinacochas",
         distritos: [
           {
@@ -2287,6 +2340,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 507,
         nombre_provincia: "Victor Fajardo",
         distritos: [
           {
@@ -2340,6 +2394,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 508,
         nombre_provincia: "Huanca Sancos",
         distritos: [
           {
@@ -2361,6 +2416,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 509,
         nombre_provincia: "Vilcas Huaman",
         distritos: [
           {
@@ -2398,6 +2454,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 510,
         nombre_provincia: "Paucar del Sara Sara",
         distritos: [
           {
@@ -2443,6 +2500,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 511,
         nombre_provincia: "Sucre",
         distritos: [
           {
@@ -2494,9 +2552,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 6,
     nombre_departamento: "Cajamarca",
     provincias: [
       {
+        provincia_id: 601,
         nombre_provincia: "Cajamarca",
         distritos: [
           {
@@ -2550,6 +2610,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 602,
         nombre_provincia: "Cajabamba",
         distritos: [
           {
@@ -2571,6 +2632,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 603,
         nombre_provincia: "Celendin",
         distritos: [
           {
@@ -2624,6 +2686,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 604,
         nombre_provincia: "Contumaza",
         distritos: [
           {
@@ -2661,6 +2724,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 605,
         nombre_provincia: "Cutervo",
         distritos: [
           {
@@ -2726,6 +2790,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 606,
         nombre_provincia: "Chota",
         distritos: [
           {
@@ -2807,6 +2872,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 607,
         nombre_provincia: "Hualgayoc",
         distritos: [
           {
@@ -2824,6 +2890,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 608,
         nombre_provincia: "Jaen",
         distritos: [
           {
@@ -2877,6 +2944,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 609,
         nombre_provincia: "Santa Cruz",
         distritos: [
           {
@@ -2926,6 +2994,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 610,
         nombre_provincia: "San Miguel",
         distritos: [
           {
@@ -2983,6 +3052,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 611,
         nombre_provincia: "San Ignacio",
         distritos: [
           {
@@ -3016,6 +3086,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 612,
         nombre_provincia: "San Marcos",
         distritos: [
           {
@@ -3049,6 +3120,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 613,
         nombre_provincia: "San Pablo",
         distritos: [
           {
@@ -3072,9 +3144,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 7,
     nombre_departamento: "Cusco",
     provincias: [
       {
+        provincia_id: 701,
         nombre_provincia: "Cusco",
         distritos: [
           {
@@ -3112,6 +3186,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 702,
         nombre_provincia: "Acomayo",
         distritos: [
           {
@@ -3145,6 +3220,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 703,
         nombre_provincia: "Anta",
         distritos: [
           {
@@ -3186,6 +3262,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 704,
         nombre_provincia: "Calca",
         distritos: [
           {
@@ -3223,6 +3300,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 705,
         nombre_provincia: "Canas",
         distritos: [
           {
@@ -3260,6 +3338,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 706,
         nombre_provincia: "Canchis",
         distritos: [
           {
@@ -3297,6 +3376,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 707,
         nombre_provincia: "Chumbivilcas",
         distritos: [
           {
@@ -3334,6 +3414,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 708,
         nombre_provincia: "Espinar",
         distritos: [
           {
@@ -3371,6 +3452,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 709,
         nombre_provincia: "La Convencion",
         distritos: [
           {
@@ -3416,6 +3498,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 710,
         nombre_provincia: "Paruro",
         distritos: [
           {
@@ -3457,6 +3540,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 711,
         nombre_provincia: "Paucartambo",
         distritos: [
           {
@@ -3486,6 +3570,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 712,
         nombre_provincia: "Quispicanchi",
         distritos: [
           {
@@ -3539,6 +3624,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 713,
         nombre_provincia: "Urubamba",
         distritos: [
           {
@@ -3574,9 +3660,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 8,
     nombre_departamento: "Huancavelica",
     provincias: [
       {
+        provincia_id: 801,
         nombre_provincia: "Huancavelica",
         distritos: [
           {
@@ -3658,6 +3746,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 802,
         nombre_provincia: "Acobamba",
         distritos: [
           {
@@ -3695,6 +3784,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 803,
         nombre_provincia: "Angaraes",
         distritos: [
           {
@@ -3748,6 +3838,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 804,
         nombre_provincia: "Castrovirreyna",
         distritos: [
           {
@@ -3805,6 +3896,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 805,
         nombre_provincia: "Tayacaja",
         distritos: [
           {
@@ -3874,6 +3966,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 806,
         nombre_provincia: "Huaytara",
         distritos: [
           {
@@ -3943,6 +4036,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 807,
         nombre_provincia: "Churcampa",
         distritos: [
           {
@@ -3994,9 +4088,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 9,
     nombre_departamento: "Huanuco",
     provincias: [
       {
+        provincia_id: 901,
         nombre_provincia: "Huanuco",
         distritos: [
           {
@@ -4050,6 +4146,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 902,
         nombre_provincia: "Ambo",
         distritos: [
           {
@@ -4087,6 +4184,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 903,
         nombre_provincia: "Dos de Mayo",
         distritos: [
           {
@@ -4128,6 +4226,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 904,
         nombre_provincia: "Huamalies",
         distritos: [
           {
@@ -4177,6 +4276,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 905,
         nombre_provincia: "Marañon",
         distritos: [
           {
@@ -4194,6 +4294,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 906,
         nombre_provincia: "Leoncio Prado",
         distritos: [
           {
@@ -4223,6 +4324,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 907,
         nombre_provincia: "Pachitea",
         distritos: [
           {
@@ -4244,6 +4346,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 908,
         nombre_provincia: "Puerto Inca",
         distritos: [
           {
@@ -4269,6 +4372,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 909,
         nombre_provincia: "Huacaybamba",
         distritos: [
           {
@@ -4290,6 +4394,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 910,
         nombre_provincia: "Lauricocha",
         distritos: [
           {
@@ -4323,6 +4428,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 911,
         nombre_provincia: "Yarowilca",
         distritos: [
           {
@@ -4362,9 +4468,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 10,
     nombre_departamento: "Ica",
     provincias: [
       {
+        provincia_id: 1001,
         nombre_provincia: "Ica",
         distritos: [
           {
@@ -4426,6 +4534,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1002,
         nombre_provincia: "Chincha",
         distritos: [
           {
@@ -4475,6 +4584,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1003,
         nombre_provincia: "Nazca",
         distritos: [
           {
@@ -4500,6 +4610,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1004,
         nombre_provincia: "Pisco",
         distritos: [
           {
@@ -4537,6 +4648,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1005,
         nombre_provincia: "Palpa",
         distritos: [
           {
@@ -4564,9 +4676,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 11,
     nombre_departamento: "Junin",
     provincias: [
       {
+        provincia_id: 1101,
         nombre_provincia: "Huancayo",
         distritos: [
           {
@@ -4684,6 +4798,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1102,
         nombre_provincia: "Concepcion",
         distritos: [
           {
@@ -4749,6 +4864,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1103,
         nombre_provincia: "Jauja",
         distritos: [
           {
@@ -4890,6 +5006,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1104,
         nombre_provincia: "Junin",
         distritos: [
           {
@@ -4911,6 +5028,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1105,
         nombre_provincia: "Tarma",
         distritos: [
           {
@@ -4952,6 +5070,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1106,
         nombre_provincia: "Yauli",
         distritos: [
           {
@@ -4997,6 +5116,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1107,
         nombre_provincia: "Satipo",
         distritos: [
           {
@@ -5034,6 +5154,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1108,
         nombre_provincia: "Chanchamayo",
         distritos: [
           {
@@ -5063,6 +5184,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1109,
         nombre_provincia: "Chupaca",
         distritos: [
           {
@@ -5106,9 +5228,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 12,
     nombre_departamento: "La Libertad",
     provincias: [
       {
+        provincia_id: 1201,
         nombre_provincia: "Trujillo",
         distritos: [
           {
@@ -5158,6 +5282,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1202,
         nombre_provincia: "Bolivar",
         distritos: [
           {
@@ -5187,6 +5312,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1203,
         nombre_provincia: "Sanchez Carrion",
         distritos: [
           {
@@ -5224,6 +5350,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1204,
         nombre_provincia: "Otuzco",
         distritos: [
           {
@@ -5269,6 +5396,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1205,
         nombre_provincia: "Pacasmayo",
         distritos: [
           {
@@ -5294,6 +5422,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1206,
         nombre_provincia: "Pataz",
         distritos: [
           {
@@ -5351,6 +5480,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1207,
         nombre_provincia: "Santiago de Chuco",
         distritos: [
           {
@@ -5388,6 +5518,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1208,
         nombre_provincia: "Ascope",
         distritos: [
           {
@@ -5425,6 +5556,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1209,
         nombre_provincia: "Chepen",
         distritos: [
           {
@@ -5442,6 +5574,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1210,
         nombre_provincia: "Julcan",
         distritos: [
           {
@@ -5463,6 +5596,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1211,
         nombre_provincia: "Gran Chimu",
         distritos: [
           {
@@ -5484,6 +5618,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1212,
         nombre_provincia: "Viru",
         distritos: [
           {
@@ -5503,9 +5638,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 13,
     nombre_departamento: "Lambayeque",
     provincias: [
       {
+        provincia_id: 1301,
         nombre_provincia: "Chiclayo",
         distritos: [
           {
@@ -5591,6 +5728,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1302,
         nombre_provincia: "Ferreñafe",
         distritos: [
           {
@@ -5620,6 +5758,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1303,
         nombre_provincia: "Lambayeque",
         distritos: [
           {
@@ -5675,9 +5814,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 14,
     nombre_departamento: "Lima",
     provincias: [
       {
+        provincia_id: 1401,
         nombre_provincia: "Lima",
         distritos: [
           {
@@ -5855,6 +5996,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1402,
         nombre_provincia: "Cajatambo",
         distritos: [
           {
@@ -5880,6 +6022,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1403,
         nombre_provincia: "Canta",
         distritos: [
           {
@@ -5913,6 +6056,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1404,
         nombre_provincia: "Cañete",
         distritos: [
           {
@@ -5982,6 +6126,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1405,
         nombre_provincia: "Huaura",
         distritos: [
           {
@@ -6035,6 +6180,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1406,
         nombre_provincia: "Huarochiri",
         distritos: [
           {
@@ -6168,6 +6314,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1407,
         nombre_provincia: "Yauyos",
         distritos: [
           {
@@ -6305,6 +6452,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1408,
         nombre_provincia: "Huaral",
         distritos: [
           {
@@ -6358,6 +6506,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1409,
         nombre_provincia: "Barranca",
         distritos: [
           {
@@ -6383,6 +6532,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1410,
         nombre_provincia: "Oyon",
         distritos: [
           {
@@ -6414,9 +6564,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 15,
     nombre_departamento: "Loreto",
     provincias: [
       {
+        provincia_id: 1501,
         nombre_provincia: "Maynas",
         distritos: [
           {
@@ -6474,6 +6626,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1502,
         nombre_provincia: "Alto Amazonas",
         distritos: [
           {
@@ -6503,6 +6656,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1503,
         nombre_provincia: "Loreto",
         distritos: [
           {
@@ -6528,6 +6682,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1504,
         nombre_provincia: "Requena",
         distritos: [
           {
@@ -6577,6 +6732,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1505,
         nombre_provincia: "Ucayali",
         distritos: [
           {
@@ -6606,6 +6762,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1506,
         nombre_provincia: "Mariscal Ramon Castilla",
         distritos: [
           {
@@ -6627,6 +6784,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1507,
         nombre_provincia: "Datem del Marañon",
         distritos: [
           {
@@ -6658,9 +6816,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 16,
     nombre_departamento: "Madre de Dios",
     provincias: [
       {
+        provincia_id: 1601,
         nombre_provincia: "Tambopata",
         distritos: [
           {
@@ -6682,6 +6842,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1602,
         nombre_provincia: "Manu",
         distritos: [
           {
@@ -6703,6 +6864,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1603,
         nombre_provincia: "Tahuamanu",
         distritos: [
           {
@@ -6722,9 +6884,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 17,
     nombre_departamento: "Moquegua",
     provincias: [
       {
+        provincia_id: 1701,
         nombre_provincia: "Mariscal Nieto",
         distritos: [
           {
@@ -6754,6 +6918,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1702,
         nombre_provincia: "General Sanchez Cerro",
         distritos: [
           {
@@ -6803,6 +6968,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1703,
         nombre_provincia: "Ilo",
         distritos: [
           {
@@ -6822,9 +6988,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 18,
     nombre_departamento: "Pasco",
     provincias: [
       {
+        provincia_id: 1801,
         nombre_provincia: "Pasco",
         distritos: [
           {
@@ -6882,6 +7050,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1802,
         nombre_provincia: "Daniel Alcides Carrion",
         distritos: [
           {
@@ -6919,6 +7088,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1803,
         nombre_provincia: "Oxapampa",
         distritos: [
           {
@@ -6958,9 +7128,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 19,
     nombre_departamento: "Piura",
     provincias: [
       {
+        provincia_id: 1901,
         nombre_provincia: "Piura",
         distritos: [
           {
@@ -7002,6 +7174,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1902,
         nombre_provincia: "Ayabaca",
         distritos: [
           {
@@ -7047,6 +7220,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1903,
         nombre_provincia: "Huancabamba",
         distritos: [
           {
@@ -7084,6 +7258,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1904,
         nombre_provincia: "Morropon",
         distritos: [
           {
@@ -7129,6 +7304,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1905,
         nombre_provincia: "Paita",
         distritos: [
           {
@@ -7162,6 +7338,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1906,
         nombre_provincia: "Sullana",
         distritos: [
           {
@@ -7199,6 +7376,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1907,
         nombre_provincia: "Talara",
         distritos: [
           {
@@ -7228,6 +7406,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 1908,
         nombre_provincia: "Sechura",
         distritos: [
           {
@@ -7259,9 +7438,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 20,
     nombre_departamento: "Puno",
     provincias: [
       {
+        provincia_id: 2001,
         nombre_provincia: "Puno",
         distritos: [
           {
@@ -7327,6 +7508,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2002,
         nombre_provincia: "Azangaro",
         distritos: [
           {
@@ -7392,6 +7574,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2003,
         nombre_provincia: "Carabaya",
         distritos: [
           {
@@ -7437,6 +7620,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2004,
         nombre_provincia: "Chucuito",
         distritos: [
           {
@@ -7470,6 +7654,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2005,
         nombre_provincia: "Huancane",
         distritos: [
           {
@@ -7507,6 +7692,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2006,
         nombre_provincia: "Lampa",
         distritos: [
           {
@@ -7552,6 +7738,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2007,
         nombre_provincia: "Melgar",
         distritos: [
           {
@@ -7593,6 +7780,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2008,
         nombre_provincia: "Sandia",
         distritos: [
           {
@@ -7638,6 +7826,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2009,
         nombre_provincia: "San Roman",
         distritos: [
           {
@@ -7659,6 +7848,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2010,
         nombre_provincia: "Yunguyo",
         distritos: [
           {
@@ -7692,6 +7882,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2011,
         nombre_provincia: "San Antonio de Putina",
         distritos: [
           {
@@ -7717,6 +7908,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2012,
         nombre_provincia: "El Collao",
         distritos: [
           {
@@ -7742,6 +7934,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2013,
         nombre_provincia: "Moho",
         distritos: [
           {
@@ -7765,9 +7958,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 21,
     nombre_departamento: "San Martin",
     provincias: [
       {
+        provincia_id: 2101,
         nombre_provincia: "Moyobamba",
         distritos: [
           {
@@ -7797,6 +7992,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2102,
         nombre_provincia: "Huallaga",
         distritos: [
           {
@@ -7826,6 +8022,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2103,
         nombre_provincia: "Lamas",
         distritos: [
           {
@@ -7875,6 +8072,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2104,
         nombre_provincia: "Mariscal Caceres",
         distritos: [
           {
@@ -7900,6 +8098,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2105,
         nombre_provincia: "Rioja",
         distritos: [
           {
@@ -7941,6 +8140,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2106,
         nombre_provincia: "San Martin",
         distritos: [
           {
@@ -8002,6 +8202,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2107,
         nombre_provincia: "Bellavista",
         distritos: [
           {
@@ -8031,6 +8232,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2108,
         nombre_provincia: "Tocache",
         distritos: [
           {
@@ -8056,6 +8258,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2109,
         nombre_provincia: "Picota",
         distritos: [
           {
@@ -8101,6 +8304,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2110,
         nombre_provincia: "El Dorado",
         distritos: [
           {
@@ -8128,9 +8332,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 22,
     nombre_departamento: "Tacna",
     provincias: [
       {
+        provincia_id: 2201,
         nombre_provincia: "Tacna",
         distritos: [
           {
@@ -8176,6 +8382,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2202,
         nombre_provincia: "Tarata",
         distritos: [
           {
@@ -8213,6 +8420,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2203,
         nombre_provincia: "Jorge Basadre",
         distritos: [
           {
@@ -8230,6 +8438,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2204,
         nombre_provincia: "Candarave",
         distritos: [
           {
@@ -8261,9 +8470,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 23,
     nombre_departamento: "Tumbes",
     provincias: [
       {
+        provincia_id: 2301,
         nombre_provincia: "Tumbes",
         distritos: [
           {
@@ -8293,6 +8504,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2302,
         nombre_provincia: "Contralmirante Villar",
         distritos: [
           {
@@ -8310,6 +8522,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2303,
         nombre_provincia: "Zarumilla",
         distritos: [
           {
@@ -8333,9 +8546,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 24,
     nombre_departamento: "Callao",
     provincias: [
       {
+        provincia_id: 2401,
         nombre_provincia: "Callao",
         distritos: [
           {
@@ -8367,9 +8582,11 @@ export const seedLocations = [
     ],
   },
   {
+    departamento_id: 25,
     nombre_departamento: "Ucayali",
     provincias: [
       {
+        provincia_id: 2501,
         nombre_provincia: "Coronel Portillo",
         distritos: [
           {
@@ -8403,6 +8620,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2502,
         nombre_provincia: "Padre Abad",
         distritos: [
           {
@@ -8420,6 +8638,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2503,
         nombre_provincia: "Atalaya",
         distritos: [
           {
@@ -8441,6 +8660,7 @@ export const seedLocations = [
         ],
       },
       {
+        provincia_id: 2504,
         nombre_provincia: "Purus",
         distritos: [
           {

@@ -7,6 +7,7 @@ import { MouseEvent, useEffect, useState } from "react";
 
 import { useAtom } from "jotai";
 import { userAtomCompany, userAtomPostulant } from "../../store/user";
+import { atomSearch } from "../../store/atomSearch";
 
 interface Props {
   showLogo?: boolean;
@@ -17,6 +18,7 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [verifyCompany, setVerifyCompany] = useState<boolean>(false);
+  const [, setValueAtomSearch] = useAtom(atomSearch);
   const [userP] = useAtom(userAtomPostulant);
   const [userC] = useAtom(userAtomCompany);
 
@@ -80,7 +82,11 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
                 marginLeft: "0rem",
               },
             }}
-            onClick={() => navigate("/")}
+            onClick={() => {
+              navigate("/");
+              localStorage.removeItem("searchValue")
+              setValueAtomSearch({ value: "", location: "" })
+            }}
           >
             <img
               src="/logo.png"

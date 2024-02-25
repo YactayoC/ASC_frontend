@@ -32,6 +32,7 @@ export const AppRouter = () => {
           path="/candidate/search/:value/:location?"
           element={<ResultsSearch />}
         />
+        <Route path="/candidate/search/featured-area/:featuredArea?" element={<ResultsSearch />} />
 
         {/* Company */}
         <Route path="/auth/company/login" element={<LoginComp />} />
