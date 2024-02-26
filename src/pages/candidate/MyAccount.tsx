@@ -40,8 +40,7 @@ const MyAccount = () => {
 
   const handleSubmitEmail = (event: any) => {
     event.preventDefault();
-    // Agrega aquí la lógica para manejar el envío del formulario
-    handleCloseModalEmail(); // Cierra el modal después de enviar el formulario
+    handleCloseModalEmail(); 
   };
 
   const createdAt = userInfo ? JSON.parse(userInfo).created_at : "";
@@ -415,6 +414,7 @@ const MyAccount = () => {
               variant="outlined"
               margin="normal"
               type="email"
+              defaultValue={userInfo ? JSON.parse(userInfo).emailCandidate : ""}
               fullWidth
             />
             <TextField

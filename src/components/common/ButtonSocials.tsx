@@ -18,7 +18,7 @@ const ButtonSocials = () => {
         zIndex: "100",
       }}
     >
-      <IconButton component="a" href="https://www.facebook.com">
+      <IconButton component="a" href="https://www.facebook.com/asclaboral" target="_blank">
         <Facebook
           sx={{
             fontSize: "2.5rem",
@@ -30,7 +30,7 @@ const ButtonSocials = () => {
           }}
         />
       </IconButton>
-      <IconButton component="a" href="https://www.linkedin.com">
+      <IconButton component="a" href="https://www.linkedin.com/company/2501409/admin/" target="_blank">
         <LinkedIn
           sx={{
             fontSize: "2.5rem",
@@ -42,7 +42,7 @@ const ButtonSocials = () => {
           }}
         />
       </IconButton>
-      <IconButton component="a" href="https://www.twitter.com">
+      <IconButton component="a" href="https://twitter.com/GRUPOASC_PERU" target="_blank">
         <Twitter
           sx={{
             fontSize: "2.5rem",

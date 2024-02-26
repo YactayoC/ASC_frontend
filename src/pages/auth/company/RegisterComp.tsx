@@ -35,6 +35,7 @@ const RegisterComp = () => {
     register,
     handleSubmit,
     control,
+    setError,
     formState: { errors },
   } = useForm<RegisterFormCompany>();
 
@@ -95,8 +96,10 @@ const RegisterComp = () => {
         handleNext();
       }
 
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      console.log(error)
+      const errorMessage = error?.response?.data?.message || "Error al enviar el correo de verificación";
+      setError('email', { type: 'manual', message: errorMessage });
     }
   }
 

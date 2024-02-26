@@ -23,6 +23,7 @@ const LoginComp = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<LoginForm>();
 
@@ -31,11 +32,21 @@ const LoginComp = () => {
   };
 
   const handleLogin = async (dataForm: LoginForm) => {
-    const response = await loginCompany(dataForm);
-    console.log(response?.response)
-    localStorage.setItem("isAuthenticated", "true");
-    localStorage.setItem("isCompany", "true");
-    navigate("/company/my-ads");
+    try {
+      const response = await loginCompany(dataForm);
+      console.log(response?.response)
+      localStorage.setItem("isAuthenticated", "true");
+      localStorage.setItem("isCompany", "true");
+      navigate("/company/my-ads");
+    }
+    catch (error: any) {
+      console.log(error);
+      const errorMessage = error?.response?.data?.message || "Correo o contraseña incorrectos";
+      setError("email", {
+        type: "manual",
+        message: errorMessage,
+      });
+    }
   }
 
   return (

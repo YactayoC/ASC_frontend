@@ -278,6 +278,14 @@ const MyCV = () => {
                 id="fileInputCV"
               />
             </Button>
+            <Typography
+              sx={{
+                color: "gray",
+                fontSize: "1rem",
+              }}
+            >
+              * El documento sustentatorio va ser remitido en el proceso o etapa de la entrevista
+            </Typography>
 
             {selectedFile && (
               <Box
@@ -756,7 +764,7 @@ const MyCV = () => {
                   id="demo-simple-select"
                   value={10}
                   label="Nacionalidad"
-                  // onChange={handleChange}
+                // onChange={handleChange}
                 >
                   <MenuItem value={10}>Perú</MenuItem>
                   <MenuItem value={20}>Bolivia</MenuItem>
@@ -803,7 +811,7 @@ const MyCV = () => {
                       id="demo-simple-select"
                       value={1}
                       label="Dia"
-                      // onChange={handleChange}
+                    // onChange={handleChange}
                     >
                       <MenuItem value={1}>1</MenuItem>
                       <MenuItem value={2}>2</MenuItem>
@@ -821,7 +829,7 @@ const MyCV = () => {
                       id="demo-simple-select"
                       value={1}
                       label="Mes"
-                      // onChange={handleChange}
+                    // onChange={handleChange}
                     >
                       <MenuItem value={1}>Enero</MenuItem>
                       <MenuItem value={2}>Febrero</MenuItem>
@@ -839,7 +847,7 @@ const MyCV = () => {
                       id="demo-simple-select"
                       value={1}
                       label="Año"
-                      // onChange={handleChange}
+                    // onChange={handleChange}
                     >
                       <MenuItem value={1}>1995</MenuItem>
                       <MenuItem value={2}>1996</MenuItem>
@@ -866,7 +874,7 @@ const MyCV = () => {
                       id="demo-simple-select"
                       value={10}
                       label="Estado Civil"
-                      // onChange={handleChange}
+                    // onChange={handleChange}
                     >
                       <MenuItem value={10}>Soltero</MenuItem>
                       <MenuItem value={20}>Viudo</MenuItem>
@@ -895,7 +903,7 @@ const MyCV = () => {
                   id="demo-simple-select"
                   value={1}
                   label="Tipo documento"
-                  // onChange={handleChange}
+                // onChange={handleChange}
                 >
                   <MenuItem value={1}>DNI</MenuItem>
                   <MenuItem value={2}>Pasaporte</MenuItem>
@@ -986,7 +994,7 @@ const MyCV = () => {
                   id="demo-simple-select"
                   value={10}
                   label="Nacionalidad"
-                  // onChange={handleChange}
+                // onChange={handleChange}
                 >
                   <MenuItem value={10}>2010</MenuItem>
                   <MenuItem value={20}>2011</MenuItem>
@@ -1001,7 +1009,7 @@ const MyCV = () => {
                   id="demo-simple-select"
                   value={10}
                   label="Nacionalidad"
-                  // onChange={handleChange}
+                // onChange={handleChange}
                 >
                   <MenuItem value={10}>2022</MenuItem>
                   <MenuItem value={20}>2023</MenuItem>
@@ -1084,7 +1092,7 @@ const MyCV = () => {
                   id="demo-simple-select"
                   value={10}
                   label="Nacionalidad"
-                  // onChange={handleChange}
+                // onChange={handleChange}
                 >
                   <MenuItem value={10}>2010</MenuItem>
                   <MenuItem value={20}>2011</MenuItem>
@@ -1099,7 +1107,7 @@ const MyCV = () => {
                   id="demo-simple-select"
                   value={10}
                   label="Nacionalidad"
-                  // onChange={handleChange}
+                // onChange={handleChange}
                 >
                   <MenuItem value={10}>2022</MenuItem>
                   <MenuItem value={20}>2023</MenuItem>
@@ -1164,7 +1172,7 @@ const MyCV = () => {
                   id="demo-simple-select"
                   value={10}
                   label="Nacionalidad"
-                  // onChange={handleChange}
+                // onChange={handleChange}
                 >
                   <MenuItem value={10}>Español</MenuItem>
                   <MenuItem value={20}>Ingles</MenuItem>
@@ -1179,7 +1187,7 @@ const MyCV = () => {
                   id="demo-simple-select"
                   value={10}
                   label="Nacionalidad"
-                  // onChange={handleChange}
+                // onChange={handleChange}
                 >
                   <MenuItem value={10}>Básico</MenuItem>
                   <MenuItem value={20}>Intermedio</MenuItem>

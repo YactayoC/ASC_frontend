@@ -115,7 +115,9 @@ function Home() {
               {jobAreasTop.map((area) => (
                 <ListItem key={area.id} sx={{ width: "fit-content" }}>
                   <Link href={`/candidate/search/featured-area/${area.id}`} color="inherit" underline="hover">
-                    <ListItemText primary={area.name} />
+                    <ListItemText >
+                      {area.name} ({area.jobsCount})
+                    </ListItemText>
                   </Link>
                 </ListItem>
               ))}

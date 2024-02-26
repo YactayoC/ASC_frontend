@@ -31,6 +31,7 @@ const Register = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<RegisterFormPostulant>();
 
@@ -90,8 +91,9 @@ const Register = () => {
         handleNext();
       }
 
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || "Error al enviar el correo de verificación";
+      setError('email', { type: 'manual', message: errorMessage });
     }
   }
 
@@ -112,7 +114,7 @@ const Register = () => {
   const handleRegisterInfoCandidate = async (data: any) => {
     try {
       //console.log(data)
-      const response = await registerCompleteCandidate(data);
+      await registerCompleteCandidate(data);
       navigate("/");
       //localStorage.setItem("userInfo", JSON.stringify(response?.response.data));
       localStorage.setItem("isCompany", "false");

@@ -60,7 +60,7 @@ const ResultsSearch = () => {
 
     const locationMatchId = location ? job.empresa.provincia.id === parseInt(location) : true;
     const matchesArea = featuredArea ? job.area.id === parseInt(featuredArea) : true;
-  
+
 
     return (
       locationMatchId &&
@@ -244,6 +244,7 @@ const ResultsSearch = () => {
                 defaultValue={dayjs(new Date())}
                 format="DD/MM/YYYY"
                 maxDate={dayjs(new Date())}
+                minDate={dayjs("1900")}
                 sx={{
                   width: "100%",
                 }}
