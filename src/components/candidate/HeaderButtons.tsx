@@ -195,6 +195,7 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
                 localStorage.removeItem("isCompany");
                 localStorage.removeItem("isAuthenticated");
                 localStorage.removeItem("userInfo");
+                localStorage.removeItem("searchValue")
                 setIsAuthenticated(!isAuthenticated);
                 handleClose("/")
               }}>
@@ -297,6 +298,7 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
                 setIsAuthenticated(!isAuthenticated);
                 localStorage.removeItem("userInfo");
                 localStorage.removeItem("isCompany");
+                localStorage.removeItem("searchValue")
                 localStorage.removeItem("isAuthenticated");
                 handleClose("/")
               }}>

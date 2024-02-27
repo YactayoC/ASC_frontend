@@ -13,14 +13,50 @@ import { atomSearch } from "../../store/atomSearch";
 import { ToastContainer, toast } from "react-toastify";
 import { seedLocations } from "../../seed/locations";
 
-
 const SearchJob = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [location, setLocation] = useState("");
   const [_valueAtomSearch, setValueAtomSearch] = useAtom(atomSearch);
   const [locationLabel, setLocationLabel] = useState(""); // Para la etiqueta de visualización
-  //console.log(valueAtomSearch)
+
+  const onSearch = async (e: any) => {
+    e.preventDefault();
+    const trimmedSearch = search.trim();
+
+    if (!trimmedSearch && !location) {
+      toast.error('Ingrese un puesto y una ubicación para buscar', {
+        closeOnClick: true,
+        autoClose: 2000,
+        theme: 'colored',
+      });
+      return;
+    }
+
+    if (!trimmedSearch) {
+
+      setValueAtomSearch({ value: trimmedSearch, location });
+      localStorage.setItem('searchValue', JSON.stringify({ value: trimmedSearch, location }));
+
+      navigate(`/candidate/search/geo/${location}/`);
+      return
+    }
+
+    if (!location) {
+
+      setValueAtomSearch({ value: trimmedSearch, location });
+      localStorage.setItem('searchValue', JSON.stringify({ value: trimmedSearch, location }));
+
+      navigate(`/candidate/search/${trimmedSearch}/`);
+      return
+    }
+
+    setValueAtomSearch({ value: trimmedSearch, location });
+    localStorage.setItem('searchValue', JSON.stringify({ value: trimmedSearch, location }));
+
+    navigate(`/candidate/search/${trimmedSearch}/${location}/`);
+    return
+  };
 
   const flatOptions = seedLocations.flatMap(departamento =>
     departamento.provincias.map(provincia => ({
@@ -55,26 +91,6 @@ const SearchJob = () => {
     }
   }, [location]);
 
-  const onSearch = (e: any) => {
-    e.preventDefault();
-    const trimmedSearch = search.trim();
-
-    if (!trimmedSearch || !location) {
-      toast.error('Ingrese un puesto y una ubicación para buscar', {
-        closeOnClick: true,
-        autoClose: 2000,
-        theme: 'colored',
-      });
-      return;
-    }
-
-    // Actualiza el átomo y localStorage con el valor y ubicación actuales
-    setValueAtomSearch({ value: trimmedSearch, location });
-    localStorage.setItem('searchValue', JSON.stringify({ value: trimmedSearch, location }));
-
-    // Navega a la página de resultados de búsqueda
-    navigate(`/candidate/search/${trimmedSearch}/${location}/`);
-  };
 
   return (
     <>
@@ -87,7 +103,7 @@ const SearchJob = () => {
               label="Puesto"
               value={search}
               onChange={(e) => {
-                console.log(e.target.value); // Para depuración
+                //console.log(e.target.value); // Para depuración
                 setSearch(e.target.value);
               }}
               sx={{

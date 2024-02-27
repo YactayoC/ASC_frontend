@@ -21,28 +21,36 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { Facebook, Share, WhatsApp } from "@mui/icons-material";
 import dayjs from "dayjs";
-
 import HeaderButtons from "../../components/candidate/HeaderButtons";
 import theme from "../../../theme";
 import SearchJob from "../../components/common/SearchJob";
 import { jobs } from "../../seed/resultsSearchJob";
 import SwipperableDr from "../../components/common/SwipperableDr";
 import { Jornada, ModalidadTrabajo } from "../../interfaces/Jobs";
+import { useNavigate } from "react-router-dom";
+import useOffers from "../../hooks/Candidate/Offers/useOffers";
 
 const ResultsSearch = () => {
+  const navigate = useNavigate();
+  const [postulatedJobIds, setPostulatedJobIds] = useState<number[]>([]);
+  const [openConfirmationPost, setOpenConfirmationPost] = useState(false);
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const { value, location, featuredArea } = useParams();
+  const paramsRef = useRef({ value, location, featuredArea });
+  //console.log(paramsRef)
   const [buttonOrderBy, setButtonOrderBy] = useState("recientes");
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedJob, setSelectedJob] = useState<any>(jobs.length > 0 ? jobs[0] : undefined);
+
   const [selectModalidad, setSelectModalidad] = useState<number | null>(null);
   const [selectJornada, setSelectJornada] = useState<number | null>(null);
   const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
+  const { getOffersByProvinceId, getOffersByJobAndProvinceId, getOffersByJob } = useOffers();
 
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -122,6 +130,27 @@ const ResultsSearch = () => {
     { id: 4, nombre: "Beca/Prácticas" },
   ];
 
+  const applyOffer = (jobId: number) => {
+    const isAuthenticated = localStorage.getItem("isAuthenticated");
+
+    if (isAuthenticated === "false" || isAuthenticated === null) {
+      navigate("/login");
+    } else {
+      setPostulatedJobIds(prevIds => {
+        const newIds = [...new Set([...prevIds, jobId])];
+        localStorage.setItem('postulatedJobIds', JSON.stringify(newIds));
+        return newIds;
+      });
+      setOpenConfirmationPost(true);
+    }
+  };
+
+  useEffect(() => {
+    const storedPostulatedJobIds = localStorage.getItem('postulatedJobIds');
+    if (storedPostulatedJobIds) {
+      setPostulatedJobIds(JSON.parse(storedPostulatedJobIds));
+    }
+  }, []);
 
   useEffect(() => {
     // Verifica si el trabajo seleccionado actualmente sigue estando en los trabajos filtrados
@@ -137,8 +166,39 @@ const ResultsSearch = () => {
     // No cambies el trabajo seleccionado si sigue siendo válido
   }, [filteredJobs]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      // Solo ejecutar si los parámetros actuales son diferentes a los anteriores
+      if (
+        paramsRef.current.value !== value ||
+        paramsRef.current.location !== location ||
+        paramsRef.current.featuredArea !== featuredArea
+      ) {
+        paramsRef.current = { value, location, featuredArea };
+        let response;
 
-  // console.log(fechaSolo); // "2023-03-15"
+        if (location && value) {
+          response = await getOffersByJobAndProvinceId(value, Number(location));
+
+          console.log(response)
+        } else if (location) {
+          response = await getOffersByProvinceId(Number(location));
+
+          console.log(response)
+        } else if (value) {
+          response = await getOffersByJob(value);
+
+          console.log(response)
+        } else {
+          // Manejo si no hay parámetros
+        }
+        // Actualizar el estado con la respuesta aquí
+      }
+    };
+
+    fetchData();
+  }, [value, location, featuredArea, getOffersByProvinceId, getOffersByJobAndProvinceId, getOffersByJob]);
+
 
   return (
     <>
@@ -628,135 +688,165 @@ const ResultsSearch = () => {
                   }}
                 >
                   {selectedJob && (
-                    //console.log(selectedJob.nombre_puesto), // <--- This is the line that I added to debug
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        padding: "1rem",
-                        border: "1px solid #e0e0e0",
-                        height: "100%",
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "start",
-                          columnGap: "1rem",
-                        }}
-                      >
-                        <Box>
-                          <Typography variant="h6">{selectedJob.nombre_puesto}</Typography>
-                          <Link
-                            href={selectedJob.empresa?.sitio_web}
-                            target="_blank"
-                            sx={{
-                              width: "fit-content",
-                              fontSize: "1rem",
-                            }}
-                          >
-                            {selectedJob.empresa?.nombre_completo}
-                          </Link>
-                        </Box>
-                        <img
-                          src="
-                    https://cdn.pixabay.com/photo/2021/08/10/15/36/microsoft-6536268_1280.png"
-                          alt=""
-                          style={{
-                            width: "3rem",
-                            height: "3rem",
-                          }}
-                        />
-                      </Box>
-                      <Typography
-                        sx={{
-                          fontSize: "1rem",
-                        }}
-                      >
-                        {selectedJob.empresa?.direccion}, {selectedJob.empresa?.provincia?.nombre_provincia}
-                      </Typography>
-                      <Box
-                        sx={{
-                          marginTop: "1rem",
-                          display: "flex",
-                          columnGap: "1rem",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          size="large"
+                    <>
+                      {openConfirmationPost && postulatedJobIds.includes(selectedJob.oferta_id) ? (
+                        <Box
                           sx={{
-                            width: "fit-content",
-                            borderRadius: "20px",
+                            display: "flex",
+                            flexDirection: "column",
+                            padding: "1rem",
+                            border: "1px solid #e0e0e0",
+                            height: "100%",
+                            alignItems: "center",
+                            justifyContent: "center",
+
                           }}
                         >
-                          Postularme
-                        </Button>
-                        <IconButton
-                          color="primary"
-                          aria-label="upload picture"
-                          onClick={(e: any) => setAnchorEl(e.currentTarget)}
-                        >
-                          <Share />
-                        </IconButton>
-                        <Menu
-                          anchorEl={anchorEl}
-                          open={Boolean(anchorEl)}
-                          onClose={handleClose}
-                        >
-                          <MenuItem
-                            onClick={handleShareFacebook}
+                          <Typography variant="h6" gutterBottom>
+                            ¡Felicitaciones! Te has postulado a la oferta de empleo
+                          </Typography>
+                          <Typography variant="body1" gutterBottom>
+                            En breve estarías recibiendo una respuesta de la empresa
+                          </Typography>
+                        </Box>
+                      ) : (
+                        <>
+                          <Box
                             sx={{
                               display: "flex",
-                              alignItems: "center",
-                              columnGap: "0.5rem",
+                              flexDirection: "column",
+                              padding: "1rem",
+                              border: "1px solid #e0e0e0",
+                              height: "100%",
                             }}
                           >
-                            <Facebook />
-                            <Typography
-                              component={"span"}
+                            <Box
                               sx={{
-                                fontSize: "0.9rem",
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "start",
+                                columnGap: "1rem",
                               }}
                             >
-                              Facebook
-                            </Typography>
-                          </MenuItem>
-                          <MenuItem
-                            onClick={handleShareInstagram}
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              columnGap: "0.5rem",
-                            }}
-                          >
-                            <WhatsApp />
+                              <Box>
+                                <Typography variant="h6">{selectedJob.nombre_puesto}</Typography>
+                                <Link
+                                  href={selectedJob.empresa?.sitio_web}
+                                  target="_blank"
+                                  sx={{
+                                    width: "fit-content",
+                                    fontSize: "1rem",
+                                  }}
+                                >
+                                  {selectedJob.empresa?.nombre_completo}
+                                </Link>
+                              </Box>
+                              <img
+                                src="
+                    https://cdn.pixabay.com/photo/2021/08/10/15/36/microsoft-6536268_1280.png"
+                                alt=""
+                                style={{
+                                  width: "3rem",
+                                  height: "3rem",
+                                }}
+                              />
+                            </Box>
                             <Typography
-                              component={"span"}
                               sx={{
-                                fontSize: "0.9rem",
+                                fontSize: "1rem",
                               }}
                             >
-                              Whatsapp
+                              {selectedJob.empresa?.direccion}, {selectedJob.empresa?.provincia?.nombre_provincia}
                             </Typography>
-                          </MenuItem>
-                        </Menu>
-                      </Box>
-                      <Divider sx={{ marginTop: "1rem" }} />
-                      <Typography
-                        sx={{
-                          marginTop: "1rem",
-                          fontWeight: 400,
-                          color: "##313944",
-                        }}
-                      >
-                        {selectedJob.descripcion}
-                      </Typography>
-                    </Box>
+                            <Box
+                              sx={{
+                                marginTop: "1rem",
+                                display: "flex",
+                                columnGap: "1rem",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                size="large"
+                                sx={{
+                                  width: "fit-content",
+                                  borderRadius: "20px",
+                                }}
+                                onClick={() => applyOffer(selectedJob.oferta_id)}
+                              >
+                                Postularme
+                              </Button>
+                              <IconButton
+                                color="primary"
+                                aria-label="upload picture"
+                                onClick={(e: any) => setAnchorEl(e.currentTarget)}
+                              >
+                                <Share />
+                              </IconButton>
+                              <Menu
+                                anchorEl={anchorEl}
+                                open={Boolean(anchorEl)}
+                                onClose={handleClose}
+                              >
+                                <MenuItem
+                                  onClick={handleShareFacebook}
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    columnGap: "0.5rem",
+                                  }}
+                                >
+                                  <Facebook />
+                                  <Typography
+                                    component={"span"}
+                                    sx={{
+                                      fontSize: "0.9rem",
+                                    }}
+                                  >
+                                    Facebook
+                                  </Typography>
+                                </MenuItem>
+                                <MenuItem
+                                  onClick={handleShareInstagram}
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    columnGap: "0.5rem",
+                                  }}
+                                >
+                                  <WhatsApp />
+                                  <Typography
+                                    component={"span"}
+                                    sx={{
+                                      fontSize: "0.9rem",
+                                    }}
+                                  >
+                                    Whatsapp
+                                  </Typography>
+                                </MenuItem>
+                              </Menu>
+                            </Box>
+                            <Divider sx={{ marginTop: "1rem" }} />
+                            <Typography
+                              sx={{
+                                marginTop: "1rem",
+                                fontWeight: 400,
+                                color: "##313944",
+                              }}
+                            >
+                              {selectedJob.descripcion}
+                            </Typography>
+                          </Box>
+                        </>
+                      )}
+
+                    </>
+
                   )}
+
+
                 </Grid>
               </Grid>
             </>
