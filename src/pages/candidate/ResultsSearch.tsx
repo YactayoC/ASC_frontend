@@ -30,13 +30,14 @@ import theme from "../../../theme";
 import SearchJob from "../../components/common/SearchJob";
 import SwipperableDr from "../../components/common/SwipperableDr";
 import { Jornada, ModalidadTrabajo } from "../../interfaces/Jobs";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import useOffers from "../../hooks/Candidate/Offers/useOffers";
 
 const ResultsSearch = () => {
-  const navigate = useNavigate();
-  const [postulatedJobIds, setPostulatedJobIds] = useState<number[]>([]);
-  const [openConfirmationPost, setOpenConfirmationPost] = useState(false);
+  //const navigate = useNavigate();
+  const userInfo = localStorage.getItem("userInfo");
+  const user = userInfo ? JSON.parse(userInfo) : null;
+  const [userAppliedOffers, setUserAppliedOffers] = useState<number[]>([]);
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const { value, location, featuredArea } = useParams<{ value: string; location?: string; featuredArea?: string }>();
@@ -49,7 +50,7 @@ const ResultsSearch = () => {
   const [selectModalidad, setSelectModalidad] = useState<number | null>(null);
   const [selectJornada, setSelectJornada] = useState<number | null>(null);
   const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
-  const { getOffersByProvinceId, getOffersByJobAndProvinceId, getOffersByJob } = useOffers();
+  const { getOffersByProvinceId, getOffersByJobAndProvinceId, getOffersByJob, applyOffer, getOffersByUserId } = useOffers();
 
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -129,28 +130,37 @@ const ResultsSearch = () => {
     { id: 3, nombre: "Por horas" },
     { id: 4, nombre: "Beca/Prácticas" },
   ];
-
-  const applyOffer = (jobId: number): void => {
-    const isAuthenticated = localStorage.getItem("isAuthenticated");
-
-    if (isAuthenticated === "false" || isAuthenticated === null) {
-      navigate("/login");
-    } else {
-      setPostulatedJobIds(prevIds => {
-        const newIds = [...new Set([...prevIds, jobId])];
-        localStorage.setItem('postulatedJobIds', JSON.stringify(newIds));
-        return newIds;
-      });
-      setOpenConfirmationPost(true);
+  const handleApplyOffer = async () => {
+    try {
+      const response = await applyOffer(selectDataIdJob.oferta_id, user.id_user);
+      if (response.ok) {
+        setUserAppliedOffers((prev) => [...prev, selectDataIdJob.oferta_id]);
+        //localStorage.setItem("postulatedJobIds", JSON.stringify(postulatedJobIds));
+        //setOpenConfirmationPost(true);
+      }
+    } catch (error) {
+      console.log(error);
     }
-  };
+  }
 
   useEffect(() => {
-    const storedPostulatedJobIds = localStorage.getItem('postulatedJobIds');
-    if (storedPostulatedJobIds) {
-      setPostulatedJobIds(JSON.parse(storedPostulatedJobIds));
-    }
-  }, []);
+    const fetchUserAppliedOffers = async () => {
+      // Asegurarse de que el usuario esté definido y que no haya realizado ya la petición
+      if (user?.id_user && !userAppliedOffers.length) {
+        try {
+          const response = await getOffersByUserId(user.id_user);
+          if (response.ok) {
+            const appliedOfferIds = response.response.map((offer: any) => offer.oferta_id);
+            setUserAppliedOffers(appliedOfferIds);
+          }
+        } catch (error) {
+          console.error("Error fetching user applied offers:", error);
+        }
+      }
+    };
+
+    fetchUserAppliedOffers();
+  }, [user?.id_user]); // Dependencia en user.id_user¿
 
   useEffect(() => {
     // Crea una cadena que representa los parámetros actuales de búsqueda
@@ -182,7 +192,7 @@ const ResultsSearch = () => {
 
       setSelectedJob(response.response);
       setSelectDataIdJob(response.response[0]);
-      
+
     };
 
     fetchData();
@@ -433,6 +443,7 @@ const ResultsSearch = () => {
                           onClick={() => {
                             setSelectDataIdJob(prob);
                             if (isSmallScreen) {
+                              setSelectDataIdJob(prob);
                               setOpen(true);
                             }
                           }}
@@ -533,6 +544,195 @@ const ResultsSearch = () => {
                 {/* Seleccionar detalle movil */}
                 {isSmallScreen && (
                   <SwipperableDr open={open} setOpen={setOpen}>
+                    <>
+                      {userAppliedOffers.includes(selectDataIdJob?.oferta_id) ? (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: "1rem",
+                            border: "1px solid #e0e0e0",
+                            height: "100%",
+                          }}
+                        >
+                          <Typography variant="h6" gutterBottom>
+                            ¡Felicitaciones! Ya has postulado a la oferta de empleo.
+                          </Typography>
+                          <Typography variant="body1" gutterBottom>
+                            En breve podrías estar recibiendo una respuesta de la empresa.
+                          </Typography>
+                        </Box>
+                      ) : (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            padding: "1rem",
+                            border: "1px solid #e0e0e0",
+                            height: "100%",
+                            maxHeight: "48rem",
+                            overflowY: "auto",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "start",
+                              columnGap: "1rem",
+                              height: "100%",
+                            }}
+                          >
+                            <Box>
+                              <Typography variant="h6">
+                                {selectDataIdJob?.nombre_puesto}
+                              </Typography>
+                              <Link
+                                href={selectDataIdJob?.empresa.sitio_web}
+                                target="_blank"
+                                sx={{
+                                  width: "fit-content",
+                                  fontSize: "1rem",
+                                }}
+                              >
+                                {selectDataIdJob?.empresa.nombre_completo}
+                              </Link>
+                            </Box>
+                            <img
+                              src={selectDataIdJob?.empresa.avatar}
+                              alt=""
+                              style={{
+                                width: "3rem",
+                                height: "3rem",
+                              }}
+                            />
+                          </Box>
+
+                          <Typography
+                            sx={{
+                              fontSize: "1rem",
+                            }}
+                          >
+                            {selectDataIdJob?.empresa.direccion}, {selectDataIdJob?.empresa.provincia}
+                          </Typography>
+                          <Box
+                            sx={{
+                              marginTop: "1rem",
+                              display: "flex",
+                              columnGap: "1rem",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              size="large"
+                              sx={{
+                                width: "fit-content",
+                                borderRadius: "20px",
+                              }}
+                              onClick={() => handleApplyOffer()}
+                            >
+                              Postularme
+                            </Button>
+                            <IconButton
+                              color="primary"
+                              aria-label="upload picture"
+                              onClick={(e: any) => setAnchorEl(e.currentTarget)}
+                            >
+                              <Share />
+                            </IconButton>
+                            <Menu
+                              anchorEl={anchorEl}
+                              open={Boolean(anchorEl)}
+                              onClose={handleClose}
+                            >
+                              <MenuItem
+                                onClick={handleShareFacebook}
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  columnGap: "0.5rem",
+                                }}
+                              >
+                                <Facebook />
+                                <Typography
+                                  component={"span"}
+                                  sx={{
+                                    fontSize: "0.9rem",
+                                  }}
+                                >
+                                  Facebook
+                                </Typography>
+                              </MenuItem>
+                              <MenuItem
+                                onClick={handleShareInstagram}
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  columnGap: "0.5rem",
+                                }}
+                              >
+                                <WhatsApp />
+                                <Typography
+                                  component={"span"}
+                                  sx={{
+                                    fontSize: "0.9rem",
+                                  }}
+                                >
+                                  Whatsapp
+                                </Typography>
+                              </MenuItem>
+                            </Menu>
+                          </Box>
+                          <Divider sx={{ marginTop: "1rem" }} />
+                          <Typography
+                            sx={{
+                              marginTop: "1rem",
+                              fontWeight: 400,
+                              color: "##313944",
+                            }}
+                          >
+                            {selectDataIdJob?.descripcion}
+                          </Typography>
+                        </Box>
+                      )}
+                    </>
+                  </SwipperableDr>
+                )}
+                {/* Seleccionar detalle escritorio */}
+                <Grid
+                  item
+                  xs={12}
+                  sm={7}
+                  sx={{
+                    [theme.breakpoints.down("sm")]: {
+                      display: "none",
+                    },
+                  }}
+                >
+                  {userAppliedOffers.includes(selectDataIdJob?.oferta_id) ? (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: "1rem",
+                        border: "1px solid #e0e0e0",
+                        height: "100%",
+                      }}
+                    >
+                      <Typography variant="h6" gutterBottom>
+                        ¡Felicitaciones! Ya has postulado a la oferta de empleo.
+                      </Typography>
+                      <Typography variant="body1" gutterBottom>
+                        En breve podrías estar recibiendo una respuesta de la empresa.
+                      </Typography>
+                    </Box>
+                  ) : (
                     <Box
                       sx={{
                         display: "flex",
@@ -540,8 +740,6 @@ const ResultsSearch = () => {
                         padding: "1rem",
                         border: "1px solid #e0e0e0",
                         height: "100%",
-                        maxHeight: "48rem",
-                        overflowY: "auto",
                       }}
                     >
                       <Box
@@ -550,27 +748,23 @@ const ResultsSearch = () => {
                           justifyContent: "space-between",
                           alignItems: "start",
                           columnGap: "1rem",
-                          height: "100%",
                         }}
                       >
                         <Box>
-                          <Typography variant="h6">
-                            xxxxxx
-                          </Typography>
+                          <Typography variant="h6">{selectDataIdJob?.nombre_puesto}</Typography>
                           <Link
-                            href="xxxxx"
+                            href={selectDataIdJob?.empresa.sitio_web}
                             target="_blank"
                             sx={{
                               width: "fit-content",
                               fontSize: "1rem",
                             }}
                           >
-                            xxxxx
+                            {selectDataIdJob?.empresa.nombre_completo}
                           </Link>
                         </Box>
                         <img
-                          src="
-                    https://cdn.pixabay.com/photo/2021/08/10/15/36/microsoft-6536268_1280.png"
+                          src={selectDataIdJob?.empresa.avatar}
                           alt=""
                           style={{
                             width: "3rem",
@@ -578,13 +772,12 @@ const ResultsSearch = () => {
                           }}
                         />
                       </Box>
-
                       <Typography
                         sx={{
                           fontSize: "1rem",
                         }}
                       >
-                        xxxx
+                        {selectDataIdJob?.empresa.direccion}, {selectDataIdJob?.empresa.provincia}
                       </Typography>
                       <Box
                         sx={{
@@ -602,6 +795,7 @@ const ResultsSearch = () => {
                             width: "fit-content",
                             borderRadius: "20px",
                           }}
+                          onClick={() => handleApplyOffer()}
                         >
                           Postularme
                         </Button>
@@ -663,183 +857,10 @@ const ResultsSearch = () => {
                           color: "##313944",
                         }}
                       >
-                        xxxx
+                        {selectDataIdJob?.descripcion}
                       </Typography>
                     </Box>
-                  </SwipperableDr>
-                )}
-                {/* Seleccionar detalle escritorio */}
-                <Grid
-                  item
-                  xs={12}
-                  sm={7}
-                  sx={{
-                    [theme.breakpoints.down("sm")]: {
-                      display: "none",
-                    },
-                  }}
-                >
-
-                  {selectedJob && (
-                    <>
-                      {openConfirmationPost && postulatedJobIds.includes(selectedJob.oferta_id) ? (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            padding: "1rem",
-                            border: "1px solid #e0e0e0",
-                            height: "100%",
-                            alignItems: "center",
-                            justifyContent: "center",
-
-                          }}
-                        >
-                          <Typography variant="h6" gutterBottom>
-                            ¡Felicitaciones! Te has postulado a la oferta de empleo
-                          </Typography>
-                          <Typography variant="body1" gutterBottom>
-                            En breve estarías recibiendo una respuesta de la empresa
-                          </Typography>
-                        </Box>
-                      ) : (
-                        <>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              flexDirection: "column",
-                              padding: "1rem",
-                              border: "1px solid #e0e0e0",
-                              height: "100%",
-                            }}
-                          >
-                            <Box
-                              sx={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "start",
-                                columnGap: "1rem",
-                              }}
-                            >
-                              <Box>
-                                <Typography variant="h6">{selectDataIdJob?.nombre_puesto}</Typography>
-                                <Link
-                                  href={selectDataIdJob?.empresa.sitio_web}
-                                  target="_blank"
-                                  sx={{
-                                    width: "fit-content",
-                                    fontSize: "1rem",
-                                  }}
-                                >
-                                  {selectDataIdJob?.empresa.nombre_completo}
-                                </Link>
-                              </Box>
-                              <img
-                                src={selectDataIdJob?.empresa.avatar}
-                                alt=""
-                                style={{
-                                  width: "3rem",
-                                  height: "3rem",
-                                }}
-                              />
-                            </Box>
-                            <Typography
-                              sx={{
-                                fontSize: "1rem",
-                              }}
-                            >
-                              {selectDataIdJob?.empresa.direccion}, {selectDataIdJob?.empresa.provincia}
-                            </Typography>
-                            <Box
-                              sx={{
-                                marginTop: "1rem",
-                                display: "flex",
-                                columnGap: "1rem",
-                                alignItems: "center",
-                              }}
-                            >
-                              <Button
-                                variant="contained"
-                                color="primary"
-                                size="large"
-                                sx={{
-                                  width: "fit-content",
-                                  borderRadius: "20px",
-                                }}
-                                onClick={() => {
-                                  applyOffer(selectedJob.oferta_id);
-                                }}
-                              >
-                                Postularme
-                              </Button>
-                              <IconButton
-                                color="primary"
-                                aria-label="upload picture"
-                                onClick={(e: any) => setAnchorEl(e.currentTarget)}
-                              >
-                                <Share />
-                              </IconButton>
-                              <Menu
-                                anchorEl={anchorEl}
-                                open={Boolean(anchorEl)}
-                                onClose={handleClose}
-                              >
-                                <MenuItem
-                                  onClick={handleShareFacebook}
-                                  sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    columnGap: "0.5rem",
-                                  }}
-                                >
-                                  <Facebook />
-                                  <Typography
-                                    component={"span"}
-                                    sx={{
-                                      fontSize: "0.9rem",
-                                    }}
-                                  >
-                                    Facebook
-                                  </Typography>
-                                </MenuItem>
-                                <MenuItem
-                                  onClick={handleShareInstagram}
-                                  sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    columnGap: "0.5rem",
-                                  }}
-                                >
-                                  <WhatsApp />
-                                  <Typography
-                                    component={"span"}
-                                    sx={{
-                                      fontSize: "0.9rem",
-                                    }}
-                                  >
-                                    Whatsapp
-                                  </Typography>
-                                </MenuItem>
-                              </Menu>
-                            </Box>
-                            <Divider sx={{ marginTop: "1rem" }} />
-                            <Typography
-                              sx={{
-                                marginTop: "1rem",
-                                fontWeight: 400,
-                                color: "##313944",
-                              }}
-                            >
-                              {selectDataIdJob?.descripcion}
-                            </Typography>
-                          </Box>
-                        </>
-                      )}
-
-                    </>
-
                   )}
-
                 </Grid>
               </Grid>
             </>
