@@ -39,7 +39,7 @@ const SearchJob = () => {
       localStorage.setItem('searchValue', JSON.stringify({ value: trimmedSearch, location }));
 
       navigate(`/candidate/search/geo/${location}/`);
-      return
+      return;
     }
 
     if (!location) {
@@ -48,14 +48,14 @@ const SearchJob = () => {
       localStorage.setItem('searchValue', JSON.stringify({ value: trimmedSearch, location }));
 
       navigate(`/candidate/search/${trimmedSearch}/`);
-      return
+      return;
     }
 
     setValueAtomSearch({ value: trimmedSearch, location });
     localStorage.setItem('searchValue', JSON.stringify({ value: trimmedSearch, location }));
 
     navigate(`/candidate/search/${trimmedSearch}/${location}/`);
-    return
+    return;
   };
 
   const flatOptions = seedLocations.flatMap(departamento =>

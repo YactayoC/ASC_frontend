@@ -40,9 +40,9 @@ const ResultsSearch = () => {
   const [openConfirmationPost, setOpenConfirmationPost] = useState(false);
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { value, location, featuredArea } = useParams();
-  const paramsRef = useRef({ value, location, featuredArea });
-  //console.log(paramsRef)
+  const { value, location, featuredArea } = useParams<{ value: string; location?: string; featuredArea?: string }>();
+  const [searchParamsString, setSearchParamsString] = useState('');
+
   const [buttonOrderBy, setButtonOrderBy] = useState("recientes");
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedJob, setSelectedJob] = useState<any>(jobs.length > 0 ? jobs[0] : undefined);
@@ -166,38 +166,49 @@ const ResultsSearch = () => {
     // No cambies el trabajo seleccionado si sigue siendo válido
   }, [filteredJobs]);
 
+  const isFirstRun = useRef(true);
+
   useEffect(() => {
+    // Crea una cadena que representa los parámetros actuales de búsqueda
+    const currentParamsString = `${value}-${location ?? 'all'}-${featuredArea ?? 'all'}`;
+
+    if (isFirstRun.current) {
+      // Evitamos que se ejecute la lógica en el primer renderizado
+      isFirstRun.current = false;
+      return;
+    }
+
+    // Comparamos la cadena actual de parámetros con la última almacenada
+    if (currentParamsString === searchParamsString) {
+      console.log("Los parámetros de búsqueda no han cambiado. Evitando nueva petición.");
+      return;
+    }
+
     const fetchData = async () => {
-      // Solo ejecutar si los parámetros actuales son diferentes a los anteriores
-      if (
-        paramsRef.current.value !== value ||
-        paramsRef.current.location !== location ||
-        paramsRef.current.featuredArea !== featuredArea
-      ) {
-        paramsRef.current = { value, location, featuredArea };
-        let response;
+      let response;
 
-        if (location && value) {
-          response = await getOffersByJobAndProvinceId(value, Number(location));
-
-          console.log(response)
-        } else if (location) {
-          response = await getOffersByProvinceId(Number(location));
-
-          console.log(response)
-        } else if (value) {
-          response = await getOffersByJob(value);
-
-          console.log(response)
-        } else {
-          // Manejo si no hay parámetros
-        }
-        // Actualizar el estado con la respuesta aquí
+      if (location && value) {
+        response = await getOffersByJobAndProvinceId(value, parseInt(location));
+      } else if (location) {
+        response = await getOffersByProvinceId(parseInt(location));
+      } else if (value) {
+        response = await getOffersByJob(value);
+      } else {
+        return;
       }
+
+      // Actualiza la cadena de parámetros de búsqueda con los actuales
+      setSearchParamsString(currentParamsString);
+
+      // Aquí manejarías la respuesta
+      console.log(response);
     };
 
     fetchData();
-  }, [value, location, featuredArea, getOffersByProvinceId, getOffersByJobAndProvinceId, getOffersByJob]);
+    // Actualizamos la cadena de parámetros de búsqueda con los actuales
+    setSearchParamsString(currentParamsString);
+  }, [value, location, featuredArea, searchParamsString]);
+
 
 
   return (
