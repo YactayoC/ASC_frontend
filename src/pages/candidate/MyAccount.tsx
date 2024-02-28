@@ -19,12 +19,30 @@ import {
 import theme from "../../../theme";
 import HeaderButtons from "../../components/candidate/HeaderButtons";
 import { useState } from "react";
+import { useForm } from 'react-hook-form';
 import { EditOutlined } from "@mui/icons-material";
+import useAccount from '../../hooks/Candidate/Account/useAccount';
 
 const MyAccount = () => {
+  const userInfo = localStorage.getItem("userInfo");
+  const user = userInfo ? JSON.parse(userInfo) : null;
   const [tabValue, setTabValue] = useState(0);
   const [openModalEmail, setOpenModalEmail] = useState(false);
-  const userInfo = localStorage.getItem("userInfo");
+  const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
+  const { updatePasswordCanddidate } = useAccount();
+
+  const onSubmit = async (data: any) => {
+    if (!data.newPassword && !data.confirmNewPassword) {
+      return; // Salir de la función si ambos campos están vacíos
+    }
+
+    const response = await updatePasswordCanddidate(user.id_user, data.newPassword);
+
+    if (response.ok) {
+      reset();
+    }
+
+  }
 
   const handleOpenModalEmail = () => {
     setOpenModalEmail(true);
@@ -40,7 +58,7 @@ const MyAccount = () => {
 
   const handleSubmitEmail = (event: any) => {
     event.preventDefault();
-    handleCloseModalEmail(); 
+    handleCloseModalEmail();
   };
 
   const createdAt = userInfo ? JSON.parse(userInfo).created_at : "";
@@ -187,7 +205,9 @@ const MyAccount = () => {
               rowGap: "2rem",
             }}
           >
-            <Box
+            <FormControl
+              component={"form"}
+              onSubmit={handleSubmit(onSubmit)}
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -215,21 +235,63 @@ const MyAccount = () => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  columnGap: "2rem",
+                  columnGap: "8rem",
                 }}
               >
-                <TextField
-                  label="Nueva contraseña"
-                  variant="outlined"
-                  margin="normal"
-                  type="password"
-                />
-                <TextField
-                  label="Confirma nueva contraseña"
-                  variant="outlined"
-                  margin="normal"
-                  type="password"
-                />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <TextField
+                    label="Nueva contraseña"
+                    variant="outlined"
+                    type="password"
+                    sx={{
+                      width: "20rem",
+                    }}
+                    {...register("newPassword", {
+                      minLength: {
+                        value: 6,
+                        message: "La contraseña debe tener al menos 6 caracteres" // Mensaje de error cuando no se cumple la condición
+                      }
+                    })}
+                  />
+                  {errors.newPassword &&
+                    <Typography variant="caption" color="error">
+                      {String(errors.newPassword.message)}
+                    </Typography>
+                  }
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <TextField
+                    label="Confirma nueva contraseña"
+                    variant="outlined"
+                    sx={{
+                      width: "20rem",
+                    }}
+                    type="password"
+                    {...register("confirmNewPassword", {
+                      minLength: {
+                        value: 6,
+                        message: "La contraseña debe tener al menos 6 caracteres"
+                      },
+                      validate: value =>
+                        value === watch('newPassword') || "Las contraseñas no coinciden"
+                    })}
+                  />
+                  {errors.confirmNewPassword &&
+                    <Typography variant="caption" color="error">
+                      {String(errors.confirmNewPassword.message)}
+                    </Typography>
+                  }
+                </Box>
               </Box>
               <Box>
                 <FormControlLabel
@@ -240,6 +302,7 @@ const MyAccount = () => {
               <Button
                 variant="contained"
                 color="primary"
+                type="submit"
                 sx={{
                   width: "fit-content",
                   [theme.breakpoints.down("sm")]: {
@@ -249,7 +312,7 @@ const MyAccount = () => {
               >
                 Guardar
               </Button>
-            </Box>
+            </FormControl>
 
             <Divider />
 
@@ -375,9 +438,9 @@ const MyAccount = () => {
                 Eliminar
               </Button>
             </Box>
-          </Box>
+          </Box >
         )}
-      </Box>
+      </Box >
 
       <Modal
         open={openModalEmail}
