@@ -42,11 +42,10 @@ const ResultsSearch = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const { value, location, featuredArea } = useParams<{ value: string; location?: string; featuredArea?: string }>();
   const [searchParamsString, setSearchParamsString] = useState('');
-
+  const isFirstRun = useRef(true);
   const [buttonOrderBy, setButtonOrderBy] = useState("recientes");
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedJob, setSelectedJob] = useState<any>(jobs.length > 0 ? jobs[0] : undefined);
-
   const [selectModalidad, setSelectModalidad] = useState<number | null>(null);
   const [selectJornada, setSelectJornada] = useState<number | null>(null);
   const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
@@ -166,19 +165,15 @@ const ResultsSearch = () => {
     // No cambies el trabajo seleccionado si sigue siendo válido
   }, [filteredJobs]);
 
-  const isFirstRun = useRef(true);
-
   useEffect(() => {
     // Crea una cadena que representa los parámetros actuales de búsqueda
     const currentParamsString = `${value}-${location ?? 'all'}-${featuredArea ?? 'all'}`;
 
     if (isFirstRun.current) {
-      // Evitamos que se ejecute la lógica en el primer renderizado
       isFirstRun.current = false;
       return;
     }
 
-    // Comparamos la cadena actual de parámetros con la última almacenada
     if (currentParamsString === searchParamsString) {
       console.log("Los parámetros de búsqueda no han cambiado. Evitando nueva petición.");
       return;
@@ -196,20 +191,14 @@ const ResultsSearch = () => {
       } else {
         return;
       }
-
-      // Actualiza la cadena de parámetros de búsqueda con los actuales
       setSearchParamsString(currentParamsString);
 
-      // Aquí manejarías la respuesta
       console.log(response);
     };
 
     fetchData();
-    // Actualizamos la cadena de parámetros de búsqueda con los actuales
     setSearchParamsString(currentParamsString);
   }, [value, location, featuredArea, searchParamsString]);
-
-
 
   return (
     <>
