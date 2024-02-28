@@ -68,7 +68,6 @@ const MyAccount = () => {
     <>
       <HeaderButtons showLogo={true} />
       <Box
-        // maxWidth=""
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -336,10 +335,10 @@ const MyAccount = () => {
                 <FormControl>
                   <RadioGroup
                     aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue="female"
+                    defaultValue={userInfo ? JSON.parse(userInfo).visibility : "0"}
                     name="radio-buttons-group"
                   >
-                    <FormControlLabel
+                    <FormControlLabel 
                       value="0"
                       control={<Radio />}
                       label="Tu CV es visible en los avisos a los que te postulaste y en otras búsquedas que realizan las empresas."
