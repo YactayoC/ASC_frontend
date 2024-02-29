@@ -28,6 +28,7 @@ import {
   PhoneOutlined,
 } from "@mui/icons-material";
 import useFiles from "../../hooks/Files/useFiles";
+import useAccount from "../../hooks/Candidate/Account/useAccount";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -48,15 +49,37 @@ const MyCV = () => {
   const [openModalStudy, setOpenModalStudy] = useState(false);
   const [openModalLanguage, setOpenModalLanguage] = useState(false);
   const [selectedFile, setSelectedFile] = useState<any>(null);
+  const [personalInfoEdit, setPersonalInfoEdit] = useState({});
+  const [selectedOptionDocumentType, setSelectedOptionDocumentType] = useState<string | null>(null);
   const { uploadFile } = useFiles();
   const userInfo = localStorage.getItem("userInfo");
   const userInfoJson = JSON.parse(userInfo || "{}");
-  //console.log(userInfoJson?.apellidosC)
+  const { getPersonalInformation } = useAccount();
 
-  const handleOpenModalEditDataPersonal = () => {
+  const handleOpenModalEditDataPersonal = async () => {
     //HARÁ LA PETICIÓN
     setOpenModalDataPersonal(true);
+    const response = await getPersonalInformation(userInfoJson?.id_user);
+    const userPersonalInfo = response.response.data;
+    setPersonalInfoEdit(userPersonalInfo);
+    console.log(userPersonalInfo)
   };
+
+  const convertStateToNumber = () => {
+
+    const state = (personalInfoEdit as { estado_civil: string })?.estado_civil;
+
+    switch (state) {
+      case "Soltero":
+        return 1;
+      case "Viudo":
+        return 2;
+      case "Casado":
+        return 3;
+      default:
+        return;
+    }
+  }
 
   const handleCloseModalEditDataPersonal = () => {
     setOpenModalDataPersonal(false);
@@ -106,7 +129,11 @@ const MyCV = () => {
 
   const handleSubmitEmail = (event: any) => {
     event.preventDefault();
-    handleCloseModalEditDataPersonal();
+    //handleCloseModalEditDataPersonal();
+
+    const formData = new FormData(event.target);
+    console.log("formData")
+
   };
 
   useEffect(() => {
@@ -763,207 +790,206 @@ const MyCV = () => {
           }}
         >
           <Typography variant="h6" id="modal-title" gutterBottom align="left">
-            Dato personal y de contacto
+            Datos personal y de contacto
           </Typography>
           <Divider />
-          <form
-            onSubmit={handleSubmitEmail}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              rowGap: "1.5rem",
-              marginTop: "1rem",
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                columnGap: "1rem",
-                alignItems: "center",
-              }}
-            >
-              <TextField
-                label="Nombres"
-                variant="outlined"
-                margin="normal"
-                fullWidth
-              />
-              <TextField
-                label="Apellidos"
-                variant="outlined"
-                margin="normal"
-                fullWidth
-              />
-              <Autocomplete
-                fullWidth
-                options={[
-                  'Argentina',
-                  'Bolivia',
-                  'Brasil',
-                  'Perú',
-                  'Chile',
-                ]}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Nacionalidad"
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                  />
-                )}
-
-              />
-            </Box>
-
-            <Box
-              sx={{
+            <FormControl
+              onSubmit={handleSubmitEmail}
+              style={{
                 display: "flex",
                 flexDirection: "column",
+                rowGap: "1.5rem",
+                marginTop: "1rem",
               }}
             >
-              <Typography variant="h6" gutterBottom align="left">
-                Fecha de nacimiento
-              </Typography>
               <Box
                 sx={{
                   display: "flex",
-                  columnGap: "3rem",
+                  columnGap: "1rem",
                   alignItems: "center",
-                  [theme.breakpoints.down("sm")]: {
-                    flexDirection: "column",
-                    gap: "1rem",
-                  },
                 }}
               >
+                <TextField
+                  label="Nombres"
+                  variant="outlined"
+                  margin="normal"
+                  defaultValue={(personalInfoEdit as { nombre: string })?.nombre}
+                  fullWidth
+                />
+                <TextField
+                  label="Apellidos"
+                  variant="outlined"
+                  margin="normal"
+                  defaultValue={(personalInfoEdit as { apellidos: string })?.apellidos}
+                  fullWidth
+                />
+                <Autocomplete
+                  fullWidth
+                  disableClearable
+                  options={['Peruano(a)']}
+                  defaultValue="Peruano(a)"
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Nacionalidad"
+                      variant="outlined"
+                      
+                      margin="normal"
+                      fullWidth
+                    />
+                  )}
+
+                />
+              </Box>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <Typography variant="h6" gutterBottom align="left">
+                  Fecha de nacimiento
+                </Typography>
                 <Box
                   sx={{
                     display: "flex",
-                    width: "100%",
-                    columnGap: "1rem",
+                    columnGap: "3rem",
+                    alignItems: "center",
+                    [theme.breakpoints.down("sm")]: {
+                      flexDirection: "column",
+                      gap: "1rem",
+                    },
                   }}
                 >
-                  <FormControl
+                  <Box
                     sx={{
-                      width: "50%",
+                      display: "flex",
+                      width: "100%",
+                      columnGap: "1rem",
                     }}
                   >
-                    <InputLabel id="select-dia">Dia</InputLabel>
-                    <Select
-                      labelId="select-dia"
-                      id="demo-simple-select"
-                      value={1}
-                      label="Dia"
-                    // onChange={handleChange}
+                    <FormControl
+                      sx={{
+                        width: "50%",
+                      }}
                     >
-                      <MenuItem value={1}>1</MenuItem>
-                      <MenuItem value={2}>2</MenuItem>
-                      <MenuItem value={3}>3</MenuItem>
-                    </Select>
-                  </FormControl>
-                  <FormControl
+                      <InputLabel id="select-dia">Dia</InputLabel>
+                      <Select
+                        labelId="select-dia"
+                        id="demo-simple-select"
+                        value={1}
+                        label="Dia"
+                      // onChange={handleChange}
+                      >
+                        <MenuItem value={1}>1</MenuItem>
+                        <MenuItem value={2}>2</MenuItem>
+                        <MenuItem value={3}>3</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <FormControl
+                      sx={{
+                        width: "50%",
+                      }}
+                    >
+                      <InputLabel id="select-mes">Mes</InputLabel>
+                      <Select
+                        labelId="select-mes"
+                        id="demo-simple-select"
+                        value={1}
+                        label="Mes"
+                      // onChange={handleChange}
+                      >
+                        <MenuItem value={1}>Enero</MenuItem>
+                        <MenuItem value={2}>Febrero</MenuItem>
+                        <MenuItem value={3}>Marzo</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <FormControl
+                      sx={{
+                        width: "50%",
+                      }}
+                    >
+                      <InputLabel id="select-anio">Año</InputLabel>
+                      <Select
+                        labelId="select-anio"
+                        id="demo-simple-select"
+                        value={1}
+                        label="Año"
+                      // onChange={handleChange}
+                      >
+                        <MenuItem value={1}>1995</MenuItem>
+                        <MenuItem value={2}>1996</MenuItem>
+                        <MenuItem value={3}>1997</MenuItem>
+                        <MenuItem value={4}>1998</MenuItem>
+                        <MenuItem value={5}>1999</MenuItem>
+                        <MenuItem value={6}>2000</MenuItem>
+                        <MenuItem value={7}>2001</MenuItem>
+                        <MenuItem value={8}>2002</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  <Box
                     sx={{
-                      width: "50%",
+                      display: "flex",
+                      width: "100%",
+                      columnGap: "1rem",
                     }}
                   >
-                    <InputLabel id="select-mes">Mes</InputLabel>
-                    <Select
-                      labelId="select-mes"
-                      id="demo-simple-select"
-                      value={1}
-                      label="Mes"
-                    // onChange={handleChange}
-                    >
-                      <MenuItem value={1}>Enero</MenuItem>
-                      <MenuItem value={2}>Febrero</MenuItem>
-                      <MenuItem value={3}>Marzo</MenuItem>
-                    </Select>
-                  </FormControl>
-                  <FormControl
-                    sx={{
-                      width: "50%",
-                    }}
-                  >
-                    <InputLabel id="select-anio">Año</InputLabel>
-                    <Select
-                      labelId="select-anio"
-                      id="demo-simple-select"
-                      value={1}
-                      label="Año"
-                    // onChange={handleChange}
-                    >
-                      <MenuItem value={1}>1995</MenuItem>
-                      <MenuItem value={2}>1996</MenuItem>
-                      <MenuItem value={3}>1997</MenuItem>
-                      <MenuItem value={3}>1998</MenuItem>
-                      <MenuItem value={3}>1999</MenuItem>
-                      <MenuItem value={3}>2000</MenuItem>
-                      <MenuItem value={3}>2001</MenuItem>
-                      <MenuItem value={3}>2002</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    width: "100%",
-                    columnGap: "1rem",
-                  }}
-                >
-                  <FormControl fullWidth>
-                    <InputLabel id="select-civil">Estado Civil</InputLabel>
-                    <Select
-                      labelId="select-civil"
-                      id="demo-simple-select"
-                      value={10}
-                      label="Estado Civil"
-                    // onChange={handleChange}
-                    >
-                      <MenuItem value={10}>Soltero</MenuItem>
-                      <MenuItem value={20}>Viudo</MenuItem>
-                      <MenuItem value={30}>Casado</MenuItem>
-                    </Select>
-                  </FormControl>
+                    <FormControl fullWidth>
+                      <InputLabel id="select-civil">Estado Civil</InputLabel>
+                      <Select
+                        labelId="select-civil"
+                        id="demo-simple-select"
+                        defaultValue={convertStateToNumber()}
+                        label="Estado Civil"
+                      // onChange={handleChange}
+                      >
+                        <MenuItem value={1}>Soltero</MenuItem>
+                        <MenuItem value={2}>Viudo</MenuItem>
+                        <MenuItem value={3}>Casado</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
 
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                columnGap: "1rem",
-              }}
-            >
-              <FormControl
+              <Box
                 sx={{
-                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  columnGap: "1rem",
                 }}
               >
-                <InputLabel id="select-documento">Tipo documento</InputLabel>
-                <Select
-                  labelId="select-documento"
-                  id="demo-simple-select"
-                  value={1}
-                  label="Tipo documento"
-                // onChange={handleChange}
-                >
-                  <MenuItem value={1}>DNI</MenuItem>
-                  <MenuItem value={2}>Pasaporte</MenuItem>
-                </Select>
-              </FormControl>
+                <Autocomplete
+                  fullWidth
+                  options={['DNI']}
+                  onChange={(event, value) => setSelectedOptionDocumentType(value)}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Tipo documento"
+                      variant="outlined"
+                      margin="normal"
+                      fullWidth
+                    />
+                  )}
+                />
 
-              <TextField
-                label="Documento"
-                variant="outlined"
-                margin="normal"
-                fullWidth
-              />
-            </Box>
-            <Button type="submit" variant="contained" color="primary">
-              Guardar
-            </Button>
-          </form>
+                <TextField
+                  label="Documento"
+                  variant="outlined"
+                  margin="normal"
+                  disabled={!selectedOptionDocumentType}
+                  defaultValue={(personalInfoEdit as { documento: string })?.documento}
+                  fullWidth
+                />
+
+              </Box>
+              <Button type="submit" variant="contained" color="primary">
+                Guardar
+              </Button>
+            </FormControl>
         </Box>
       </Modal>
 
@@ -1192,7 +1218,8 @@ const MyCV = () => {
             Agregar idioma
           </Typography>
           <Divider />
-          <form
+          <FormControl
+            component={"form"}
             onSubmit={handleSubmitEmail}
             style={{
               display: "flex",
@@ -1242,7 +1269,7 @@ const MyCV = () => {
             <Button type="submit" variant="contained" color="primary">
               Guardar
             </Button>
-          </form>
+          </FormControl>
         </Box>
       </Modal>
     </>

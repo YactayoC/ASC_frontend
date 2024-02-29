@@ -66,10 +66,29 @@ const useAccount = () => {
         }
     }
 
+    const getPersonalInformation = async (postulanteId: Number) => {
+        try {
+            const response: any = await apiClient.get(`/account/candidate/get-personal-info/${postulanteId}`);
+
+            const responseData = response.data;
+
+            return {
+                response: responseData,
+                status: response.status,
+                ok: true
+            };
+        }
+        catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
     return {
         updatePasswordCanddidate,
         changeVisibilityCV,
-        deactivateAccount
+        deactivateAccount,
+        getPersonalInformation
     }
 }
 
