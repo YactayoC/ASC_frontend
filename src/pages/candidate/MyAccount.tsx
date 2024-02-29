@@ -507,6 +507,8 @@ const MyAccount = () => {
           <Typography variant="h6" id="modal-title" gutterBottom align="center">
             Modificar email
           </Typography>
+
+          {/* CAMBIAR EL EMAIL - FALTA RUTA */}
           <FormControl
             component="form"
             onSubmit={handleSubmit(handleSubmitEmail)} // Utiliza el método handleSubmit de React Hook Form

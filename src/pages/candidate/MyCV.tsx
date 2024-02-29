@@ -13,11 +13,12 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Autocomplete,
 } from "@mui/material";
 
 import theme from "../../../theme";
 import HeaderButtons from "../../components/candidate/HeaderButtons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Add,
   CloudUpload,
@@ -26,6 +27,7 @@ import {
   MailOutline,
   PhoneOutlined,
 } from "@mui/icons-material";
+import useFiles from "../../hooks/Files/useFiles";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -45,9 +47,14 @@ const MyCV = () => {
   const [openModalExperience, setOpenModalExperience] = useState(false);
   const [openModalStudy, setOpenModalStudy] = useState(false);
   const [openModalLanguage, setOpenModalLanguage] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFile, setSelectedFile] = useState<any>(null);
+  const { uploadFile } = useFiles();
+  const userInfo = localStorage.getItem("userInfo");
+  const userInfoJson = JSON.parse(userInfo || "{}");
+  //console.log(userInfoJson?.apellidosC)
 
   const handleOpenModalEditDataPersonal = () => {
+    //HARÁ LA PETICIÓN
     setOpenModalDataPersonal(true);
   };
 
@@ -59,13 +66,29 @@ const MyCV = () => {
     setTabValue(newValue);
   };
 
-  const handleFileChange = (event: any) => {
+  const handleFileChange = async (event: any) => {
     const file = event.target.files[0];
-    setSelectedFile(file);
+    const userId = userInfoJson?.id_user;
+    if (file) {
+      setSelectedFile({ name: file.name, size: file.size });
+
+      console.log(file, userId)
+
+      const response = await uploadFile(file, userId);
+      console.log(response);
+
+      localStorage.setItem('selectedFileDetails', JSON.stringify({
+        name: file.name,
+        size: file.size
+      }));
+    }
+
+    event.target.value = ''; // Reset input value
   };
 
   const handleDeleteFile = () => {
     setSelectedFile(null);
+    localStorage.removeItem('selectedFileDetails');
   };
 
   const formatFileSize = (sizeInBytes: number) => {
@@ -85,6 +108,13 @@ const MyCV = () => {
     event.preventDefault();
     handleCloseModalEditDataPersonal();
   };
+
+  useEffect(() => {
+    const fileDetails = localStorage.getItem('selectedFileDetails');
+    if (fileDetails) {
+      setSelectedFile(JSON.parse(fileDetails));
+    }
+  }, []);
 
   return (
     <>
@@ -146,7 +176,7 @@ const MyCV = () => {
             }}
           >
             <Typography variant="h5" gutterBottom>
-              Luis De Tomas
+              {userInfoJson?.nombresC} {userInfoJson?.apellidosC}
             </Typography>
 
             <Box
@@ -197,7 +227,7 @@ const MyCV = () => {
                       marginBottom: "0",
                     }}
                   >
-                    luis_de_tomas@gmail.com
+                    {userInfoJson?.emailCandidate}
                   </Typography>
                 </Box>
                 <Box
@@ -220,7 +250,7 @@ const MyCV = () => {
                       marginBottom: "0",
                     }}
                   >
-                    9999999999
+                    NO DEFINIDO
                   </Typography>
                 </Box>
 
@@ -244,7 +274,7 @@ const MyCV = () => {
                       marginBottom: "0",
                     }}
                   >
-                    Perú, Lima, Lima, Lima
+                    NO DEFINIDO
                   </Typography>
                 </Box>
               </Box>
@@ -263,6 +293,7 @@ const MyCV = () => {
               component="label"
               color="primary"
               startIcon={<CloudUpload />}
+              disabled={!!selectedFile}
               sx={{
                 width: "fit-content",
                 [theme.breakpoints.down("sm")]: {
@@ -334,7 +365,7 @@ const MyCV = () => {
             }}
           >
             <Typography variant="h5" gutterBottom>
-              Luis De Tomas
+              {userInfoJson?.nombresC} {userInfoJson?.apellidosC}
             </Typography>
 
             <Box
@@ -369,6 +400,9 @@ const MyCV = () => {
                   sx={{
                     display: "flex",
                     flexDirection: "row",
+                    [theme.breakpoints.down("sm")]: {
+                      flexDirection: "column",
+                    },
                   }}
                 >
                   <Box
@@ -391,7 +425,7 @@ const MyCV = () => {
                         marginBottom: "0",
                       }}
                     >
-                      luis_de_tomas@gmail.com
+                      {userInfoJson?.emailCandidate}
                     </Typography>
                   </Box>
                   <Box
@@ -414,7 +448,7 @@ const MyCV = () => {
                         marginBottom: "0",
                       }}
                     >
-                      9999999999
+                      NO DEFINIDO
                     </Typography>
                   </Box>
                   <Box
@@ -437,7 +471,7 @@ const MyCV = () => {
                         marginBottom: "0",
                       }}
                     >
-                      Perú, Lima, Lima, Lima
+                      NO DEFINIDO
                     </Typography>
                   </Box>
                 </Box>
@@ -507,7 +541,7 @@ const MyCV = () => {
             }}
           >
             <Typography variant="h5" gutterBottom>
-              Luis De Tomas
+              {userInfoJson?.nombresC} {userInfoJson?.apellidosC}
             </Typography>
 
             <Box
@@ -542,6 +576,9 @@ const MyCV = () => {
                   sx={{
                     display: "flex",
                     flexDirection: "row",
+                    [theme.breakpoints.down("sm")]: {
+                      flexDirection: "column",
+                    },
                   }}
                 >
                   <Box
@@ -587,7 +624,7 @@ const MyCV = () => {
                         marginBottom: "0",
                       }}
                     >
-                      9999999999
+                      NO DEFINIDO
                     </Typography>
                   </Box>
                   <Box
@@ -610,7 +647,7 @@ const MyCV = () => {
                         marginBottom: "0",
                       }}
                     >
-                      Perú, Lima, Lima, Lima
+                      NO DEFINIDO
                     </Typography>
                   </Box>
                 </Box>
@@ -757,20 +794,26 @@ const MyCV = () => {
                 margin="normal"
                 fullWidth
               />
-              <FormControl fullWidth>
-                <InputLabel id="select-nacionalidad">Nacionalidad</InputLabel>
-                <Select
-                  labelId="select-nacionalidad"
-                  id="demo-simple-select"
-                  value={10}
-                  label="Nacionalidad"
-                // onChange={handleChange}
-                >
-                  <MenuItem value={10}>Perú</MenuItem>
-                  <MenuItem value={20}>Bolivia</MenuItem>
-                  <MenuItem value={30}>Venezuela</MenuItem>
-                </Select>
-              </FormControl>
+              <Autocomplete
+                fullWidth
+                options={[
+                  'Argentina',
+                  'Bolivia',
+                  'Brasil',
+                  'Perú',
+                  'Chile',
+                ]}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Nacionalidad"
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                  />
+                )}
+
+              />
             </Box>
 
             <Box
