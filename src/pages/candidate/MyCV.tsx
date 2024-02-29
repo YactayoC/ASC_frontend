@@ -29,6 +29,7 @@ import {
 } from "@mui/icons-material";
 import useFiles from "../../hooks/Files/useFiles";
 import useAccount from "../../hooks/Candidate/Account/useAccount";
+import { useForm } from "react-hook-form";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -55,6 +56,7 @@ const MyCV = () => {
   const userInfo = localStorage.getItem("userInfo");
   const userInfoJson = JSON.parse(userInfo || "{}");
   const { getPersonalInformation } = useAccount();
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   const handleOpenModalEditDataPersonal = async () => {
     //HARÁ LA PETICIÓN
@@ -66,9 +68,7 @@ const MyCV = () => {
   };
 
   const convertStateToNumber = () => {
-
     const state = (personalInfoEdit as { estado_civil: string })?.estado_civil;
-
     switch (state) {
       case "Soltero":
         return 1;
@@ -79,6 +79,22 @@ const MyCV = () => {
       default:
         return;
     }
+  }
+
+  const onSubmitPersonalData = (data: any) => {
+    // Aquí manejas los datos del formulario, por ejemplo, una solicitud POST
+    console.log(data);
+  };
+
+  const onSubmitExperienceData = (data: any) => {
+    console.log("first")
+    // Aquí manejas los datos del formulario, por ejemplo, una solicitud POST
+    console.log(data);
+  }
+
+  const onSubmitEducationData = (data: any) => {
+    // Aquí manejas los datos del formulario, por ejemplo, una solicitud POST
+    console.log(data);
   }
 
   const handleCloseModalEditDataPersonal = () => {
@@ -125,15 +141,6 @@ const MyCV = () => {
     } else {
       return sizeInBytes + " bytes";
     }
-  };
-
-  const handleSubmitEmail = (event: any) => {
-    event.preventDefault();
-    //handleCloseModalEditDataPersonal();
-
-    const formData = new FormData(event.target);
-    console.log("formData")
-
   };
 
   useEffect(() => {
@@ -767,34 +774,35 @@ const MyCV = () => {
         )}
       </Box>
 
-      <Modal
-        open={openModalDataPersonal}
-        onClose={handleCloseModalEditDataPersonal}
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "900px",
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            padding: "2rem",
-            paddingBlock: "3rem",
-            [theme.breakpoints.down("sm")]: {
-              width: "95%",
-              padding: "1rem",
-              paddingBlock: "2rem",
-            },
-          }}
+        <Modal
+          open={openModalDataPersonal}
+          onClose={handleCloseModalEditDataPersonal}
         >
-          <Typography variant="h6" id="modal-title" gutterBottom align="left">
-            Datos personal y de contacto
-          </Typography>
-          <Divider />
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "900px",
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              padding: "2rem",
+              paddingBlock: "3rem",
+              [theme.breakpoints.down("sm")]: {
+                width: "95%",
+                padding: "1rem",
+                paddingBlock: "2rem",
+              },
+            }}
+          >
+            <Typography variant="h6" id="modal-title" gutterBottom align="left">
+              Datos personal y de contacto
+            </Typography>
+            <Divider />
             <FormControl
-              onSubmit={handleSubmitEmail}
+              component={"form"}
+              onSubmit={handleSubmit(onSubmitPersonalData)}
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -833,9 +841,9 @@ const MyCV = () => {
                       {...params}
                       label="Nacionalidad"
                       variant="outlined"
-                      
                       margin="normal"
                       fullWidth
+                      {...register("nacionalidad", { required: true })}
                     />
                   )}
 
@@ -990,8 +998,8 @@ const MyCV = () => {
                 Guardar
               </Button>
             </FormControl>
-        </Box>
-      </Modal>
+          </Box>
+        </Modal>
 
       <Modal
         open={openModalExperience}
@@ -1019,8 +1027,9 @@ const MyCV = () => {
             Experiencia laboral
           </Typography>
           <Divider />
-          <form
-            onSubmit={handleSubmitEmail}
+          <FormControl
+            component={"form"}
+            onSubmit={handleSubmit(onSubmitExperienceData)}
             style={{
               display: "flex",
               flexDirection: "column",
@@ -1090,7 +1099,7 @@ const MyCV = () => {
             <Button type="submit" variant="contained" color="primary">
               Guardar
             </Button>
-          </form>
+          </FormControl>
         </Box>
       </Modal>
 
@@ -1117,8 +1126,9 @@ const MyCV = () => {
             Agregar estudio
           </Typography>
           <Divider />
-          <form
-            onSubmit={handleSubmitEmail}
+          <FormControl
+            component={"form"}
+            onSubmit={handleSubmit(onSubmitEducationData)}
             style={{
               display: "flex",
               flexDirection: "column",
@@ -1188,7 +1198,7 @@ const MyCV = () => {
             <Button type="submit" variant="contained" color="primary">
               Guardar
             </Button>
-          </form>
+          </FormControl>
         </Box>
       </Modal>
 
@@ -1219,8 +1229,6 @@ const MyCV = () => {
           </Typography>
           <Divider />
           <FormControl
-            component={"form"}
-            onSubmit={handleSubmitEmail}
             style={{
               display: "flex",
               flexDirection: "column",
