@@ -4,18 +4,12 @@ import {
   Tabs,
   Tab,
   Button,
-  Modal,
   TextField,
   IconButton,
   Divider,
-  FormControl,
   styled,
-  InputLabel,
-  Select,
-  MenuItem,
-  Autocomplete,
 } from "@mui/material";
-
+import useAccount from "../../hooks/Candidate/Account/useAccount";
 import theme from "../../../theme";
 import HeaderButtons from "../../components/candidate/HeaderButtons";
 import { useEffect, useState } from "react";
@@ -27,9 +21,20 @@ import {
   MailOutline,
   PhoneOutlined,
 } from "@mui/icons-material";
+import {
+  Timeline,
+  TimelineItem,
+  timelineItemClasses,
+  TimelineSeparator,
+  TimelineConnector,
+  TimelineContent,
+  TimelineDot,
+} from '@mui/lab';
 import useFiles from "../../hooks/Files/useFiles";
-import useAccount from "../../hooks/Candidate/Account/useAccount";
-import { useForm } from "react-hook-form";
+import ModalDataPersonal from "../../components/candidate/Modals/ModalDataPersonal";
+import ModalDataExperience from "../../components/candidate/Modals/ModalDataExperience";
+import ModalDataStudies from "../../components/candidate/Modals/ModalDataStudies";
+import ModalDataLanguage from "../../components/candidate/Modals/ModalDataLanguage";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -50,60 +55,60 @@ const MyCV = () => {
   const [openModalStudy, setOpenModalStudy] = useState(false);
   const [openModalLanguage, setOpenModalLanguage] = useState(false);
   const [selectedFile, setSelectedFile] = useState<any>(null);
-  const [personalInfoEdit, setPersonalInfoEdit] = useState({});
-  const [selectedOptionDocumentType, setSelectedOptionDocumentType] = useState<string | null>(null);
+  const [experiencesData, setExperiencesData] = useState<any>([]);
+  const [studiesData, setStudiesData] = useState<any>([]);
+  const [languagesData, setLanguagesData] = useState<any>([]);
   const { uploadFile } = useFiles();
   const userInfo = localStorage.getItem("userInfo");
   const userInfoJson = JSON.parse(userInfo || "{}");
-  const { getPersonalInformation } = useAccount();
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { getExperienceInformation, getStudiesInformation, getLanguagesInformation } = useAccount();
 
   const handleOpenModalEditDataPersonal = async () => {
-    //HARÁ LA PETICIÓN
     setOpenModalDataPersonal(true);
-    const response = await getPersonalInformation(userInfoJson?.id_user);
-    const userPersonalInfo = response.response.data;
-    setPersonalInfoEdit(userPersonalInfo);
-    console.log(userPersonalInfo)
   };
-
-  const convertStateToNumber = () => {
-    const state = (personalInfoEdit as { estado_civil: string })?.estado_civil;
-    switch (state) {
-      case "Soltero":
-        return 1;
-      case "Viudo":
-        return 2;
-      case "Casado":
-        return 3;
-      default:
-        return;
-    }
-  }
-
-  const onSubmitPersonalData = (data: any) => {
-    // Aquí manejas los datos del formulario, por ejemplo, una solicitud POST
-    console.log(data);
-  };
-
-  const onSubmitExperienceData = (data: any) => {
-    console.log("first")
-    // Aquí manejas los datos del formulario, por ejemplo, una solicitud POST
-    console.log(data);
-  }
-
-  const onSubmitEducationData = (data: any) => {
-    // Aquí manejas los datos del formulario, por ejemplo, una solicitud POST
-    console.log(data);
-  }
 
   const handleCloseModalEditDataPersonal = () => {
     setOpenModalDataPersonal(false);
   };
 
+  const handleCloseModalEditDataExperience = () => {
+    setOpenModalExperience(false);
+  }
+
+  const handleCloseModalEditDataStudies = () => {
+    setOpenModalStudy(false);
+  }
+
+  const handleCloseModalEditDataLanguage = () => {
+    setOpenModalLanguage(false);
+  }
+
+  //TABS
   const handleChange = (_e: any, newValue: number) => {
     setTabValue(newValue);
   };
+
+  //TAB EXPERIENCE
+  const handleGetExperiences = async () => {
+    //HARÁ LA PETICIÓN PARA LISTAR LAS EXPERIENCIAS
+    const repsonse = await getExperienceInformation(userInfoJson?.id_user);
+    setExperiencesData(repsonse.response.data);
+    console.log(repsonse.response.data)
+  }
+
+  const handleGetStudies = async () => {
+    //HARÁ LA PETICIÓN PARA LISTAR LOS ESTUDIOS
+    const response = await getStudiesInformation(userInfoJson?.id_user);
+    setStudiesData(response.response.studies);
+    console.log(response.response.studies)
+  }
+
+  const handleGetLanguages = async () => {
+    //HARÁ LA PETICIÓN PARA LISTAR LOS IDIOMAS
+    const response = await getLanguagesInformation(userInfoJson?.id_user);
+    setLanguagesData(response.response.data);
+    console.log(response.response.data)
+  }
 
   const handleFileChange = async (event: any) => {
     const file = event.target.files[0];
@@ -186,12 +191,19 @@ const MyCV = () => {
               <Tab
                 value={1}
                 label="Experiencia"
-                onClick={(e) => handleChange(e, 1)}
+                onClick={(e) => {
+                  handleChange(e, 1)
+                  handleGetExperiences()
+                }}
               />
               <Tab
                 value={2}
                 label="Educación"
-                onClick={(e) => handleChange(e, 2)}
+                onClick={(e) => {
+                  handleChange(e, 2)
+                  handleGetStudies()
+                  handleGetLanguages()
+                }}
               />
             </Tabs>
           </Box>
@@ -521,7 +533,7 @@ const MyCV = () => {
               </Box>
             </Box>
 
-            <Box sx={{}}>
+            <Box>
               <Typography variant="h5" gutterBottom>
                 Experiencia laboral
               </Typography>
@@ -542,22 +554,70 @@ const MyCV = () => {
                 >
                   Mis experiencias profesionales
                 </Typography>
-                <Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      columnGap: "1rem",
-                    }}
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    columnGap: "1rem",
+                  }}
+                >
+                  <Button
+                    variant="outlined"
+                    endIcon={<Add />}
+                    onClick={() => setOpenModalExperience(true)}
                   >
-                    <Button
-                      variant="outlined"
-                      endIcon={<Add />}
-                      onClick={() => setOpenModalExperience(true)}
+                    Agregar experiencia
+                  </Button>
+                </Box>
+                <Box>
+                  {experiencesData.map((experience: any) => (
+                    <Timeline
+                      key={experience.id}
+                      sx={{
+                        //ALINEAR A LA IZQUIERDA
+                        [`& .${timelineItemClasses.root}:before`]: {
+                          flex: 0,
+                          padding: 6,
+                        },
+                      }}
                     >
-                      Agregar experiencia
-                    </Button>
-                  </Box>
+                      <TimelineItem>
+                        <TimelineSeparator>
+                          <TimelineDot />
+                          <TimelineConnector />
+                        </TimelineSeparator>
+                        <TimelineContent>
+                          <Box
+                            mt={2}
+                            p={2}
+                            borderRadius={4}
+                            width={"70%"}
+                            display={"flex"}
+                            flexDirection={"column"}
+                            gap={"1rem"}
+                            margin={"0"}
+                            padding={"0.7rem  "}
+                          >
+                            <Box>
+                              <Typography variant="body1">
+                                <strong> {experience.cargo}</strong>
+                              </Typography>
+                              <Typography variant="body1" color={"#808080"}>
+                                {experience.empresa}
+                              </Typography>
+                            </Box>
+                            <Typography variant="body1">
+                              {experience.funciones}
+                            </Typography>
+                            <Typography>
+                              <strong>Periodo: </strong> {experience.anio_inicio} - {experience.anio_fin}
+                            </Typography>
+                          </Box>
+                        </TimelineContent>
+                      </TimelineItem>
+                    </Timeline>
+                  ))}
                 </Box>
               </Box>
             </Box>
@@ -635,7 +695,7 @@ const MyCV = () => {
                         marginBottom: "0",
                       }}
                     >
-                      luis_de_tomas@gmail.com
+                      {userInfoJson?.emailCandidate}
                     </Typography>
                   </Box>
                   <Box
@@ -716,23 +776,70 @@ const MyCV = () => {
                   >
                     Mis Estudios
                   </Typography>
-                  <Box>
-                    <Box
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      columnGap: "1rem",
+                    }}
+                  >
+                    <Button
+                      variant="outlined"
+                      endIcon={<Add />}
+                      onClick={() => setOpenModalStudy(true)}
+                    >
+                      Agregar estudio
+                    </Button>
+                  </Box>
+                </Box>
+                <Box>
+                  {studiesData.map((study: any) => (
+                    <Timeline
+                      key={study.id}
                       sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        columnGap: "1rem",
+                        //ALINEAR A LA IZQUIERDA
+                        [`& .${timelineItemClasses.root}:before`]: {
+                          flex: 0,
+                          padding: 6,
+                        },
                       }}
                     >
-                      <Button
-                        variant="outlined"
-                        endIcon={<Add />}
-                        onClick={() => setOpenModalStudy(true)}
-                      >
-                        Agregar estudio
-                      </Button>
-                    </Box>
-                  </Box>
+                      <TimelineItem>
+                        <TimelineSeparator>
+                          <TimelineDot />
+                          <TimelineConnector />
+                        </TimelineSeparator>
+                        <TimelineContent>
+                          <Box
+                            mt={2}
+                            p={2}
+                            borderRadius={4}
+                            width={"70%"}
+                            display={"flex"}
+                            flexDirection={"column"}
+                            gap={"1rem"}
+                            margin={"0"}
+                            padding={"0.7rem"}
+                          >
+                            <Box>
+                              <Typography variant="body1">
+                                <strong> {study.titulo}</strong>
+                              </Typography>
+                              <Typography variant="body1" color={"#808080"}>
+                                {study.institucion}
+                              </Typography>
+                              <Typography variant="body1">
+                                {study.descripcion}
+                              </Typography>
+                            </Box>
+                            <Typography>
+                              <strong>Periodo: </strong> {study.fechaInicio} - {study.fechaFin}
+                            </Typography>
+                          </Box>
+                        </TimelineContent>
+                      </TimelineItem>
+                    </Timeline>
+                  ))}
                 </Box>
                 <Box
                   sx={{
@@ -750,22 +857,63 @@ const MyCV = () => {
                   >
                     Idiomas
                   </Typography>
-                  <Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        columnGap: "1rem",
-                      }}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      columnGap: "1rem",
+                    }}
+                  >
+                    <Button
+                      variant="outlined"
+                      endIcon={<Add />}
+                      onClick={() => setOpenModalLanguage(true)}
                     >
-                      <Button
-                        variant="outlined"
-                        endIcon={<Add />}
-                        onClick={() => setOpenModalLanguage(true)}
+                      Agregar idioma
+                    </Button>
+                  </Box>
+                  <Box>
+                    {languagesData.map((language: any) => (
+                      <Timeline
+                        key={language.id}
+                        sx={{
+                          //ALINEAR A LA IZQUIERDA
+                          [`& .${timelineItemClasses.root}:before`]: {
+                            flex: 0,
+                            padding: 6,
+                          },
+                        }}
                       >
-                        Agregar idioma
-                      </Button>
-                    </Box>
+                        <TimelineItem>
+                          <TimelineSeparator>
+                            <TimelineDot />
+                            <TimelineConnector />
+                          </TimelineSeparator>
+                          <TimelineContent>
+                            <Box
+                              mt={2}
+                              p={2}
+                              borderRadius={4}
+                              width={"70%"}
+                              display={"flex"}
+                              flexDirection={"column"}
+                              gap={"1rem"}
+                              margin={"0"}
+                              padding={"0.7rem"}
+                            >
+                              <Box>
+                                <Typography variant="body1">
+                                  <strong> {language.idioma}</strong>
+                                </Typography>
+                                <Typography variant="body1" color={"#808080"}>
+                                  {language.nivel}
+                                </Typography>
+                              </Box>
+                            </Box>
+                          </TimelineContent>
+                        </TimelineItem>
+                      </Timeline>
+                    ))}
                   </Box>
                 </Box>
               </Box>
@@ -774,512 +922,20 @@ const MyCV = () => {
         )}
       </Box>
 
-        <Modal
-          open={openModalDataPersonal}
-          onClose={handleCloseModalEditDataPersonal}
-        >
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: "900px",
-              bgcolor: "background.paper",
-              boxShadow: 24,
-              padding: "2rem",
-              paddingBlock: "3rem",
-              [theme.breakpoints.down("sm")]: {
-                width: "95%",
-                padding: "1rem",
-                paddingBlock: "2rem",
-              },
-            }}
-          >
-            <Typography variant="h6" id="modal-title" gutterBottom align="left">
-              Datos personal y de contacto
-            </Typography>
-            <Divider />
-            <FormControl
-              component={"form"}
-              onSubmit={handleSubmit(onSubmitPersonalData)}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                rowGap: "1.5rem",
-                marginTop: "1rem",
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  columnGap: "1rem",
-                  alignItems: "center",
-                }}
-              >
-                <TextField
-                  label="Nombres"
-                  variant="outlined"
-                  margin="normal"
-                  defaultValue={(personalInfoEdit as { nombre: string })?.nombre}
-                  fullWidth
-                />
-                <TextField
-                  label="Apellidos"
-                  variant="outlined"
-                  margin="normal"
-                  defaultValue={(personalInfoEdit as { apellidos: string })?.apellidos}
-                  fullWidth
-                />
-                <Autocomplete
-                  fullWidth
-                  disableClearable
-                  options={['Peruano(a)']}
-                  defaultValue="Peruano(a)"
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Nacionalidad"
-                      variant="outlined"
-                      margin="normal"
-                      fullWidth
-                      {...register("nacionalidad", { required: true })}
-                    />
-                  )}
-
-                />
-              </Box>
-
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <Typography variant="h6" gutterBottom align="left">
-                  Fecha de nacimiento
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    columnGap: "3rem",
-                    alignItems: "center",
-                    [theme.breakpoints.down("sm")]: {
-                      flexDirection: "column",
-                      gap: "1rem",
-                    },
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      width: "100%",
-                      columnGap: "1rem",
-                    }}
-                  >
-                    <FormControl
-                      sx={{
-                        width: "50%",
-                      }}
-                    >
-                      <InputLabel id="select-dia">Dia</InputLabel>
-                      <Select
-                        labelId="select-dia"
-                        id="demo-simple-select"
-                        value={1}
-                        label="Dia"
-                      // onChange={handleChange}
-                      >
-                        <MenuItem value={1}>1</MenuItem>
-                        <MenuItem value={2}>2</MenuItem>
-                        <MenuItem value={3}>3</MenuItem>
-                      </Select>
-                    </FormControl>
-                    <FormControl
-                      sx={{
-                        width: "50%",
-                      }}
-                    >
-                      <InputLabel id="select-mes">Mes</InputLabel>
-                      <Select
-                        labelId="select-mes"
-                        id="demo-simple-select"
-                        value={1}
-                        label="Mes"
-                      // onChange={handleChange}
-                      >
-                        <MenuItem value={1}>Enero</MenuItem>
-                        <MenuItem value={2}>Febrero</MenuItem>
-                        <MenuItem value={3}>Marzo</MenuItem>
-                      </Select>
-                    </FormControl>
-                    <FormControl
-                      sx={{
-                        width: "50%",
-                      }}
-                    >
-                      <InputLabel id="select-anio">Año</InputLabel>
-                      <Select
-                        labelId="select-anio"
-                        id="demo-simple-select"
-                        value={1}
-                        label="Año"
-                      // onChange={handleChange}
-                      >
-                        <MenuItem value={1}>1995</MenuItem>
-                        <MenuItem value={2}>1996</MenuItem>
-                        <MenuItem value={3}>1997</MenuItem>
-                        <MenuItem value={4}>1998</MenuItem>
-                        <MenuItem value={5}>1999</MenuItem>
-                        <MenuItem value={6}>2000</MenuItem>
-                        <MenuItem value={7}>2001</MenuItem>
-                        <MenuItem value={8}>2002</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      width: "100%",
-                      columnGap: "1rem",
-                    }}
-                  >
-                    <FormControl fullWidth>
-                      <InputLabel id="select-civil">Estado Civil</InputLabel>
-                      <Select
-                        labelId="select-civil"
-                        id="demo-simple-select"
-                        defaultValue={convertStateToNumber()}
-                        label="Estado Civil"
-                      // onChange={handleChange}
-                      >
-                        <MenuItem value={1}>Soltero</MenuItem>
-                        <MenuItem value={2}>Viudo</MenuItem>
-                        <MenuItem value={3}>Casado</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Box>
-                </Box>
-              </Box>
-
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  columnGap: "1rem",
-                }}
-              >
-                <Autocomplete
-                  fullWidth
-                  options={['DNI']}
-                  onChange={(event, value) => setSelectedOptionDocumentType(value)}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Tipo documento"
-                      variant="outlined"
-                      margin="normal"
-                      fullWidth
-                    />
-                  )}
-                />
-
-                <TextField
-                  label="Documento"
-                  variant="outlined"
-                  margin="normal"
-                  disabled={!selectedOptionDocumentType}
-                  defaultValue={(personalInfoEdit as { documento: string })?.documento}
-                  fullWidth
-                />
-
-              </Box>
-              <Button type="submit" variant="contained" color="primary">
-                Guardar
-              </Button>
-            </FormControl>
-          </Box>
-        </Modal>
-
-      <Modal
-        open={openModalExperience}
-        onClose={() => setOpenModalExperience(false)}
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "900px",
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            padding: "2rem",
-            paddingBlock: "3rem",
-            [theme.breakpoints.down("sm")]: {
-              width: "95%",
-              padding: "1rem",
-              paddingBlock: "2rem",
-            },
-          }}
-        >
-          <Typography variant="h6" id="modal-title" gutterBottom align="left">
-            Experiencia laboral
-          </Typography>
-          <Divider />
-          <FormControl
-            component={"form"}
-            onSubmit={handleSubmit(onSubmitExperienceData)}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              rowGap: "1.5rem",
-              marginTop: "1rem",
-            }}
-          >
-            <TextField
-              label="Cargo"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-            />
-
-            <TextField
-              label="Funciones"
-              variant="outlined"
-              multiline
-              minRows={4}
-              fullWidth
-            />
-
-            <TextField
-              label="Empresa"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-            />
-            <Box
-              sx={{
-                display: "flex",
-                columnGap: "1rem",
-                marginTop: "1rem",
-              }}
-            >
-              <FormControl fullWidth>
-                <InputLabel id="select-nacionalidad">Año Inicio</InputLabel>
-                <Select
-                  labelId="select-nacionalidad"
-                  id="demo-simple-select"
-                  value={10}
-                  label="Nacionalidad"
-                // onChange={handleChange}
-                >
-                  <MenuItem value={10}>2010</MenuItem>
-                  <MenuItem value={20}>2011</MenuItem>
-                  <MenuItem value={30}>2012</MenuItem>
-                </Select>
-              </FormControl>
-
-              <FormControl fullWidth>
-                <InputLabel id="select-nacionalidad">Año Fin</InputLabel>
-                <Select
-                  labelId="select-nacionalidad"
-                  id="demo-simple-select"
-                  value={10}
-                  label="Nacionalidad"
-                // onChange={handleChange}
-                >
-                  <MenuItem value={10}>2022</MenuItem>
-                  <MenuItem value={20}>2023</MenuItem>
-                  <MenuItem value={30}>2024</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-
-            <Button type="submit" variant="contained" color="primary">
-              Guardar
-            </Button>
-          </FormControl>
-        </Box>
-      </Modal>
-
-      <Modal open={openModalStudy} onClose={() => setOpenModalStudy(false)}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "900px",
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            padding: "2rem",
-            paddingBlock: "3rem",
-            [theme.breakpoints.down("sm")]: {
-              width: "95%",
-              padding: "1rem",
-              paddingBlock: "2rem",
-            },
-          }}
-        >
-          <Typography variant="h6" id="modal-title" gutterBottom align="left">
-            Agregar estudio
-          </Typography>
-          <Divider />
-          <FormControl
-            component={"form"}
-            onSubmit={handleSubmit(onSubmitEducationData)}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              rowGap: "1.5rem",
-              marginTop: "1rem",
-            }}
-          >
-            <TextField
-              label="Descripción del titulo"
-              variant="outlined"
-              multiline
-              minRows={4}
-              fullWidth
-            />
-
-            <TextField
-              label="Titulo"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-            />
-
-            <TextField
-              label="Institución"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-            />
-            <Box
-              sx={{
-                display: "flex",
-                columnGap: "1rem",
-                marginTop: "1rem",
-              }}
-            >
-              <FormControl fullWidth>
-                <InputLabel id="select-nacionalidad">Año Inicio</InputLabel>
-                <Select
-                  labelId="select-nacionalidad"
-                  id="demo-simple-select"
-                  value={10}
-                  label="Nacionalidad"
-                // onChange={handleChange}
-                >
-                  <MenuItem value={10}>2010</MenuItem>
-                  <MenuItem value={20}>2011</MenuItem>
-                  <MenuItem value={30}>2012</MenuItem>
-                </Select>
-              </FormControl>
-
-              <FormControl fullWidth>
-                <InputLabel id="select-nacionalidad">Año Fin</InputLabel>
-                <Select
-                  labelId="select-nacionalidad"
-                  id="demo-simple-select"
-                  value={10}
-                  label="Nacionalidad"
-                // onChange={handleChange}
-                >
-                  <MenuItem value={10}>2022</MenuItem>
-                  <MenuItem value={20}>2023</MenuItem>
-                  <MenuItem value={30}>2024</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-
-            <Button type="submit" variant="contained" color="primary">
-              Guardar
-            </Button>
-          </FormControl>
-        </Box>
-      </Modal>
-
-      <Modal
-        open={openModalLanguage}
-        onClose={() => setOpenModalLanguage(false)}
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "900px",
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            padding: "2rem",
-            paddingBlock: "3rem",
-            [theme.breakpoints.down("sm")]: {
-              width: "95%",
-              padding: "1rem",
-              paddingBlock: "2rem",
-            },
-          }}
-        >
-          <Typography variant="h6" id="modal-title" gutterBottom align="left">
-            Agregar idioma
-          </Typography>
-          <Divider />
-          <FormControl
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              rowGap: "1.5rem",
-              marginTop: "1rem",
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                columnGap: "1rem",
-                marginTop: "1rem",
-              }}
-            >
-              <FormControl fullWidth>
-                <InputLabel id="select-nacionalidad">Idioma</InputLabel>
-                <Select
-                  labelId="select-nacionalidad"
-                  id="demo-simple-select"
-                  value={10}
-                  label="Nacionalidad"
-                // onChange={handleChange}
-                >
-                  <MenuItem value={10}>Español</MenuItem>
-                  <MenuItem value={20}>Ingles</MenuItem>
-                  <MenuItem value={30}>Alemán</MenuItem>
-                </Select>
-              </FormControl>
-
-              <FormControl fullWidth>
-                <InputLabel id="select-nacionalidad">Nivel</InputLabel>
-                <Select
-                  labelId="select-nacionalidad"
-                  id="demo-simple-select"
-                  value={10}
-                  label="Nacionalidad"
-                // onChange={handleChange}
-                >
-                  <MenuItem value={10}>Básico</MenuItem>
-                  <MenuItem value={20}>Intermedio</MenuItem>
-                  <MenuItem value={30}>Avanzado</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-
-            <Button type="submit" variant="contained" color="primary">
-              Guardar
-            </Button>
-          </FormControl>
-        </Box>
-      </Modal>
+      <ModalDataPersonal openModalDataPersonal={openModalDataPersonal} handleCloseModalEditDataPersonal={handleCloseModalEditDataPersonal} />
+      <ModalDataExperience openModalExperience={openModalExperience} handleCloseModalEditDataExperience={handleCloseModalEditDataExperience} onExperienceSaved={async () => {
+        await handleGetExperiences();
+      }} />
+      <ModalDataStudies openModalStudy={openModalStudy} handleCloseModalEditDataStudies={handleCloseModalEditDataStudies} onStudtySave={
+        async () => {
+          await handleGetStudies();
+        }
+      } />
+      <ModalDataLanguage openModalLanguage={openModalLanguage} handleCloseModalEditDataLanguage={handleCloseModalEditDataLanguage} onLanguageSave={
+        async () => {
+          await handleGetLanguages();
+        }
+      } />
     </>
   );
 };
