@@ -15,11 +15,46 @@ import {
 } from "@mui/material";
 import theme from "../../../theme";
 import ButtonSocials from "../../components/common/ButtonSocials";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HeaderMainPage } from "../../components/layout/HeaderMainPage";
+import usePostulations from "../../hooks/Candidate/Postulations/usePostulations";
 
 const MyApplications = () => {
   const [open, setOpen] = useState(false);
+  const [allPostulations, setAllPostulations] = useState<any>([]);
+  const { getPostulations } = usePostulations();
+  const userInfo = localStorage.getItem("userInfo");
+  const userInfoJson = JSON.parse(userInfo || "{}");
+  const [filterPostulationStateId, setFilterPostulationStateId] = useState<{ [key: string]: number | null }>({
+    id_estado_postulacion: null, // null indica sin filtro
+  });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isSortedByDateDesc, setIsSortedByDateDesc] = useState(false); // Valor inicial correctamente establecido
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+  const handleSortChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsSortedByDateDesc(event.target.checked);
+  };
+
+  const getFilteredAndSortedPostulations = () => {
+    const filteredPostulations = allPostulations.filter((postulation: any) => {
+      return (
+        Object.keys(filterPostulationStateId).every((key) => {
+          const value = filterPostulationStateId[key];
+          return value === null || postulation[key] === value;
+        }) && postulation.puesto.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+
+    // Ordena las postulaciones por fecha
+    return filteredPostulations.sort((a: any, b: any) => {
+      const dateA = new Date(a.fecha_postulacion);
+      const dateB = new Date(b.fecha_postulacion);
+      return isSortedByDateDesc ? dateB.getTime() - dateA.getTime() : dateA.getTime() - dateB.getTime(); // Orden descendente si `isSortedByDateDesc` es true, de lo contrario ascendente
+    });
+  };
 
   const handleOpen = () => {
     setOpen(true);
@@ -29,11 +64,33 @@ const MyApplications = () => {
     setOpen(false);
   };
 
+  // Función genérica para establecer un criterio de filtro
+  const applyFilter = (criteria: { [key: string]: number | null }) => {
+    setFilterPostulationStateId(criteria);
+  };
+
+  const postulationsToRender = getFilteredAndSortedPostulations();
+
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    // Agrega aquí la lógica para manejar el envío del formulario
-    handleClose(); // Cierra el modal después de enviar el formulario
+    handleClose();
   };
+
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    if (!mounted.current) {
+      // Tu lógica de carga aquí
+      const handleGetPostulations = async () => {
+        const postulations = await getPostulations(userInfoJson.id_user);
+        setAllPostulations(postulations.response);
+        console.log(postulations.response);
+      };
+
+      handleGetPostulations();
+      mounted.current = true;
+    }
+  }, []);
 
   return (
     <>
@@ -107,6 +164,8 @@ const MyApplications = () => {
               variant="outlined"
               margin="normal"
               type="text"
+              value={searchTerm} // Controla el valor del input con el estado
+              onChange={handleSearchChange} // Actualiza el estado con cada cambio
               sx={{
                 width: "20rem",
               }}
@@ -138,60 +197,60 @@ const MyApplications = () => {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={handleOpen}
                 sx={{
                   [theme.breakpoints.down("sm")]: {
                     fontSize: "0.8rem",
                   },
                 }}
+                onClick={() => applyFilter({ id_estado_postulacion: null })}
               >
                 Todos
               </Button>
               <Button
                 variant="contained"
                 color="primary"
-                onClick={handleOpen}
                 sx={{
                   [theme.breakpoints.down("sm")]: {
                     fontSize: "0.8rem",
                   },
                 }}
+                onClick={() => applyFilter({ id_estado_postulacion: 1 })}
               >
                 Postulaciones
               </Button>
               <Button
                 variant="contained"
                 color="primary"
-                onClick={handleOpen}
                 sx={{
                   [theme.breakpoints.down("sm")]: {
                     fontSize: "0.8rem",
                   },
                 }}
+                onClick={() => applyFilter({ id_estado_postulacion: 2 })}
               >
                 CV Leido
               </Button>
               <Button
                 variant="contained"
                 color="primary"
-                onClick={handleOpen}
                 sx={{
                   [theme.breakpoints.down("sm")]: {
                     fontSize: "0.8rem",
                   },
                 }}
+                onClick={() => applyFilter({ id_estado_postulacion: 3 })}
               >
                 CV en proceso
               </Button>
               <Button
                 variant="contained"
                 color="primary"
-                onClick={handleOpen}
                 sx={{
                   [theme.breakpoints.down("sm")]: {
                     fontSize: "0.8rem",
                   },
                 }}
+                onClick={() => applyFilter({ id_estado_postulacion: 4 })}
               >
                 Proceso finalizado
               </Button>
@@ -206,55 +265,65 @@ const MyApplications = () => {
               <Typography gutterBottom fontWeight={400}>
                 Ordenar por fecha
               </Typography>
-              <Switch aria-label="switch-offert" />
+              <Switch
+                checked={isSortedByDateDesc}
+                onChange={handleSortChange}
+                aria-label="switch-offert"
+              />
             </Box>
           </Box>
-
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              border: "1px solid #a7a7a7",
-              borderRadius: "10px",
-              padding: "1rem",
-              rowGap: "2rem",
-            }}
-          >
+          {postulationsToRender.map((postulation: any) => (
             <Box
+              key={postulation.id}
               sx={{
                 display: "flex",
-                justifyContent: "space-between",
-                alignItems: "start",
-                columnGap: "1rem",
+                flexDirection: "column",
+                border: "1px solid #a7a7a7",
+                borderRadius: "10px",
+                padding: "1rem",
+                rowGap: "2rem",
               }}
             >
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "column",
-                  padding: "0.8rem",
+                  justifyContent: "space-between",
+                  alignItems: "start",
+                  columnGap: "1rem",
                 }}
               >
-                <Typography
-                  variant="h5"
-                  gutterBottom
+                <Box
                   sx={{
-                    [theme.breakpoints.down("sm")]: {
-                      fontSize: "1.2rem",
-                    },
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: "0.8rem",
                   }}
                 >
-                  Puesto de interés
-                </Typography>
-                <Typography variant="body2" gutterBottom>
-                  Desarrollador Frontend - Lima
-                </Typography>
+                  <Typography
+                    variant="h5"
+                    gutterBottom
+                    sx={{
+                      [theme.breakpoints.down("sm")]: {
+                        fontSize: "1.2rem",
+                      },
+                    }}
+                  >
+                    {postulation.puesto}
+                  </Typography>
+                  <Typography variant="body2" gutterBottom>
+                    {postulation.empresa} - {postulation.departamento}
+                  </Typography>
+                  <Typography variant="body2" gutterBottom>
+                    Fecha postulacion: {(postulation.fecha_postulacion).substring(0, 10).split('-').reverse().join('-')}
+                  </Typography>
+                </Box>
+
+                <Button variant="outlined"
+                  onClick={handleOpen}>Actualiza tu proceso</Button>
               </Box>
 
-              <Button variant="outlined">Actualiza tu proceso</Button>
             </Box>
-
-          </Box>
+          ))}
         </Box>
       </Container>
 
