@@ -4,11 +4,6 @@ import {
   Box,
   Button,
   Container,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Modal,
-  Select,
   TextField,
   Typography,
   Switch,
@@ -18,7 +13,7 @@ import ButtonSocials from "../../components/common/ButtonSocials";
 import { useEffect, useRef, useState } from "react";
 import { HeaderMainPage } from "../../components/layout/HeaderMainPage";
 import usePostulations from "../../hooks/Candidate/Postulations/usePostulations";
-import ModalUpdateStatusPostulation from "../../components/candidate/Modals/ModalUpdateStatusPostulation";
+import ModalUpdateStatePostulation from "../../components/candidate/Modals/ModalUpdateStatePostulation";
 
 const MyApplications = () => {
   const [open, setOpen] = useState(false);
@@ -26,6 +21,9 @@ const MyApplications = () => {
   const { getPostulations } = usePostulations();
   const userInfo = localStorage.getItem("userInfo");
   const userInfoJson = JSON.parse(userInfo || "{}");
+  const [selectedPostulationId, setSelectedPostulationId] = useState<number | null>(null);
+  const [currentDescriptionData, setCurrentDescriptionData] = useState<any>(null);
+  const [currentJobData, setCurrentJobData] = useState<any>(null);
   const [filterPostulationStateId, setFilterPostulationStateId] = useState<{ [key: string]: number | null }>({
     id_estado_postulacion: null, // null indica sin filtro
   });
@@ -58,7 +56,10 @@ const MyApplications = () => {
     });
   };
 
-  const handleOpen = () => {
+  const handleOpen = (id: number) => {
+    setSelectedPostulationId(id); // Almacena el ID de la postulación seleccionada
+    setCurrentDescriptionData(allPostulations.find((postulation: any) => postulation.id === id).descripcion_estado);
+    setCurrentJobData(allPostulations.find((postulation: any) => postulation.id === id).puesto);
     setOpen(true);
   };
 
@@ -74,12 +75,9 @@ const MyApplications = () => {
 
   const postulationsToRender = getFilteredAndSortedPostulations();
 
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
-    handleClose();
-  };
-
   const mounted = useRef(false);
+
+  //console.log(currentDescriptionData)
 
   useEffect(() => {
     if (!mounted.current) {
@@ -88,6 +86,7 @@ const MyApplications = () => {
         const postulations = await getPostulations(userInfoJson.id_user);
         setAllPostulations(postulations.response);
         console.log(postulations.response);
+        //setCurrentDescriptionData(postulations.response.descripcion_estado);
       };
 
       handleGetPostulations();
@@ -339,7 +338,9 @@ const MyApplications = () => {
                     </Box>
 
                     <Button variant="outlined"
-                      onClick={handleOpen}>Actualiza tu proceso</Button>
+                      onClick={() => {
+                        handleOpen(postulation.id);
+                      }}>Actualiza tu proceso</Button>
                   </Box>
 
                 </Box>
@@ -350,7 +351,7 @@ const MyApplications = () => {
         </Box>
       </Container>
 
-      <ModalUpdateStatusPostulation postulation={{ open, setOpen }} onClose={handleClose} />
+      <ModalUpdateStatePostulation openModalUpdateStatePostulation={open} handleModalUpdateStatePostulation={handleClose} postulationId={selectedPostulationId} descriptionOption={currentDescriptionData} jobData={currentJobData} />
 
       <ButtonSocials />
     </>
