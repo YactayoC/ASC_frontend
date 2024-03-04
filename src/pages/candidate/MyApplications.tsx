@@ -18,6 +18,7 @@ import ButtonSocials from "../../components/common/ButtonSocials";
 import { useEffect, useRef, useState } from "react";
 import { HeaderMainPage } from "../../components/layout/HeaderMainPage";
 import usePostulations from "../../hooks/Candidate/Postulations/usePostulations";
+import ModalUpdateStatusPostulation from "../../components/candidate/Modals/ModalUpdateStatusPostulation";
 
 const MyApplications = () => {
   const [open, setOpen] = useState(false);
@@ -30,6 +31,7 @@ const MyApplications = () => {
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [isSortedByDateDesc, setIsSortedByDateDesc] = useState(false); // Valor inicial correctamente establecido
+  const [selectedFilter, setSelectedFilter] = useState<number | null>(null);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -65,8 +67,9 @@ const MyApplications = () => {
   };
 
   // Función genérica para establecer un criterio de filtro
-  const applyFilter = (criteria: { [key: string]: number | null }) => {
+  const applyFilter = (criteria: { [key: string]: number | null }, selectedId: number | null) => {
     setFilterPostulationStateId(criteria);
+    setSelectedFilter(selectedId); // Actualiza el estado del botón seleccionado
   };
 
   const postulationsToRender = getFilteredAndSortedPostulations();
@@ -195,65 +198,66 @@ const MyApplications = () => {
               }}
             >
               <Button
-                variant="contained"
+                variant={selectedFilter === null ? "contained" : "outlined"}
                 color="primary"
                 sx={{
                   [theme.breakpoints.down("sm")]: {
                     fontSize: "0.8rem",
                   },
                 }}
-                onClick={() => applyFilter({ id_estado_postulacion: null })}
+                onClick={() => applyFilter({ id_estado_postulacion: null }, null)}
               >
                 Todos
               </Button>
               <Button
-                variant="contained"
+                variant={selectedFilter === 1 ? "contained" : "outlined"}
                 color="primary"
                 sx={{
                   [theme.breakpoints.down("sm")]: {
                     fontSize: "0.8rem",
                   },
                 }}
-                onClick={() => applyFilter({ id_estado_postulacion: 1 })}
+                onClick={() => applyFilter({ id_estado_postulacion: 1 }, 1)}
               >
                 Postulaciones
               </Button>
               <Button
-                variant="contained"
+                variant={selectedFilter === 2 ? "contained" : "outlined"}
                 color="primary"
                 sx={{
                   [theme.breakpoints.down("sm")]: {
                     fontSize: "0.8rem",
                   },
                 }}
-                onClick={() => applyFilter({ id_estado_postulacion: 2 })}
+                onClick={() => applyFilter({ id_estado_postulacion: 2 }, 2)}
               >
                 CV Leido
               </Button>
               <Button
-                variant="contained"
+                variant={selectedFilter === 3 ? "contained" : "outlined"}
                 color="primary"
                 sx={{
                   [theme.breakpoints.down("sm")]: {
                     fontSize: "0.8rem",
                   },
                 }}
-                onClick={() => applyFilter({ id_estado_postulacion: 3 })}
+                onClick={() => applyFilter({ id_estado_postulacion: 3 }, 3)}
               >
                 CV en proceso
               </Button>
               <Button
-                variant="contained"
+                variant={selectedFilter === 4 ? "contained" : "outlined"}
                 color="primary"
                 sx={{
                   [theme.breakpoints.down("sm")]: {
                     fontSize: "0.8rem",
                   },
                 }}
-                onClick={() => applyFilter({ id_estado_postulacion: 4 })}
+                onClick={() => applyFilter({ id_estado_postulacion: 4 }, 4)}
               >
                 Proceso finalizado
               </Button>
+
             </Box>
             <Box
               sx={{
@@ -272,135 +276,81 @@ const MyApplications = () => {
               />
             </Box>
           </Box>
-          {postulationsToRender.map((postulation: any) => (
-            <Box
-              key={postulation.id}
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                border: "1px solid #a7a7a7",
-                borderRadius: "10px",
-                padding: "1rem",
-                rowGap: "2rem",
-              }}
-            >
-              <Box
+
+          <>
+            {postulationsToRender.length === 0 ? (
+              <Typography
+                variant="h5"
+                gutterBottom
                 sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "start",
-                  columnGap: "1rem",
+                  textAlign: "center",
+                  [theme.breakpoints.down("sm")]: {
+                    fontSize: "1.2rem",
+                  },
                 }}
               >
+                No se encontraron postulaciones
+              </Typography>
+            ) : (
+              postulationsToRender.map((postulation: any) => (
                 <Box
+                  key={postulation.id}
                   sx={{
                     display: "flex",
                     flexDirection: "column",
-                    padding: "0.8rem",
+                    border: "1px solid #a7a7a7",
+                    borderRadius: "10px",
+                    padding: "1rem",
+                    rowGap: "2rem",
                   }}
                 >
-                  <Typography
-                    variant="h5"
-                    gutterBottom
+                  <Box
                     sx={{
-                      [theme.breakpoints.down("sm")]: {
-                        fontSize: "1.2rem",
-                      },
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "start",
+                      columnGap: "1rem",
                     }}
                   >
-                    {postulation.puesto}
-                  </Typography>
-                  <Typography variant="body2" gutterBottom>
-                    {postulation.empresa} - {postulation.departamento}
-                  </Typography>
-                  <Typography variant="body2" gutterBottom>
-                    Fecha postulacion: {(postulation.fecha_postulacion).substring(0, 10).split('-').reverse().join('-')}
-                  </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        padding: "0.8rem",
+                      }}
+                    >
+                      <Typography
+                        variant="h5"
+                        gutterBottom
+                        sx={{
+                          [theme.breakpoints.down("sm")]: {
+                            fontSize: "1.2rem",
+                          },
+                        }}
+                      >
+                        {postulation.puesto}
+                      </Typography>
+                      <Typography variant="body2" gutterBottom>
+                        {postulation.empresa} - {postulation.departamento}
+                      </Typography>
+                      <Typography variant="body2" gutterBottom>
+                        Fecha postulacion: {(postulation.fecha_postulacion).substring(0, 10).split('-').reverse().join('-')}
+                      </Typography>
+                    </Box>
+
+                    <Button variant="outlined"
+                      onClick={handleOpen}>Actualiza tu proceso</Button>
+                  </Box>
+
                 </Box>
+              ))
+            )}
 
-                <Button variant="outlined"
-                  onClick={handleOpen}>Actualiza tu proceso</Button>
-              </Box>
-
-            </Box>
-          ))}
+          </>
         </Box>
       </Container>
 
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 350,
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            padding: "2rem",
-            paddingBlock: "3rem",
-          }}
-        >
-          <Typography variant="h6" id="modal-title" gutterBottom align="center">
-            ¿Qué ofertas desea recibir?
-          </Typography>
-          <form
-            onSubmit={handleSubmit}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              rowGap: "1rem",
-            }}
-          >
-            <TextField
-              label="Puesto"
-              variant="outlined"
-              margin="normal"
-              type="text"
-              fullWidth
-            />
-            <FormControl fullWidth>
-              <InputLabel id="select-ubicacion">Ubicacion</InputLabel>
-              <Select
-                labelId="select-ubicacion"
-                id="demo-simple-select"
-                value={10}
-                label="Ubicacion"
-              // onChange={handleChange}
-              >
-                <MenuItem value={10}>Lima</MenuItem>
-                <MenuItem value={20}>Chilca</MenuItem>
-                <MenuItem value={30}>Villa El Salvador</MenuItem>
-              </Select>
-            </FormControl>
-
-            <FormControl fullWidth>
-              <InputLabel id="select-frecuencia">
-                Frecuencia de notificaciones
-              </InputLabel>
-              <Select
-                labelId="select-frecuencia"
-                id="demo-simple-select"
-                value={10}
-                label="Frecuencia de notificaciones"
-              // onChange={handleChange}
-              >
-                <MenuItem value={10}>Una vez cada 2 días</MenuItem>
-                <MenuItem value={20}>Una vez cada 3 días</MenuItem>
-                <MenuItem value={30}>Una vez a la semana</MenuItem>
-              </Select>
-            </FormControl>
-            <Button type="submit" variant="contained" color="primary">
-              Suscribirme
-            </Button>
-          </form>
-        </Box>
-      </Modal>
+      <ModalUpdateStatusPostulation postulation={{ open, setOpen }} onClose={handleClose} />
 
       <ButtonSocials />
     </>

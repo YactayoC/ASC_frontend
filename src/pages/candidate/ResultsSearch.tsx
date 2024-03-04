@@ -40,6 +40,7 @@ const ResultsSearch = () => {
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const { value, location, featuredArea } = useParams<{ value: string; location?: string; featuredArea?: string }>();
+  console.log(featuredArea)
   const [searchParamsString, setSearchParamsString] = useState('');
   const isFirstRun = useRef(true);
   const [buttonOrderBy, setButtonOrderBy] = useState("recientes");
@@ -49,7 +50,7 @@ const ResultsSearch = () => {
   const [selectModalidad, setSelectModalidad] = useState<number | null>(null);
   const [selectJornada, setSelectJornada] = useState<number | null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const { getOffersByProvinceId, getOffersByJobAndProvinceId, getOffersByJob, applyOffer, getOffersByUserId } = useOffers();
+  const { getOffersByProvinceId, getOffersByJobAndProvinceId, getOffersByJob, applyOffer, getOffersByUserId, getOffersByAreaId } = useOffers();
 
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -104,15 +105,6 @@ const ResultsSearch = () => {
   const handleShareInstagram = () => {
     handleClose();
   };
-
-  const handleDateChange = (newValue: any) => {
-    // Convierte el timestamp (newValue) a un string legible usando dayjs
-    //const dateStringFormat = dayjs(newValue).format("DD-MM-YYYY");
-    const dateStringNoFormat = dayjs(newValue).format("YYYY-MM-DD");
-    //console.log(dateStringNoFormat); // Imprime la fecha en formato 'YYYY-MM-DD'
-    //console.log(dateStringFormat)
-    setSelectedDate(dateStringNoFormat);
-  }
 
   const modalidad_trabajo: ModalidadTrabajo[] = [
     { id: 1, nombre: "Presencial" },
@@ -181,6 +173,8 @@ const ResultsSearch = () => {
         response = await getOffersByProvinceId(parseInt(location));
       } else if (value) {
         response = await getOffersByJob(value);
+      } else if (featuredArea) {
+        response = await getOffersByAreaId(parseInt(featuredArea));
       } else {
         return;
       }
@@ -274,7 +268,6 @@ const ResultsSearch = () => {
             }}
           >
             <FormControl fullWidth>
-
               <Autocomplete
                 disablePortal
                 //disableClearable
@@ -418,6 +411,7 @@ const ResultsSearch = () => {
                     overflowY: "auto",
                   }}
                 >
+                  {/* VERSION ESCRITORIO */}
                   <Box
                     sx={{
                       display: "flex",
@@ -539,7 +533,7 @@ const ResultsSearch = () => {
                   </Box>
                 </Grid>
 
-                {/* Seleccionar detalle movil */}
+                {/* DETALLE DE LA OFERTA MOVIL */}
                 {isSmallScreen && (
                   <SwipperableDr open={open} setOpen={setOpen}>
                     <>
@@ -700,7 +694,8 @@ const ResultsSearch = () => {
                     </>
                   </SwipperableDr>
                 )}
-                {/* Seleccionar detalle escritorio */}
+
+                {/* DETALLE DE LA OFERTA ESCRITORIO */}
                 <Grid
                   item
                   xs={12}

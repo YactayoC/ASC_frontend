@@ -15,24 +15,34 @@ import SearchJob from "../components/common/SearchJob";
 import HeaderButtons from "../components/candidate/HeaderButtons";
 import ButtonSocials from "../components/common/ButtonSocials";
 import { jobAreasTop } from "../seed/jobAreas";
-import useDataDefault from "../hooks/useDataDefault";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import useOffers from "../hooks/Candidate/Offers/useOffers";
+import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
+import { da } from "date-fns/locale";
 
 function Home() {
-
+  const executed = useRef(false);
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const navigate = useNavigate();
+  const { getAreasTop } = useOffers();
+  const [areasTop, setAreasTop] = useState<any>([]);
 
-  const { getDataDefault } = useDataDefault();
+  const handleGetOffersByAreaTop = async (id: number) => {
+    navigate(`/candidate/search/featured-area/${id}`);
+  };
 
-  const handleData = async () => {
-    const data = await getDataDefault();
-    return data;
+  const handleDataAreasTop = async () => {
+    const data = await getAreasTop();
+    setAreasTop(data.response)
+    console.log(data.response)
   }
 
-  // Cadena de fecha y hora recibida
-
   useEffect(() => {
-    handleData();
+    if (!executed.current) {
+      handleDataAreasTop();
+      executed.current = true;
+    }
   }, []);
 
   return (
@@ -108,20 +118,22 @@ function Home() {
             Áreas destacadas
           </Typography>
           <Box display="flex">
-            <Stack
-              direction={{ xs: "column", sm: "row" }}
-              spacing={{ xs: 1, sm: 2 }}
-            >
-              {jobAreasTop.map((area) => (
+            {areasTop.map((area: any) => (
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                spacing={{ xs: 1, sm: 2 }}
+              >
+
                 <ListItem key={area.id} sx={{ width: "fit-content" }}>
-                  <Link href={`/candidate/search/featured-area/${area.id}`} color="inherit" underline="hover">
+                  <Link onClick={() => handleGetOffersByAreaTop(area.area_id)} color="inherit" underline="hover">
                     <ListItemText >
-                      {area.name} ({area.jobsCount})
+                      {area.nombre} (x)
                     </ListItemText>
                   </Link>
                 </ListItem>
-              ))}
-            </Stack>
+
+              </Stack>
+            ))}
           </Box>
         </Container>
         <Container>
