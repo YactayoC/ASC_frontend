@@ -66,9 +66,28 @@ const useAccount = () => {
         }
     }
 
+    //PERSONAL INFORMATION
     const getPersonalInformation = async (postulanteId: Number) => {
         try {
             const response: any = await apiClient.get(`/account/candidate/get-personal-info/${postulanteId}`);
+
+            const responseData = response.data;
+
+            return {
+                response: responseData,
+                status: response.status,
+                ok: true
+            };
+        }
+        catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
+    const getIncompletePersonalInformation = async (postulanteId: Number) => {
+        try {
+            const response: any = await apiClient.get(`/account/candidate/get-incomplete-personal-info/${postulanteId}`);
 
             const responseData = response.data;
 
@@ -299,7 +318,8 @@ const useAccount = () => {
         insertExperienceInformation,
         getLanguagesInformation,
         insertLanguagesInformation,
-        changeEmailCandidate
+        changeEmailCandidate,
+        getIncompletePersonalInformation
     }
 }
 

@@ -12,7 +12,7 @@ import {
 import useAccount from "../../hooks/Candidate/Account/useAccount";
 import theme from "../../../theme";
 import HeaderButtons from "../../components/candidate/HeaderButtons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Add,
   CloudUpload,
@@ -58,10 +58,11 @@ const MyCV = () => {
   const [experiencesData, setExperiencesData] = useState<any>([]);
   const [studiesData, setStudiesData] = useState<any>([]);
   const [languagesData, setLanguagesData] = useState<any>([]);
+  const [personalIncompleteInformation, setPersonalIncompleteInformation] = useState<any>({});
   const { uploadFile } = useFiles();
   const userInfo = localStorage.getItem("userInfo");
   const userInfoJson = JSON.parse(userInfo || "{}");
-  const { getExperienceInformation, getStudiesInformation, getLanguagesInformation } = useAccount();
+  const { getExperienceInformation, getStudiesInformation, getLanguagesInformation, getIncompletePersonalInformation } = useAccount();
 
   const handleOpenModalEditDataPersonal = async () => {
     setOpenModalDataPersonal(true);
@@ -125,6 +126,8 @@ const MyCV = () => {
         name: file.name,
         size: file.size
       }));
+
+      window.location.reload();
     }
 
     event.target.value = ''; // Reset input value
@@ -135,25 +138,33 @@ const MyCV = () => {
     localStorage.removeItem('selectedFileDetails');
   };
 
-  const formatFileSize = (sizeInBytes: number) => {
-    const kilobyte = 1024;
-    const megabyte = kilobyte * 1024;
+  const handleGetIncompletePersonalInformation = async () => {
+    const response = await getIncompletePersonalInformation(userInfoJson?.id_user);
+    const dataPersonalInformation = response.response.data;
+    setPersonalIncompleteInformation(dataPersonalInformation);
+    console.log(dataPersonalInformation)
+    setSelectedFile(dataPersonalInformation.cv_visible);
+    return
+  }
 
-    if (sizeInBytes > megabyte) {
-      return (sizeInBytes / megabyte).toFixed(2) + " MB";
-    } else if (sizeInBytes > kilobyte) {
-      return (sizeInBytes / kilobyte).toFixed(2) + " KB";
-    } else {
-      return sizeInBytes + " bytes";
-    }
-  };
+  const isMounted = useRef(true);
 
   useEffect(() => {
-    const fileDetails = localStorage.getItem('selectedFileDetails');
-    if (fileDetails) {
-      setSelectedFile(JSON.parse(fileDetails));
+    if (isMounted.current) {
+      handleGetIncompletePersonalInformation();
     }
-  }, []);
+
+    return () => {
+      isMounted.current = false;
+    }
+  }, [])
+
+  // useEffect(() => {
+  //   const fileDetails = localStorage.getItem('selectedFileDetails');
+  //   if (fileDetails) {
+  //     setSelectedFile(JSON.parse(fileDetails));
+  //   }
+  // }, []);
 
   return (
     <>
@@ -222,7 +233,7 @@ const MyCV = () => {
             }}
           >
             <Typography variant="h5" gutterBottom>
-              {userInfoJson?.nombresC} {userInfoJson?.apellidosC}
+              {personalIncompleteInformation.nombre} {personalIncompleteInformation.apellidos}
             </Typography>
 
             <Box
@@ -273,7 +284,7 @@ const MyCV = () => {
                       marginBottom: "0",
                     }}
                   >
-                    {userInfoJson?.emailCandidate}
+                    {personalIncompleteInformation.email}
                   </Typography>
                 </Box>
                 <Box
@@ -296,7 +307,7 @@ const MyCV = () => {
                       marginBottom: "0",
                     }}
                   >
-                    NO DEFINIDO
+                    {personalIncompleteInformation.numero}
                   </Typography>
                 </Box>
 
@@ -320,7 +331,7 @@ const MyCV = () => {
                       marginBottom: "0",
                     }}
                   >
-                    NO DEFINIDO
+                    {personalIncompleteInformation.direccion}
                   </Typography>
                 </Box>
               </Box>
@@ -375,16 +386,20 @@ const MyCV = () => {
                   position: "relative",
                 }}
               >
-                <Typography variant="subtitle1" fontWeight="bold">
-                  CV Cargado:
+                <Typography variant="h6" fontWeight="bold" marginBottom={"1rem"}>
+                  CV Registrado
                 </Typography>
-                <Typography variant="body1">
-                  <strong>Nombre:</strong> {selectedFile.name}
-                </Typography>
-                <Typography variant="body1">
-                  <strong>Tamaño:</strong> {formatFileSize(selectedFile.size)}
-                </Typography>
-
+                <Button
+                  variant="contained"
+                  color="primary"
+                  href={personalIncompleteInformation.cv}
+                  target="_blank"
+                  sx={{
+                    borderRadius: "0.5rem",
+                  }}
+                >
+                  Ver CV
+                </Button>
                 <IconButton
                   onClick={handleDeleteFile}
                   sx={{
@@ -411,7 +426,7 @@ const MyCV = () => {
             }}
           >
             <Typography variant="h5" gutterBottom>
-              {userInfoJson?.nombresC} {userInfoJson?.apellidosC}
+              {personalIncompleteInformation.nombre} {personalIncompleteInformation.apellidos}
             </Typography>
 
             <Box
@@ -471,7 +486,7 @@ const MyCV = () => {
                         marginBottom: "0",
                       }}
                     >
-                      {userInfoJson?.emailCandidate}
+                      {personalIncompleteInformation.email}
                     </Typography>
                   </Box>
                   <Box
@@ -494,7 +509,7 @@ const MyCV = () => {
                         marginBottom: "0",
                       }}
                     >
-                      NO DEFINIDO
+                      {personalIncompleteInformation.numero}
                     </Typography>
                   </Box>
                   <Box
@@ -517,7 +532,7 @@ const MyCV = () => {
                         marginBottom: "0",
                       }}
                     >
-                      NO DEFINIDO
+                      {personalIncompleteInformation.direccion}
                     </Typography>
                   </Box>
                 </Box>
@@ -525,8 +540,11 @@ const MyCV = () => {
                 <TextField
                   label="Descripción del perfil"
                   variant="outlined"
+                  value={personalIncompleteInformation.descripcion}
                   multiline
-                  fullWidth
+                  sx={{
+                    width: "40rem",
+                  }}
                   placeholder="Escribe una descripción de tu perfil"
                   rows={3}
                 />
@@ -695,7 +713,7 @@ const MyCV = () => {
                         marginBottom: "0",
                       }}
                     >
-                      {userInfoJson?.emailCandidate}
+                      {personalIncompleteInformation.email}
                     </Typography>
                   </Box>
                   <Box
@@ -718,7 +736,7 @@ const MyCV = () => {
                         marginBottom: "0",
                       }}
                     >
-                      NO DEFINIDO
+                      {personalIncompleteInformation.numero}
                     </Typography>
                   </Box>
                   <Box
@@ -741,7 +759,7 @@ const MyCV = () => {
                         marginBottom: "0",
                       }}
                     >
-                      NO DEFINIDO
+                      {personalIncompleteInformation.direccion}
                     </Typography>
                   </Box>
                 </Box>
