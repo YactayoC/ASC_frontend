@@ -1,6 +1,7 @@
 import { Box, Typography, Modal, FormControl, TextField, Button, Autocomplete } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import usePostulations from "../../../hooks/Candidate/Postulations/usePostulations";
 
 const ModalUpdateStatePostulation = (props: {
     openModalUpdateStatePostulation: boolean,
@@ -8,21 +9,34 @@ const ModalUpdateStatePostulation = (props: {
     descriptionOption: any
     postulationId: any
     jobData: any
+    onStateUpdated: () => void
 }) => {
 
     const { openModalUpdateStatePostulation, handleModalUpdateStatePostulation, descriptionOption, postulationId, jobData } = props;
     const { register, handleSubmit } = useForm();
     const [descriptionData, setDescriptionData] = useState("");
-    const [postulationIdData, setPostulationIdData] = useState("");
+    const { updatePostulationState } = usePostulations();
+    const [hasChanged, setHasChanged] = useState(false);
     const handleClose = () => {
         handleModalUpdateStatePostulation();
         setDescriptionData("");
     }
 
-    console.log(jobData)
-
     const onSubmit = async (data: any) => {
-        console.log(data);
+        //cerrar modal
+        if (hasChanged) {
+            handleModalUpdateStatePostulation();
+            const response = await updatePostulationState(
+                postulationId,
+                data.estado_descripcion
+            );
+
+            console.log(response)
+
+            if (response.ok) {
+                props.onStateUpdated();
+            }
+        }
     }
 
     const descriptionState = [
@@ -33,12 +47,11 @@ const ModalUpdateStatePostulation = (props: {
         "No quedé seleccionado",
     ]
 
-
     useEffect(() => {
         if (openModalUpdateStatePostulation && descriptionOption) {
-            // Asegúrate de que descriptionOption sea un string que coincida con uno de los labels
-            setDescriptionData(descriptionOption);
-            setPostulationIdData(postulationId);
+            const matchingOption = descriptionState.find(option => option === descriptionOption) || "";
+            setDescriptionData(matchingOption);
+            setHasChanged(false);
         }
     }, [openModalUpdateStatePostulation, descriptionOption]);
 
@@ -82,23 +95,25 @@ const ModalUpdateStatePostulation = (props: {
                         id="description"
                         fullWidth
                         options={descriptionState}
-                        value={descriptionData}
+                        value={descriptionData || ""}
                         onChange={(_event, newValue) => {
                             setDescriptionData(newValue);
+                            // Verifica si newValue es diferente a descriptionOption para establecer hasChanged
+                            if (newValue !== descriptionOption) {
+                                setHasChanged(true);
+                            } else {
+                                setHasChanged(false);
+                            }
                         }}
-                        onBlur={(_event) => {
-
-                        }
-                        }
-                        renderInput={(params) =>
+                        isOptionEqualToValue={(option, value) => option === value}
+                        renderInput={(params) => (
                             <TextField
                                 {...params}
                                 label="Estado"
                                 {...register("estado_descripcion", { required: true })}
-                            />}
+                            />
+                        )}
                     />
-
-
                     <Button type="submit" variant="contained" color="primary">
                         Actualizar
                     </Button>

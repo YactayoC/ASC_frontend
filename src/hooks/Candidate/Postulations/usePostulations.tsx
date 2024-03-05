@@ -18,8 +18,32 @@ const usePostulations = () => {
             throw err;
         }
     }
+
+    //ROUTE candidate/update-postulation-state
+    const updatePostulationState = async (postulacionId: number, descripcionEstado: string) => {
+        try {
+            const response: any = await apiClient.put(`/postulations/candidate/update-postulation-state`, {
+                descripcionEstado,
+                postulacionId
+            });
+
+            const responseData = response;
+
+            return {
+                response: responseData.data,
+                status: response.status,
+                ok: true
+            };
+        }
+        catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
     return {
-        getPostulations
+        getPostulations,
+        updatePostulationState
     };
 }
 

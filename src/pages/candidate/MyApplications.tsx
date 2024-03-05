@@ -57,14 +57,15 @@ const MyApplications = () => {
   };
 
   const handleOpen = (id: number) => {
-    setSelectedPostulationId(id); // Almacena el ID de la postulación seleccionada
     setCurrentDescriptionData(allPostulations.find((postulation: any) => postulation.id === id).descripcion_estado);
     setCurrentJobData(allPostulations.find((postulation: any) => postulation.id === id).puesto);
+    setSelectedPostulationId(id); // Actualiza el ID de la postulación seleccionada
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+    //setSelectedPostulationId(null);
   };
 
   // Función genérica para establecer un criterio de filtro
@@ -339,6 +340,7 @@ const MyApplications = () => {
 
                     <Button variant="outlined"
                       onClick={() => {
+                        console.log(postulation.id)
                         handleOpen(postulation.id);
                       }}>Actualiza tu proceso</Button>
                   </Box>
@@ -351,7 +353,17 @@ const MyApplications = () => {
         </Box>
       </Container>
 
-      <ModalUpdateStatePostulation openModalUpdateStatePostulation={open} handleModalUpdateStatePostulation={handleClose} postulationId={selectedPostulationId} descriptionOption={currentDescriptionData} jobData={currentJobData} />
+      <ModalUpdateStatePostulation
+        openModalUpdateStatePostulation={open}
+        handleModalUpdateStatePostulation={handleClose}
+        postulationId={selectedPostulationId} // Envía el ID de la postulación seleccionada
+        descriptionOption={currentDescriptionData}
+        jobData={currentJobData}
+        onStateUpdated={async () => {
+          const postulations = await getPostulations(userInfoJson.id_user);
+          setAllPostulations(postulations.response);
+        }}
+      />
 
       <ButtonSocials />
     </>
