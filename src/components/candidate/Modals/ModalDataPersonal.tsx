@@ -142,6 +142,7 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
             };
 
             localStorage.setItem("userInfo", JSON.stringify(updatedUserInfo));
+            window.location.reload();
         }
     }
 
@@ -154,8 +155,17 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
         reset()
     };
 
+    useEffect(() => {
+        setValue('nombre', nombreCandidate);
+        setValue('apellidos', apellidosCandidate);
+        setValue('nacionalidad', nacionalidadCandidate);
+        setValue('fechaNacimiento', `${day}-${month}-${year}`);
+        setValue('estadoCivil', optionCivilStatus);
+        setValue('tipoDocumento', selectedOptionDocumentType);
+        setValue('documento', dniCandidate);
 
-
+    }, [nombreCandidate, apellidosCandidate, nacionalidadCandidate, day, month, year, optionCivilStatus, selectedOptionDocumentType, dniCandidate, setValue]);
+    
     useEffect(() => {
         if (openModalDataPersonal) {
             handleGetPersonalInfo();
@@ -261,7 +271,7 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
                 </Typography>
                 <Divider />
                 <FormControl
-                    component={"form"}
+                    component="form"
                     onSubmit={handleSubmit(onSubmitPersonalData)}
                     style={{
                         display: "flex",
@@ -283,7 +293,7 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
                             value={nombreCandidate}
                             margin="normal"
                             fullWidth
-                            {...register("nombre", { required: true })}
+                            {...register("nombre", { required: false })}
                             onChange={(e) => setNombreCandidate(e.target.value)}
                         />
                         <TextField
@@ -292,7 +302,7 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
                             value={apellidosCandidate}
                             margin="normal"
                             fullWidth
-                            {...register("apellidos", { required: true })}
+                            {...register("apellidos", { required: false })}
                             onChange={(e) => setApellidosCandidate(e.target.value)}
                         />
                         <Autocomplete
