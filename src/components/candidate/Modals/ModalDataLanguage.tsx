@@ -13,7 +13,7 @@ const ModalDataLanguage = (props: {
     const { openModalLanguage, handleCloseModalEditDataLanguage } = props;
     const userInfo = localStorage.getItem("userInfo");
     const userInfoJson = JSON.parse(userInfo || "{}");
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit } = useForm();
     const { insertLanguagesInformation, } = useAccount();
     const [selectedLanguageId, setSelectedLanguageId] = useState<number | null>(null);
 
@@ -90,7 +90,7 @@ const ModalDataLanguage = (props: {
                         <Autocomplete
                             fullWidth
                             options={idiomas.map((option) => option.name)}
-                            onChange={(event, value) => {
+                            onChange={(_event, value) => {
                                 const idioma = idiomas.find(idioma => idioma.name === value);
                                 setSelectedLanguageId(idioma?.id || null); // Si no se encuentra el idioma, se asigna null
                             }}

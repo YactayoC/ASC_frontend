@@ -14,12 +14,10 @@ import ChatButton from "../components/common/Chat";
 import SearchJob from "../components/common/SearchJob";
 import HeaderButtons from "../components/candidate/HeaderButtons";
 import ButtonSocials from "../components/common/ButtonSocials";
-import { jobAreasTop } from "../seed/jobAreas";
 import { useEffect, useState } from "react";
 import useOffers from "../hooks/Candidate/Offers/useOffers";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import { da } from "date-fns/locale";
 
 function Home() {
   const executed = useRef(false);
@@ -131,6 +129,7 @@ function Home() {
                     </ListItemText>
                   </Link>
                 </ListItem>
+
 
               </Stack>
             ))}

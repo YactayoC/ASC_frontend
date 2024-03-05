@@ -94,8 +94,7 @@ const useAccount = () => {
         documento: string,
     ) => {
         try {
-
-            const response: any = await apiClient.put(`/account/candidate/personal-info`, {
+            const response: any = await apiClient.put(`/account/candidate/update-personal-info`, {
                 postulanteId,
                 nombre,
                 apellidos,

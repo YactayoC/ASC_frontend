@@ -2,10 +2,8 @@ import { Box, Button, FormControl, TextField, Typography } from "@mui/material";
 import theme from '../../../../theme';
 import { useForm } from 'react-hook-form';
 import useAccount from "../../../hooks/Candidate/Account/useAccount";
-import { useNavigate } from "react-router-dom";
 
 const FormChangeVisibleCV = () => {
-    const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm();
     const userInfo = localStorage.getItem("userInfo");
     const user = userInfo ? JSON.parse(userInfo as string) : null;

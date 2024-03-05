@@ -10,39 +10,118 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
     const { getPersonalInformation, updatePersonalinformation } = useAccount();
     const userInfo = localStorage.getItem("userInfo");
     const userInfoJson = JSON.parse(userInfo || "{}");
-    const [selectedOptionDocumentType, setSelectedOptionDocumentType] = useState<any | null>(null);
-    const { register, handleSubmit, setValue, setError, clearErrors, formState: { errors } } = useForm();
+    //NO CONSIDERAR
+    const { register, handleSubmit, setValue, setError, clearErrors, reset, formState: { errors } } = useForm();
 
+    const [selectedOptionCivilStatus, setSelectedOptionCivilStatus] = useState<any | null>(null); // ID ESTADO CIVIL
+    const [optionCivilStatus, setOptionCivilStatus] = useState('');
+    //----
+    const [selectedOptionDocumentType, setSelectedOptionDocumentType] = useState<any | null>(null); // ID  TIPO DOCUMENTO
+
+    const [nacionalidadCandidate, setNacionalidadCandidate] = useState('');
+    const [dniCandidate, setDniCandidate] = useState('');
+    const [nombreCandidate, setNombreCandidate] = useState('');
+    const [apellidosCandidate, setApellidosCandidate] = useState('');
     const [day, setDay] = useState('');
     const [month, setMonth] = useState('');
     const [year, setYear] = useState('');
 
     const handleGetPersonalInfo = async () => {
-        const response = await getPersonalInformation(userInfoJson?.id_user);
-        if (response && response.response) {
-            const data = response.response.data;
-            console.log(response.response.data)
-            setValue('nombre', data.nombre);
-            setValue('apellidos', data.apellidos);
+        const { response } = await getPersonalInformation(userInfoJson?.id_user);
+
+        if (response) {
+            const dataInfo = response.data;
+            console.log(dataInfo)
+
+            const fechaNacimiento = new Date(dataInfo.fecha_nacimiento);
+            const dayInfo = ("0" + fechaNacimiento.getDate()).slice(-2); // Asegura el formato de dos dígitos
+            const monthInfo = ("0" + (fechaNacimiento.getMonth() + 1)).slice(-2); // Meses son de 0 a 11
+            const yearInfo = fechaNacimiento.getFullYear().toString();
+
+            //setNacionalidadCandidate(dataInfo.nacionalidad);
+            setOptionCivilStatus(dataInfo.estado_civil);
+            setDniCandidate(dataInfo.documento);
+            setNombreCandidate(dataInfo.nombre);
+            setApellidosCandidate(dataInfo.apellidos);
+            setDay(dayInfo);
+            setMonth(monthInfo);
+            setYear(yearInfo);
+
+            const estadoCivilObj = estadoCivil.find(ec => ec.label === dataInfo.estado_civil);
+            if (estadoCivilObj) {
+                console.log(estadoCivilObj.label);
+            }
+            const tipoDocumentoObj = tipoDocumento.find(td => td.value === dataInfo.tipo_documento_id);
+            if (tipoDocumentoObj) {
+                console.log(tipoDocumentoObj.value);
+            }
+
+            //QUIERO QUE SELECCIONE EL PRIME ELEMENTO DE NACIONALIDAD
+            const nationalityObj = nationality.find(n => n.value === 1);
+
+            if (nationalityObj) {
+                setNacionalidadCandidate(nationalityObj.label);
+            }
         }
     }
 
     const onSubmitPersonalData = async (data: any) => {
-        handleCloseModalEditDataPersonal();
-        //REALIZAR LA PETICION
-        const response = await updatePersonalinformation(
-            userInfoJson?.id_user,
-            data.nombre,
-            data.apellidos,
-            data.fechaNacimiento,
-            data.estadoCivil,
-            data.tipoDocumento,
-            data.documento
-        );
+        //handleCloseModalEditDataPersonal();
 
-        if (response) {
-            console.log(response);
+        //REALIZAR LA PETICION
+        if (!day || !month || !year) {
+            // Si algún campo está vacío, muestra un error y no continúes
+            setError('fechaNacimiento', {
+                type: 'manual',
+                message: 'Todos los campos de la fecha de nacimiento son requeridos.',
+            });
+            return;
         }
+
+        if (selectedOptionDocumentType === 1 && (!data.documento || data.documento.trim() === '')) {
+            setError('documento', {
+                type: 'manual',
+                message: 'El campo Documento es requerido.',
+            });
+            return; // Previene el envío si el campo documento es requerido y está vacío
+        }
+        if (!selectedOptionDocumentType || data.documento.trim() === '') {
+            data.documento = null;
+        }
+
+        console.log(data);
+        console.log(selectedOptionCivilStatus);
+        console.log(selectedOptionDocumentType);
+        console.log(data.documento);
+        console.log(data.fechaNacimiento);
+        console.log(data.nacionalidad);
+        console.log(data.apellidos);
+        console.log(data.nombre);
+        console.log(data.tipoDocumento);
+        console.log(data.estadoCivil);
+        console.log(userInfoJson?.id_user)
+
+        // const response = await updatePersonalinformation(
+        //     userInfoJson?.id_user,
+        //     data.nombre,
+        //     data.apellidos,
+        //     data.fechaNacimiento,
+        //     selectedOptionCivilStatus,
+        //     selectedOptionDocumentType,
+        //     data.documento || null
+        // );
+
+        // if (response) {
+        //     console.log(response);
+        //     // Actualiza la información del usuario en el localStorage
+        //     const updatedUserInfo = {
+        //         ...userInfoJson,
+        //         nombresC: data.nombre,
+        //         apellidosC: data.apellidos
+        //     };
+
+        //     localStorage.setItem("userInfo", JSON.stringify(updatedUserInfo));
+        // }
     }
 
     const handleClose = () => {
@@ -51,6 +130,7 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
         setDay('');
         setMonth('');
         setYear('');
+        reset()
     };
 
     useEffect(() => {
@@ -120,6 +200,9 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
         { value: 1, label: 'DNI' },
     ]
 
+    const nationality = [
+        { value: 1, label: 'Peruano(a)' }
+    ]
 
     return (
         <Modal
@@ -168,24 +251,24 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
                         <TextField
                             label="Nombres"
                             variant="outlined"
+                            value={nombreCandidate}
                             margin="normal"
                             fullWidth
-                            defaultValue={userInfoJson?.nombresC}
                             {...register("nombre", { required: true })}
                         />
                         <TextField
                             label="Apellidos"
                             variant="outlined"
+                            value={apellidosCandidate}
                             margin="normal"
                             fullWidth
-                            defaultValue={userInfoJson?.apellidosC}
                             {...register("apellidos", { required: true })}
                         />
                         <Autocomplete
                             fullWidth
                             disableClearable
-                            options={['Peruano(a)']}
-                            defaultValue="Peruano(a)"
+                            options={nationality}
+                            value={{ value: 1, label: nacionalidadCandidate }}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
@@ -240,6 +323,7 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
                                         fullWidth
                                         disableClearable
                                         options={dayF}
+                                        value={day}
                                         onChange={(_event, newValue) => setDay(newValue)}
                                         renderInput={(params) => (
                                             <TextField
@@ -255,6 +339,7 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
                                         fullWidth
                                         disableClearable
                                         options={months}
+                                        value={{ value: month, label: month }}
                                         onChange={(_event, newValue) => setMonth(newValue.value)}
                                         renderInput={(params) => (
                                             <TextField
@@ -270,6 +355,7 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
                                         fullWidth
                                         disableClearable
                                         options={years}
+                                        value={year}
                                         onChange={(_event, newValue) => setYear(String(newValue))}
                                         renderInput={(params) => (
                                             <TextField
@@ -294,7 +380,9 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
                                 <Autocomplete
                                     fullWidth
                                     options={estadoCivil}
+                                    value={optionCivilStatus ? { value: Number(), label: optionCivilStatus } : null}
                                     onChange={(_event, value) => {
+                                        setSelectedOptionCivilStatus(value?.label)
                                         setValue('estadoCivil', value?.value);
                                     }}
                                     renderInput={(params) => (
@@ -306,7 +394,6 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
                                             fullWidth
                                         />
                                     )}
-
                                 />
                             </Box>
                         </Box>
@@ -320,10 +407,12 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
                     >
                         <Autocomplete
                             fullWidth
+                            value={selectedOptionDocumentType ? { value: selectedOptionDocumentType, label: 'DNI' } : null}
                             options={tipoDocumento}
                             onChange={(_event, value) => {
-                                setSelectedOptionDocumentType(value?.label)
+                                setSelectedOptionDocumentType(value?.value)
                                 setValue('tipoDocumento', value?.value);
+                                clearErrors('documento');
                             }}
                             renderInput={(params) => (
                                 <TextField
@@ -340,9 +429,10 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
                             label="Documento"
                             variant="outlined"
                             margin="normal"
+                            value={dniCandidate}
                             disabled={!selectedOptionDocumentType}
                             fullWidth
-                            {...register("documento", { required: true })}
+                            {...register("documento", { required: false })}
                         />
                     </Box>
                     <Button type="submit" variant="contained" color="primary">

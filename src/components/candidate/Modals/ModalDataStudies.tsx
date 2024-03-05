@@ -11,7 +11,7 @@ const ModalDataStudies = (props: {
     const { openModalStudy, handleCloseModalEditDataStudies } = props;
     const userInfo = localStorage.getItem("userInfo");
     const userInfoJson = JSON.parse(userInfo || "{}");
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit} = useForm();
     const { insertStudiesInformation, } = useAccount();
 
     const onSubmitStudiesData = async (data: any) => {

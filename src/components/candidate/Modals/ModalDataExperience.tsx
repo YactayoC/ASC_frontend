@@ -13,7 +13,7 @@ const ModalDataExperience = (props: {
   const { openModalExperience, handleCloseModalEditDataExperience } = props;
   const userInfo = localStorage.getItem("userInfo");
   const userInfoJson = JSON.parse(userInfo || "{}");
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit} = useForm();
   const { insertExperienceInformation, } = useAccount();
 
   const onSubmitExperienceData = async (data: any) => {

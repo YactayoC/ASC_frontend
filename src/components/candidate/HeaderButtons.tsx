@@ -192,11 +192,8 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
                 Notificaciones
               </MenuItem>
               <MenuItem onClick={() => {
-                localStorage.removeItem("isCompany");
-                localStorage.removeItem("isAuthenticated");
-                localStorage.removeItem("userInfo");
-                localStorage.removeItem("searchValue")
                 setIsAuthenticated(!isAuthenticated);
+                localStorage.clear();
                 handleClose("/")
               }}>
                 Cerrar sesión
@@ -222,7 +219,10 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => navigate("/candidate/my-applications")}
+              onClick={() => {
+                navigate("/candidate/my-applications");
+                localStorage.removeItem("searchValue")
+              }}
               sx={{
                 display: "flex",
                 columnGap: "0.2rem",
@@ -234,7 +234,10 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => navigate("/candidate/alerts")}
+              onClick={() => {
+                navigate("/candidate/alerts");
+                localStorage.removeItem("searchValue")
+              }}
               sx={{
                 display: "flex",
                 gap: "0.2rem",
@@ -296,10 +299,7 @@ const HeaderButtons = ({ showLogo = false }: Props) => {
               </MenuItem>
               <MenuItem onClick={() => {
                 setIsAuthenticated(!isAuthenticated);
-                localStorage.removeItem("userInfo");
-                localStorage.removeItem("isCompany");
-                localStorage.removeItem("searchValue")
-                localStorage.removeItem("isAuthenticated");
+                localStorage.clear();
                 handleClose("/")
               }}>
                 Cerrar sesión

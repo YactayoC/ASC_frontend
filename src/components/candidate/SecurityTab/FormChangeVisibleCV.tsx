@@ -6,7 +6,7 @@ import useAccount from "../../../hooks/Candidate/Account/useAccount";
 
 const FormDeactivateAccount = () => {
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit} = useForm();
     const [cvVisible, setCvVisible] = useState(1);
     const userInfo = localStorage.getItem("userInfo");
     const user = userInfo ? JSON.parse(userInfo as string) : null;

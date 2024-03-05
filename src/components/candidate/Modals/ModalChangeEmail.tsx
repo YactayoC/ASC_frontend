@@ -11,7 +11,7 @@ const ModalChangeEmail = (props: {
     const { openModalEmail, handleCloseModalChangeEmail } = props;
     const userInfo = localStorage.getItem("userInfo");
     const userInfoJson = JSON.parse(userInfo || "{}");
-    const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const { changeEmailCandidate } = useAccount();
 
     const onSubmitChangeEmail = async (data: any) => {
