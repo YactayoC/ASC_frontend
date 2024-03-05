@@ -89,7 +89,7 @@ const useAccount = () => {
         nombre: string,
         apellidos: string,
         fechaNacimiento: string,
-        estadoCivil: Number,
+        estadoCivil: string,
         tipoDocumentoId: Number,
         documento: string,
     ) => {
