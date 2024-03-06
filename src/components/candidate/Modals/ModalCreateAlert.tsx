@@ -59,6 +59,7 @@ const ModalUpdateStatusPostulation = (props: {
             );
 
             if (response.ok) {
+                reset();
                 props.onAlertSaved();
             }
         }

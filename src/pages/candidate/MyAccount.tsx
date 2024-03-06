@@ -9,13 +9,14 @@ import {
 
 import theme from "../../../theme";
 import HeaderButtons from "../../components/candidate/HeaderButtons";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { EditOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import ModalChangeEmail from "../../components/candidate/Modals/ModalChangeEmail";
 import FormChangePassword from "../../components/candidate/SecurityTab/FormChangePassword";
 import FormDeactivateAccount from "../../components/candidate/SecurityTab/FormDeactivateAccount";
 import FormChangeVisibleCV from "../../components/candidate/SecurityTab/FormChangeVisibleCV";
+import useAccount from "../../hooks/Candidate/Account/useAccount";
 
 const MyAccount = () => {
   const navigate = useNavigate();
@@ -23,6 +24,8 @@ const MyAccount = () => {
   const user = userInfo ? JSON.parse(userInfo as string) : null;
   const [tabValue, setTabValue] = useState(0);
   const [openModalEmail, setOpenModalEmail] = useState(false);
+  const { getIncompletePersonalInformation } = useAccount();
+  const [personalIncompleteInformation, setPersonalIncompleteInformation] = useState<any>({});
 
   const handleOpenModalEmail = () => {
     setOpenModalEmail(true);
@@ -38,6 +41,27 @@ const MyAccount = () => {
 
   const createdAt = user?.created_at;
   const formattedDate = createdAt ? new Date(createdAt).toLocaleDateString('es-ES') : "";
+
+  const isMounted = useRef(true);
+
+  const handleGetIncompletePersonalInformation = async () => {
+    const response = await getIncompletePersonalInformation(user?.id_user);
+    const dataPersonalInformation = response.response.data;
+    setPersonalIncompleteInformation(dataPersonalInformation);
+    //console.log(dataPersonalInformation)
+    //setSelectedFile(dataPersonalInformation.cv_visible);
+    return
+  }
+
+  useEffect(() => {
+    if (isMounted.current) {
+      handleGetIncompletePersonalInformation();
+    }
+
+    return () => {
+      isMounted.current = false;
+    }
+  }, [])
 
   return (
     <>
@@ -101,7 +125,7 @@ const MyAccount = () => {
                 fontSize: "1.2rem",
               }}
             >
-              {user?.nombresC}, aquí podrás gestionar tu cuenta.
+              {personalIncompleteInformation.nombre}, aquí podrás gestionar tu cuenta.
             </Typography>
 
             <Box
@@ -140,10 +164,10 @@ const MyAccount = () => {
                   }}
                 >
                   <Typography variant="h5" gutterBottom>
-                    {user?.nombresC} {user?.apellidosC}
+                    {personalIncompleteInformation.nombre} {personalIncompleteInformation.apellidos}
                   </Typography>
                   <IconButton onClick={() => {
-                    navigate("/candidate/my-cv");
+                    console.log("first")
                   }}>
                     <EditOutlined />
                   </IconButton>
@@ -156,7 +180,7 @@ const MyAccount = () => {
                   }}
                 >
                   <Typography variant="body1" gutterBottom>
-                    {user?.emailCandidate}
+                    {personalIncompleteInformation.email}
                   </Typography>
                   <IconButton onClick={handleOpenModalEmail}>
                     <EditOutlined />

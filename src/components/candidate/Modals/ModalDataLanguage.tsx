@@ -13,7 +13,7 @@ const ModalDataLanguage = (props: {
     const { openModalLanguage, handleCloseModalEditDataLanguage } = props;
     const userInfo = localStorage.getItem("userInfo");
     const userInfoJson = JSON.parse(userInfo || "{}");
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, reset } = useForm();
     const { insertLanguagesInformation, } = useAccount();
     const [selectedLanguageId, setSelectedLanguageId] = useState<number | null>(null);
 
@@ -26,7 +26,7 @@ const ModalDataLanguage = (props: {
                 selectedLanguageId,
                 data.nivel
             );
-
+            reset();
             props.onLanguageSave();
         }
     }
@@ -101,7 +101,7 @@ const ModalDataLanguage = (props: {
                                     variant="outlined"
                                     margin="normal"
                                     fullWidth
-                                    {...register("idioma", { required: true }) }
+                                    {...register("idioma", { required: true })}
                                 />
                             )}
                         />

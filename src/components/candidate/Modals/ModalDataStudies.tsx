@@ -11,7 +11,7 @@ const ModalDataStudies = (props: {
     const { openModalStudy, handleCloseModalEditDataStudies } = props;
     const userInfo = localStorage.getItem("userInfo");
     const userInfoJson = JSON.parse(userInfo || "{}");
-    const { register, handleSubmit} = useForm();
+    const { register, handleSubmit, reset } = useForm();
     const { insertStudiesInformation, } = useAccount();
 
     const onSubmitStudiesData = async (data: any) => {
@@ -25,6 +25,8 @@ const ModalDataStudies = (props: {
             data.añoFin
         );
 
+        //LIMPIAR CAMPOS DEL MODAL
+        reset();
         props.onStudtySave();
     }
 

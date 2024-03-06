@@ -14,7 +14,7 @@ const FormDeactivateAccount = () => {
 
     const convertBooleanToNumber = (value: boolean) => { return value ? 1 : 0; }
 
-    console.log("cvVisible", cvVisible)
+    //console.log("cvVisible", cvVisible)
 
     const onSubmitVisibleCV = async (data: any) => {
         if (convertBooleanToNumber(user?.cv_visible) !== Number(data.visibleCV)) {

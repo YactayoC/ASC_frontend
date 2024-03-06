@@ -110,7 +110,7 @@ const ModalUpdateAlert = (props: {
                         label="Puesto"
                         variant="outlined"
                         margin="normal"
-                        defaultValue={puestoInteres}
+                        value={puestoInteres}
                         type="text"
                         fullWidth
                         {...register("puesto", { required: true })}

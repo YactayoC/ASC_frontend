@@ -158,6 +158,25 @@ const useAccount = () => {
         }
     }
 
+    //candidate/get-types-document
+    const getTypesDocument = async () => {
+        try {
+            const response: any = await apiClient.get(`/account/candidate/get-types-document`);
+
+            const responseData = response.data;
+
+            return {
+                response: responseData,
+                status: response.status,
+                ok: true
+            };
+        }
+        catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
     //SECCION EXPEREINCIA 
     const getExperienceInformation = async (postulanteId: Number) => {
         try {
@@ -231,7 +250,7 @@ const useAccount = () => {
 
     const insertStudiesInformation = async (
         postulanteId: Number,
-        descripcion_estudio: string,
+        descripcionEstudio: string,
         titulo: string,
         institucion: string,
         anio_inicio: Number,
@@ -240,7 +259,7 @@ const useAccount = () => {
         try {
             const response: any = await apiClient.post(`/account/candidate/education-info`, {
                 postulanteId,
-                descripcion_estudio,
+                descripcionEstudio,
                 titulo,
                 institucion,
                 anio_inicio,
@@ -319,7 +338,8 @@ const useAccount = () => {
         getLanguagesInformation,
         insertLanguagesInformation,
         changeEmailCandidate,
-        getIncompletePersonalInformation
+        getIncompletePersonalInformation,
+        getTypesDocument
     }
 }
 

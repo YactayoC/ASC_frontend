@@ -6,17 +6,19 @@ import {
   Container,
   IconButton,
   FormControl,
+  InputAdornment,
 } from "@mui/material";
 
-import { ArrowBack } from "@mui/icons-material";
+import { ArrowBack, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import theme from "../../../../theme";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { LoginForm } from "../../../interfaces/Auth";
 import useAuth from "../../../hooks/Auth/useAuth";
+import { useState } from "react";
 
 const LoginComp = () => {
-  //const [dataForm, setDataForm] = useState<LoginForm>({} as LoginForm);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { loginCompany } = useAuth();
 
@@ -48,6 +50,14 @@ const LoginComp = () => {
       });
     }
   }
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleMouseDownPassword = (event: any) => {
+    event.preventDefault();
+  };
 
   return (
     <>
@@ -145,27 +155,32 @@ const LoginComp = () => {
             <Typography variant="h5" align="left" gutterBottom>
               Ingresa tu contraseña
             </Typography>
-            <Box>
-              <TextField
-                label="Contraseña"
-                variant="outlined"
-                fullWidth
-                type="password"
-                {...register("password", {
-                  required: "Este campo es requerido",
-                  minLength: {
-                    value: 1,
-                    message: "La contraseña debe tener al menos 1 caracteres",
-                  },
-                })
-                }
-              />
-              {errors.password && (
-                <Typography variant="caption" color="red">
-                  {errors.password.message}
-                </Typography>
-              )}
-            </Box>
+            <TextField
+              label="Contraseña"
+              variant="outlined"
+              fullWidth
+              type={showPassword ? "text" : "password"}
+              {...register("password", {
+                required: "Debes ingresar una contraseña",
+                minLength: {
+                  value: 6, // Asegúrate de que el valor mínimo coincida con el mensaje de error
+                  message: "La contraseña debe tener al menos 6 caracteres",
+                },
+              })}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
           </Box>
 
           <Button variant="contained" color="primary" type="submit" onClick={(e) => {

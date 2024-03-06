@@ -13,7 +13,7 @@ const ModalDataExperience = (props: {
   const { openModalExperience, handleCloseModalEditDataExperience } = props;
   const userInfo = localStorage.getItem("userInfo");
   const userInfoJson = JSON.parse(userInfo || "{}");
-  const { register, handleSubmit} = useForm();
+  const { register, handleSubmit, reset} = useForm();
   const { insertExperienceInformation, } = useAccount();
 
   const onSubmitExperienceData = async (data: any) => {
@@ -31,6 +31,7 @@ const ModalDataExperience = (props: {
       data.añoFin
     );
 
+    reset();
     props.onExperienceSaved();
   }
 

@@ -159,13 +159,6 @@ const MyCV = () => {
     }
   }, [])
 
-  // useEffect(() => {
-  //   const fileDetails = localStorage.getItem('selectedFileDetails');
-  //   if (fileDetails) {
-  //     setSelectedFile(JSON.parse(fileDetails));
-  //   }
-  // }, []);
-
   return (
     <>
       <HeaderButtons showLogo={true} />
@@ -653,7 +646,7 @@ const MyCV = () => {
             }}
           >
             <Typography variant="h5" gutterBottom>
-              {userInfoJson?.nombresC} {userInfoJson?.apellidosC}
+              {personalIncompleteInformation.nombre} {personalIncompleteInformation.apellidos}
             </Typography>
 
             <Box
