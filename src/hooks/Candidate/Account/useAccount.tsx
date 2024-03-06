@@ -111,6 +111,9 @@ const useAccount = () => {
         estadoCivil: string,
         tipoDocumentoId: Number,
         documento: string,
+        descripcionPerfil: string,
+        numero: string,
+        direccion: string
     ) => {
         try {
             const response: any = await apiClient.put(`/account/candidate/update-personal-info`, {
@@ -120,7 +123,10 @@ const useAccount = () => {
                 fechaNacimiento,
                 estadoCivil,
                 tipoDocumentoId,
-                documento
+                documento,
+                descripcionPerfil,
+                numero,
+                direccion
             });
 
             const responseData = response.data;

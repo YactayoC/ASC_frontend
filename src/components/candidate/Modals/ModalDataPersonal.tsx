@@ -23,7 +23,9 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
     const [dniCandidate, setDniCandidate] = useState('');
     const [nombreCandidate, setNombreCandidate] = useState('');
     const [apellidosCandidate, setApellidosCandidate] = useState('');
-
+    const [phoneCandidate, setPhoneCandidate] = useState('');
+    const [addressCandidate, setAddressCandidate] = useState('');
+    const [descriptionProfileCandidate, setDescriptionProfileCandidate] = useState('');
     const [dataDocumentType, setDataDocumentType] = useState<any>([]);
 
     const [day, setDay] = useState<any>()
@@ -38,6 +40,7 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
 
         if (response) {
             const dataInfo = response.data;
+
             console.log(dataInfo)
 
             if (dataInfo.fecha_nacimiento && Date.parse(dataInfo.fecha_nacimiento)) {
@@ -45,8 +48,6 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
                 const dayInfo = new Date(fechaNacimiento).getDate()
                 const monthInfo = new Date(fechaNacimiento).getMonth() + 1
                 const yearInfo = new Date(fechaNacimiento).getFullYear()
-
-                console.log(dayInfo, monthInfo, yearInfo)
 
                 setDay(dayInfo);
                 setMonth(monthInfo);
@@ -71,7 +72,9 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
             //setNacionalidadCandidate(dataInfo.nacionalidad);
             setOptionCivilStatus(dataInfo.estado_civil);
             setDniCandidate(dataInfo.documento);
-
+            setPhoneCandidate(dataInfo.numero);
+            setAddressCandidate(dataInfo.direccion);
+            setDescriptionProfileCandidate(dataInfo.descripcion_perfil);
             setNombreCandidate(dataInfo.nombre);
             setApellidosCandidate(dataInfo.apellidos);
 
@@ -83,7 +86,6 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
             const tipoDocumentoObj = responseDocumentType.data.find((td: any) => td.id === dataInfo.tipo_documento_id);
             if (tipoDocumentoObj) {
                 setSelectedOptionDocumentTypeId(tipoDocumentoObj.id);
-                console.log(tipoDocumentoObj.id)
             }
 
             //QUIERO QUE SELECCIONE EL PRIME ELEMENTO DE NACIONALIDAD
@@ -114,7 +116,10 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
             fechaNacimientoDateFormat !== initialFormValues.fechaNacimiento ||
             optionCivilStatus !== initialFormValues.estadoCivil ||
             selectedOptionDocumentTypeId !== initialFormValues.tipoDocumentoId ||
-            data.documento !== initialFormValues.documento;
+            data.documento !== initialFormValues.documento ||
+            phoneCandidate !== initialFormValues.numero ||
+            addressCandidate !== initialFormValues.direccion ||
+            descriptionProfileCandidate !== initialFormValues.descripcionPerfil;
 
         if (selectedOptionDocumentTypeId && (!data.documento || data.documento.trim() === '')) {
             setError('documento', {
@@ -141,7 +146,10 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
             fechaNacimientoDateFormat,
             optionCivilStatus,
             Number(selectedOptionDocumentTypeId),
-            dniCandidate
+            dniCandidate,
+            descriptionProfileCandidate,
+            phoneCandidate,
+            addressCandidate
         );
 
         if (response) {
@@ -164,6 +172,7 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
         setSelectedOptionDocumentType('');
         setSelectedOptionDocumentTypeId('');
         setDay('');
+        setPhoneCandidate('');
         setMonth('');
         setYear('');
         reset()
@@ -336,6 +345,36 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
                     <Box
                         sx={{
                             display: "flex",
+                            columnGap: "1rem",
+                            alignItems: "center",
+                        }}
+                    >
+                        <TextField
+                            label="Celular"
+                            variant="outlined"
+                            margin="normal"
+                            value={phoneCandidate}
+                            sx={{
+                                width: "60%",
+                            }}
+                            //value={nacionalidadCandidate}
+                            fullWidth
+                            {...register("celular", { required: false })}
+                            onChange={(e) => setPhoneCandidate(e.target.value)}
+                        />
+                        <TextField
+                            label="Dirección"
+                            variant="outlined"
+                            margin="normal"
+                            value={addressCandidate}
+                            fullWidth
+                            {...register("direccion", { required: false })}
+                            onChange={(e) => setAddressCandidate(e.target.value)}
+                        />
+                    </Box>
+                    <Box
+                        sx={{
+                            display: "flex",
                             flexDirection: "column",
                         }}
                     >
@@ -347,7 +386,8 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
                         <Box
                             sx={{
                                 display: "flex",
-                                columnGap: "3rem",
+                                columnGap: "1.8rem",
+                                width: "100%",
                                 alignItems: "center",
                                 [theme.breakpoints.down("sm")]: {
                                     flexDirection: "column",
@@ -358,98 +398,86 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
                             <Box
                                 sx={{
                                     display: "flex",
-                                    flexDirection: "column",
-                                    width: "100%",
-                                }}
-
-                            >
-                                <Box
-                                    sx={{
-                                        display: "flex",
-                                        width: "100%",
-                                        columnGap: "1rem",
-                                    }}
-                                >
-                                    <Autocomplete
-                                        fullWidth
-                                        disableClearable
-                                        options={dayF}
-                                        value={String(
-                                            day < 10 ? `0${day}` : `${day}`
-                                        )}
-                                        onChange={(_event, newValue) => setDay(newValue)}
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                label="Día"
-                                                variant="outlined"
-                                                margin="normal"
-                                                fullWidth
-                                            />
-                                        )}
-                                    />
-                                    <Autocomplete
-                                        fullWidth
-                                        disableClearable
-                                        options={months}
-                                        value={months.find(m => m.value === Number(month)) || { value: 0, label: '' }}
-                                        onChange={(_event, newValue) => setMonth(newValue.value || '')}
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                label="Mes"
-                                                variant="outlined"
-                                                margin="normal"
-                                                fullWidth
-                                            />
-                                        )}
-                                    />
-                                    <Autocomplete
-                                        fullWidth
-                                        disableClearable
-                                        options={years}
-                                        value={String(year)}
-                                        onChange={(_event, newValue) => setYear(String(newValue || ''))}
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                label="Año"
-                                                variant="outlined"
-                                                margin="normal"
-                                                fullWidth
-                                            />
-                                        )}
-
-                                    />
-                                </Box>
-                            </Box>
-                            <Box
-                                sx={{
-                                    display: "flex",
                                     width: "100%",
                                     columnGap: "1rem",
                                 }}
                             >
-
                                 <Autocomplete
-                                    fullWidth
-                                    options={estadoCivil}
-                                    getOptionLabel={(option) => option.label} // Define cómo obtener la etiqueta de cada opción
-                                    value={estadoCivil.find(ec => ec.label === optionCivilStatus) || null} // Establece el valor actual basado en la etiqueta
-                                    onChange={(_event, newValue) => {
-                                        setOptionCivilStatus(newValue?.label || ''); // Actualiza el estado con la etiqueta de la nueva selección
+                                    sx={{
+                                        width: "20%",
                                     }}
+                                    disableClearable
+                                    options={dayF}
+                                    value={String(
+                                        day < 10 ? `0${day}` : `${day}`
+                                    )}
+                                    onChange={(_event, newValue) => setDay(newValue)}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
-                                            label="Estado Civil"
+                                            label="Día"
                                             variant="outlined"
                                             margin="normal"
                                             fullWidth
                                         />
                                     )}
                                 />
+                                <Autocomplete
+                                    fullWidth
+                                    disableClearable
+                                    options={months}
+                                    value={months.find(m => m.value === Number(month)) || { value: 0, label: '' }}
+                                    onChange={(_event, newValue) => setMonth(newValue.value || '')}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Mes"
+                                            variant="outlined"
+                                            margin="normal"
+                                            fullWidth
+                                        />
+                                    )}
+                                />
+                                <Autocomplete
+                                    sx={{
+                                        width: "70%",
+                                    }}
+                                    disableClearable
+                                    options={years}
+                                    value={String(year)}
+                                    onChange={(_event, newValue) => setYear(String(newValue || ''))}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Año"
+                                            variant="outlined"
+                                            margin="normal"
+                                            fullWidth
+                                        />
+                                    )}
+
+                                />
                             </Box>
+                            <Autocomplete
+                                sx={{
+                                    width: "40%",
+                                }}
+                                options={estadoCivil}
+                                getOptionLabel={(option) => option.label} // Define cómo obtener la etiqueta de cada opción
+                                value={estadoCivil.find(ec => ec.label === optionCivilStatus) || null} // Establece el valor actual basado en la etiqueta
+                                onChange={(_event, newValue) => {
+                                    setOptionCivilStatus(newValue?.label || ''); // Actualiza el estado con la etiqueta de la nueva selección
+                                }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Estado Civil"
+                                        variant="outlined"
+                                        margin="normal"
+                                        fullWidth
+                                    />
+                                )}
+                            />
                         </Box>
                     </Box>
                     <Box
@@ -490,6 +518,17 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
                             onChange={(e) => setDniCandidate(e.target.value)}
                         />
                     </Box>
+                    <TextField
+                        multiline
+                        rows={6}
+                        label="Descripción de perfil"
+                        variant="outlined"
+                        fullWidth
+                        value={descriptionProfileCandidate}
+                        {...register("descripcionPerfil", { required: false })}
+                        onChange={(e) => setDescriptionProfileCandidate(e.target.value)}
+                    />
+
                     <Button type="submit" variant="contained" color="primary">
                         Guardar
                     </Button>
