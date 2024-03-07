@@ -1,4 +1,5 @@
-import { Box, Button, FormControl, Modal, TextField, Typography } from "@mui/material";
+import { Box, Button, FormControl, IconButton, Modal, TextField, Typography } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 import { useForm } from "react-hook-form";
 import useAccount from "../../../hooks/Candidate/Account/useAccount";
 import { useNavigate } from "react-router-dom";
@@ -54,8 +55,21 @@ const ModalChangeEmail = (props: {
                     boxShadow: 24,
                     padding: "2rem",
                     paddingBlock: "3rem",
+                    borderRadius: 1,
                 }}
             >
+                <IconButton
+                    aria-label="close"
+                    onClick={handleClose}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
                 <Typography variant="h6" id="modal-title" gutterBottom align="center">
                     Modificar email
                 </Typography>

@@ -1,9 +1,10 @@
-import { Autocomplete, Box, Button, FormControl, InputAdornment, Modal, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, FormControl, IconButton, InputAdornment, Modal, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { seedLocations } from "../../../seed/locations";
 import { useEffect, useState } from "react";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import useAlerts from "../../../hooks/Candidate/Alerts/useAlerts";
+import CloseIcon from '@mui/icons-material/Close';
 
 const ModalUpdateStatusPostulation = (props: {
     openModalUpdateStatus: boolean,
@@ -83,8 +84,21 @@ const ModalUpdateStatusPostulation = (props: {
                     boxShadow: 24,
                     padding: "2rem",
                     paddingBlock: "3rem",
+                    borderRadius: 1,
                 }}
             >
+                <IconButton
+                    aria-label="close"
+                    onClick={handleClose}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
                 <Typography variant="h6" id="modal-title" gutterBottom align="center">
                     ¿Qué ofertas desea recibir?
                 </Typography>

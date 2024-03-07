@@ -62,7 +62,14 @@ const MyCV = () => {
   const { uploadFile } = useFiles();
   const userInfo = localStorage.getItem("userInfo");
   const userInfoJson = JSON.parse(userInfo || "{}");
-  const { getExperienceInformation, getStudiesInformation, getLanguagesInformation, getIncompletePersonalInformation } = useAccount();
+  const {
+    getExperienceInformation,
+    getStudiesInformation,
+    getLanguagesInformation,
+    getIncompletePersonalInformation,
+    deleteExperienceInformation,
+    deleteStudiesInformation,
+    deleteLanguagesInformation } = useAccount();
 
   const handleOpenModalEditDataPersonal = async () => {
     setOpenModalDataPersonal(true);
@@ -94,7 +101,7 @@ const MyCV = () => {
     //HARÁ LA PETICIÓN PARA LISTAR LAS EXPERIENCIAS
     const repsonse = await getExperienceInformation(userInfoJson?.id_user);
     setExperiencesData(repsonse.response.data);
-    console.log(repsonse.response.data)
+    // console.log(repsonse.response.data)
   }
 
   const handleGetStudies = async () => {
@@ -117,10 +124,11 @@ const MyCV = () => {
     if (file) {
       setSelectedFile({ name: file.name, size: file.size });
 
-      console.log(file, userId)
+      //console.log(file, userId)
 
-      const response = await uploadFile(file, userId);
-      console.log(response);
+      //const response = await uploadFile(file, userId);
+      await uploadFile(file, userId);
+      //console.log(response);
 
       localStorage.setItem('selectedFileDetails', JSON.stringify({
         name: file.name,
@@ -137,6 +145,21 @@ const MyCV = () => {
     setSelectedFile(null);
     localStorage.removeItem('selectedFileDetails');
   };
+
+  const handleDelteExperienceInfo = async (id: number) => {
+    await deleteExperienceInformation(id);
+    setExperiencesData(experiencesData.filter((experience: any) => experience.id !== id));
+  }
+
+  const handleDeleteStudiesInfo = async (id: number) => {
+    await deleteStudiesInformation(id);
+    setStudiesData(studiesData.filter((study: any) => study.id !== id));
+  }
+
+  const handleDeleteLanguagesInfo = async (id: number) => {
+    await deleteLanguagesInformation(id);
+    setLanguagesData(languagesData.filter((language: any) => language.id !== id));
+  }
 
   const handleGetIncompletePersonalInformation = async () => {
     const response = await getIncompletePersonalInformation(userInfoJson?.id_user);
@@ -447,93 +470,116 @@ const MyCV = () => {
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  rowGap: "0.5rem",
+                  rowGap: "1rem",
                 }}
               >
+                {/*  */}
                 <Box
+                  display="flex"
+                  alignItems="start"
+                  gap={"2rem"}
                   sx={{
-                    display: "flex",
-                    flexDirection: "row",
                     [theme.breakpoints.down("sm")]: {
                       flexDirection: "column",
+                      gap: "1rem",
                     },
                   }}
                 >
                   <Box
                     sx={{
                       display: "flex",
-                      alignItems: "center",
+                      flexDirection: "column",
+                      rowGap: "0.5rem",
+                      [theme.breakpoints.down("sm")]: {
+                        flexDirection: "column",
+                      },
                     }}
                   >
-                    <IconButton>
-                      <MailOutline
-                        sx={{
-                          fontSize: "2rem",
-                        }}
-                      />
-                    </IconButton>
-                    <Typography
-                      variant="body1"
-                      gutterBottom
+
+                    <Box
                       sx={{
-                        marginBottom: "0",
+                        display: "flex",
+                        alignItems: "center",
                       }}
                     >
-                      {personalIncompleteInformation.email}
-                    </Typography>
+                      <IconButton>
+                        <MailOutline
+                          sx={{
+                            fontSize: "2rem",
+                          }}
+                        />
+                      </IconButton>
+                      <Typography
+                        variant="body1"
+                        gutterBottom
+                        sx={{
+                          marginBottom: "0",
+                        }}
+                      >
+                        {personalIncompleteInformation.email}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <IconButton>
+                        <PhoneOutlined
+                          sx={{
+                            fontSize: "2rem",
+                          }}
+                        />
+                      </IconButton>
+                      <Typography
+                        variant="body1"
+                        gutterBottom
+                        sx={{
+                          marginBottom: "0",
+                        }}
+                      >
+                        {personalIncompleteInformation.numero}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <IconButton>
+                        <LocationOnOutlined
+                          sx={{
+                            fontSize: "2rem",
+                          }}
+                        />
+                      </IconButton>
+                      <Typography
+                        variant="body1"
+                        gutterBottom
+                        sx={{
+                          marginBottom: "0",
+                        }}
+                      >
+                        {personalIncompleteInformation.direccion}
+                      </Typography>
+                    </Box>
                   </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
+
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={handleOpenModalEditDataPersonal}
                   >
-                    <IconButton>
-                      <PhoneOutlined
-                        sx={{
-                          fontSize: "2rem",
-                        }}
-                      />
-                    </IconButton>
-                    <Typography
-                      variant="body1"
-                      gutterBottom
-                      sx={{
-                        marginBottom: "0",
-                      }}
-                    >
-                      {personalIncompleteInformation.numero}
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <IconButton>
-                      <LocationOnOutlined
-                        sx={{
-                          fontSize: "2rem",
-                        }}
-                      />
-                    </IconButton>
-                    <Typography
-                      variant="body1"
-                      gutterBottom
-                      sx={{
-                        marginBottom: "0",
-                      }}
-                    >
-                      {personalIncompleteInformation.direccion}
-                    </Typography>
-                  </Box>
+                    Editar
+                  </Button>
                 </Box>
 
                 <TextField
                   label="Descripción del perfil"
                   variant="outlined"
-                  value={personalIncompleteInformation.descripcion}
+                  value={personalIncompleteInformation.descripcion_perfil}
                   multiline
                   sx={{
                     width: "40rem",
@@ -600,30 +646,48 @@ const MyCV = () => {
                         </TimelineSeparator>
                         <TimelineContent>
                           <Box
-                            mt={2}
-                            p={2}
-                            borderRadius={4}
-                            width={"70%"}
-                            display={"flex"}
-                            flexDirection={"column"}
-                            gap={"1rem"}
-                            margin={"0"}
-                            padding={"0.7rem  "}
+                            sx={{
+                              display: "flex",
+                              flexDirection: "row",
+                              columnGap: "10rem",
+                              width: "100%",
+                              height: "100%",
+                            }}
                           >
-                            <Box>
+                            <Box
+                              mt={2}
+                              p={2}
+                              borderRadius={4}
+                              width={"70%"}
+                              display={"flex"}
+                              flexDirection={"column"}
+                              gap={"1rem"}
+                              margin={"0"}
+                              padding={"0.7rem"}
+                            >
+                              <Box>
+                                <Typography variant="body1">
+                                  <strong> {experience.cargo}</strong>
+                                </Typography>
+                                <Typography variant="body1" color={"#808080"}>
+                                  {experience.empresa}
+                                </Typography>
+                              </Box>
                               <Typography variant="body1">
-                                <strong> {experience.cargo}</strong>
+                                {experience.funciones}
                               </Typography>
-                              <Typography variant="body1" color={"#808080"}>
-                                {experience.empresa}
+                              <Typography>
+                                <strong>Periodo: </strong> {experience.anio_inicio} - {experience.anio_fin}
                               </Typography>
                             </Box>
-                            <Typography variant="body1">
-                              {experience.funciones}
-                            </Typography>
-                            <Typography>
-                              <strong>Periodo: </strong> {experience.anio_inicio} - {experience.anio_fin}
-                            </Typography>
+                            <IconButton
+                              onClick={() => handleDelteExperienceInfo(experience.id)}
+                              sx={{
+                                height: "25%",
+                              }}
+                            >
+                              <DeleteOutline />
+                            </IconButton>
                           </Box>
                         </TimelineContent>
                       </TimelineItem>
@@ -680,83 +744,82 @@ const MyCV = () => {
                 <Box
                   sx={{
                     display: "flex",
-                    flexDirection: "row",
-                    [theme.breakpoints.down("sm")]: {
-                      flexDirection: "column",
-                    },
+                    alignItems: "center",
                   }}
                 >
-                  <Box
+                  <IconButton>
+                    <MailOutline
+                      sx={{
+                        fontSize: "2rem",
+                      }}
+                    />
+                  </IconButton>
+                  <Typography
+                    variant="body1"
+                    gutterBottom
                     sx={{
-                      display: "flex",
-                      alignItems: "center",
+                      marginBottom: "0",
                     }}
                   >
-                    <IconButton>
-                      <MailOutline
-                        sx={{
-                          fontSize: "2rem",
-                        }}
-                      />
-                    </IconButton>
-                    <Typography
-                      variant="body1"
-                      gutterBottom
+                    {personalIncompleteInformation.email}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <IconButton>
+                    <PhoneOutlined
                       sx={{
-                        marginBottom: "0",
+                        fontSize: "2rem",
                       }}
-                    >
-                      {personalIncompleteInformation.email}
-                    </Typography>
-                  </Box>
-                  <Box
+                    />
+                  </IconButton>
+                  <Typography
+                    variant="body1"
+                    gutterBottom
                     sx={{
-                      display: "flex",
-                      alignItems: "center",
+                      marginBottom: "0",
                     }}
                   >
-                    <IconButton>
-                      <PhoneOutlined
-                        sx={{
-                          fontSize: "2rem",
-                        }}
-                      />
-                    </IconButton>
-                    <Typography
-                      variant="body1"
-                      gutterBottom
+                    {personalIncompleteInformation.numero}
+                  </Typography>
+                </Box>
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <IconButton>
+                    <LocationOnOutlined
                       sx={{
-                        marginBottom: "0",
+                        fontSize: "2rem",
                       }}
-                    >
-                      {personalIncompleteInformation.numero}
-                    </Typography>
-                  </Box>
-                  <Box
+                    />
+                  </IconButton>
+                  <Typography
+                    variant="body1"
+                    gutterBottom
                     sx={{
-                      display: "flex",
-                      alignItems: "center",
+                      marginBottom: "0",
                     }}
                   >
-                    <IconButton>
-                      <LocationOnOutlined
-                        sx={{
-                          fontSize: "2rem",
-                        }}
-                      />
-                    </IconButton>
-                    <Typography
-                      variant="body1"
-                      gutterBottom
-                      sx={{
-                        marginBottom: "0",
-                      }}
-                    >
-                      {personalIncompleteInformation.direccion}
-                    </Typography>
-                  </Box>
+                    {personalIncompleteInformation.direccion}
+                  </Typography>
                 </Box>
               </Box>
+
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleOpenModalEditDataPersonal}
+              >
+                Editar
+              </Button>
             </Box>
 
             <Box sx={{}}>
@@ -821,31 +884,50 @@ const MyCV = () => {
                           <TimelineConnector />
                         </TimelineSeparator>
                         <TimelineContent>
+                          {/* asd123asd */}
                           <Box
-                            mt={2}
-                            p={2}
-                            borderRadius={4}
-                            width={"70%"}
-                            display={"flex"}
-                            flexDirection={"column"}
-                            gap={"1rem"}
-                            margin={"0"}
-                            padding={"0.7rem"}
+                            sx={{
+                              display: "flex",
+                              flexDirection: "row",
+                              columnGap: "10rem",
+                              width: "100%",
+                              height: "100%",
+                            }}
                           >
-                            <Box>
-                              <Typography variant="body1">
-                                <strong> {study.titulo}</strong>
-                              </Typography>
-                              <Typography variant="body1" color={"#808080"}>
-                                {study.institucion}
-                              </Typography>
-                              <Typography variant="body1">
-                                {study.descripcion}
+                            <Box
+                              mt={2}
+                              p={2}
+                              borderRadius={4}
+                              width={"70%"}
+                              display={"flex"}
+                              flexDirection={"column"}
+                              gap={"1rem"}
+                              margin={"0"}
+                              padding={"0.7rem"}
+                            >
+                              <Box>
+                                <Typography variant="body1">
+                                  <strong> {study.titulo}</strong>
+                                </Typography>
+                                <Typography variant="body1" color={"#808080"}>
+                                  {study.institucion}
+                                </Typography>
+                                <Typography variant="body1">
+                                  {study.descripcion}
+                                </Typography>
+                              </Box>
+                              <Typography>
+                                <strong>Periodo: </strong> {study.fechaInicio} - {study.fechaFin}
                               </Typography>
                             </Box>
-                            <Typography>
-                              <strong>Periodo: </strong> {study.fechaInicio} - {study.fechaFin}
-                            </Typography>
+                            <IconButton
+                              onClick={() => handleDeleteStudiesInfo(study.id)}
+                              sx={{
+                                height: "25%",
+                              }}
+                            >
+                              <DeleteOutline />
+                            </IconButton>
                           </Box>
                         </TimelineContent>
                       </TimelineItem>
@@ -902,24 +984,42 @@ const MyCV = () => {
                           </TimelineSeparator>
                           <TimelineContent>
                             <Box
-                              mt={2}
-                              p={2}
-                              borderRadius={4}
-                              width={"70%"}
-                              display={"flex"}
-                              flexDirection={"column"}
-                              gap={"1rem"}
-                              margin={"0"}
-                              padding={"0.7rem"}
+                              sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                columnGap: "10rem",
+                                width: "100%",
+                                height: "100%",
+                              }}
                             >
-                              <Box>
-                                <Typography variant="body1">
-                                  <strong> {language.idioma}</strong>
-                                </Typography>
-                                <Typography variant="body1" color={"#808080"}>
-                                  {language.nivel}
-                                </Typography>
+                              <Box
+                                mt={2}
+                                p={2}
+                                borderRadius={4}
+                                width={"70%"}
+                                display={"flex"}
+                                flexDirection={"column"}
+                                gap={"1rem"}
+                                margin={"0"}
+                                padding={"0.7rem"}
+                              >
+                                <Box>
+                                  <Typography variant="body1">
+                                    <strong> {language.idioma}</strong>
+                                  </Typography>
+                                  <Typography variant="body1" color={"#808080"}>
+                                    {language.nivel}
+                                  </Typography>
+                                </Box>
                               </Box>
+                              <IconButton
+                                onClick={() => handleDeleteLanguagesInfo(language.id)}
+                                sx={{
+                                  height: "25%",
+                                }}
+                              >
+                                <DeleteOutline />
+                              </IconButton>
                             </Box>
                           </TimelineContent>
                         </TimelineItem>

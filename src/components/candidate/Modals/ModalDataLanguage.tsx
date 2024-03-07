@@ -1,8 +1,9 @@
-import { Autocomplete, Box, Button, Divider, FormControl, Modal, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Divider, FormControl, IconButton, Modal, TextField, Typography } from "@mui/material";
 import theme from "../../../../theme";
 import { useForm } from "react-hook-form";
 import useAccount from "../../../hooks/Candidate/Account/useAccount";
 import { useState } from "react";
+import CloseIcon from '@mui/icons-material/Close';
 
 const ModalDataLanguage = (props: {
     openModalLanguage: boolean;
@@ -59,6 +60,7 @@ const ModalDataLanguage = (props: {
                     boxShadow: 24,
                     padding: "2rem",
                     paddingBlock: "3rem",
+                    borderRadius: 1,
                     [theme.breakpoints.down("sm")]: {
                         width: "95%",
                         padding: "1rem",
@@ -66,6 +68,18 @@ const ModalDataLanguage = (props: {
                     },
                 }}
             >
+                <IconButton
+                    aria-label="close"
+                    onClick={handleClose}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
                 <Typography variant="h6" id="modal-title" gutterBottom align="left">
                     Agregar idioma
                 </Typography>

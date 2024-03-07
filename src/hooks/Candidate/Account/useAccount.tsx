@@ -235,6 +235,24 @@ const useAccount = () => {
         }
     }
 
+    const deleteExperienceInformation = async (experienceId: Number) => {
+        try {
+            const response: any = await apiClient.delete(`/account/candidate/experience-info/${experienceId}`);
+
+            const responseData = response.data;
+
+            return {
+                response: responseData,
+                status: response.status,
+                ok: true
+            };
+        }
+        catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
     //SECCION ESTUDIOS
     const getStudiesInformation = async (postulanteId: Number) => {
         try {
@@ -271,6 +289,24 @@ const useAccount = () => {
                 anio_inicio,
                 anio_fin
             });
+
+            const responseData = response.data;
+
+            return {
+                response: responseData,
+                status: response.status,
+                ok: true
+            };
+        }
+        catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
+    const deleteStudiesInformation = async (educationId: Number) => {
+        try {
+            const response: any = await apiClient.delete(`/account/candidate/education-info/${educationId}`);
 
             const responseData = response.data;
 
@@ -331,6 +367,24 @@ const useAccount = () => {
         }
     }
 
+    const deleteLanguagesInformation = async (languageId: Number) => {
+        try {
+            const response: any = await apiClient.delete(`/account/candidate/language-info/${languageId}`);
+
+            const responseData = response.data;
+
+            return {
+                response: responseData,
+                status: response.status,
+                ok: true
+            };
+        }
+        catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
     return {
         updatePasswordCandidate,
         changeVisibilityCV,
@@ -345,7 +399,10 @@ const useAccount = () => {
         insertLanguagesInformation,
         changeEmailCandidate,
         getIncompletePersonalInformation,
-        getTypesDocument
+        getTypesDocument,
+        deleteExperienceInformation,
+        deleteStudiesInformation,
+        deleteLanguagesInformation
     }
 }
 

@@ -1,7 +1,8 @@
-import { Box, Typography, Modal, FormControl, TextField, Button, Autocomplete } from "@mui/material";
+import { Box, Typography, Modal, FormControl, TextField, Button, Autocomplete, IconButton } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import usePostulations from "../../../hooks/Candidate/Postulations/usePostulations";
+import CloseIcon from '@mui/icons-material/Close';
 
 const ModalUpdateStatePostulation = (props: {
     openModalUpdateStatePostulation: boolean,
@@ -73,8 +74,21 @@ const ModalUpdateStatePostulation = (props: {
                     boxShadow: 24,
                     padding: "2rem",
                     paddingBlock: "3rem",
+                    borderRadius: 1,
                 }}
             >
+                <IconButton
+                    aria-label="close"
+                    onClick={handleClose}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
                 <Typography variant="h6" id="modal-title" gutterBottom align="center" marginBottom={"1rem"}>
                     Actualizar estado
                 </Typography>

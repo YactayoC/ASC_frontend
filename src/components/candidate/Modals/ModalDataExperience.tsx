@@ -1,8 +1,9 @@
-import { Autocomplete, Box, Button, Divider, FormControl, Modal, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Divider, FormControl, IconButton, Modal, TextField, Typography } from "@mui/material";
 import theme from "../../../../theme";
 //react hook form
 import useAccount from "../../../hooks/Candidate/Account/useAccount";
 import { useForm } from "react-hook-form";
+import CloseIcon from '@mui/icons-material/Close';
 
 const ModalDataExperience = (props: {
   openModalExperience: boolean,
@@ -13,7 +14,7 @@ const ModalDataExperience = (props: {
   const { openModalExperience, handleCloseModalEditDataExperience } = props;
   const userInfo = localStorage.getItem("userInfo");
   const userInfoJson = JSON.parse(userInfo || "{}");
-  const { register, handleSubmit, reset} = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const { insertExperienceInformation, } = useAccount();
 
   const onSubmitExperienceData = async (data: any) => {
@@ -55,6 +56,7 @@ const ModalDataExperience = (props: {
           boxShadow: 24,
           padding: "2rem",
           paddingBlock: "3rem",
+          borderRadius: 1,
           [theme.breakpoints.down("sm")]: {
             width: "95%",
             padding: "1rem",
@@ -62,6 +64,18 @@ const ModalDataExperience = (props: {
           },
         }}
       >
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
         <Typography variant="h6" id="modal-title" gutterBottom align="left">
           Experiencia laboral
         </Typography>

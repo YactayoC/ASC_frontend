@@ -1,9 +1,10 @@
 import { useForm } from "react-hook-form";
-import { Box, FormControl, Modal, TextField, Typography, Button, InputAdornment, Autocomplete } from "@mui/material";
+import { Box, FormControl, Modal, TextField, Typography, Button, InputAdornment, Autocomplete, IconButton } from "@mui/material";
 import { seedLocations } from "../../../seed/locations";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useEffect, useState } from "react";
 import useAlerts from "../../../hooks/Candidate/Alerts/useAlerts";
+import CloseIcon from '@mui/icons-material/Close';
 
 const ModalUpdateAlert = (props: {
     openModalUpdateStatus: boolean,
@@ -92,8 +93,21 @@ const ModalUpdateAlert = (props: {
                     boxShadow: 24,
                     padding: "2rem",
                     paddingBlock: "3rem",
+                    borderRadius: 1,
                 }}
             >
+                <IconButton
+                    aria-label="close"
+                    onClick={handleClose}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
                 <Typography variant="h6" id="modal-title" gutterBottom align="center">
                     Editar alerta
                 </Typography>
