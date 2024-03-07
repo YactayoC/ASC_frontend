@@ -11,7 +11,6 @@ import theme from "../../../theme";
 import HeaderButtons from "../../components/candidate/HeaderButtons";
 import { useEffect, useRef, useState } from "react";
 import { EditOutlined } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
 import ModalChangeEmail from "../../components/candidate/Modals/ModalChangeEmail";
 import FormChangePassword from "../../components/candidate/SecurityTab/FormChangePassword";
 import FormDeactivateAccount from "../../components/candidate/SecurityTab/FormDeactivateAccount";
@@ -19,7 +18,6 @@ import FormChangeVisibleCV from "../../components/candidate/SecurityTab/FormChan
 import useAccount from "../../hooks/Candidate/Account/useAccount";
 
 const MyAccount = () => {
-  const navigate = useNavigate();
   const userInfo = localStorage.getItem("userInfo");
   const user = userInfo ? JSON.parse(userInfo as string) : null;
   const [tabValue, setTabValue] = useState(0);
