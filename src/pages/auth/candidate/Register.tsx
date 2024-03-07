@@ -348,7 +348,7 @@ const Register = () => {
                   {...register("apellidos", {
                     required: "Debe ingresar sus apellidos",
                     pattern: {
-                      value: /^[A-Za-z\s]+$/,
+                      value: /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/,
                       message: "Debe ingresar sus apellidos",
                     },
                     maxLength: {

@@ -25,8 +25,31 @@ const useFiles = () => {
         }
     };
 
+    //DELETE http://localhost:3000/api/files/delete-file
+    const deleteFile = async (postulanteId: Number): Promise<any> => {
+        try {
+            const response = await apiClient.delete('/files/delete-file', {
+                data: {
+                    postulanteId,
+                },
+            });
+            const responseData = response.data;
+
+            return {
+                response: responseData,
+                status: response.status,
+                ok: true,
+            };
+        } catch (err: any) {
+            console.error(err);
+            // Manejo de errores
+        }
+    }
+
+
     return {
         uploadFile,
+        deleteFile
     };
 };
 

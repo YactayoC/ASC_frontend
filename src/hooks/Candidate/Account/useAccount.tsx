@@ -341,6 +341,24 @@ const useAccount = () => {
         }
     }
 
+    const getListLanguage = async () => {
+        try {
+            const response: any = await apiClient.get(`/account/candidate/get-language-list`);
+
+            const responseData = response.data;
+
+            return {
+                response: responseData,
+                status: response.status,
+                ok: true
+            };
+        }
+        catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
     const insertLanguagesInformation = async (
         postulanteId: Number,
         idiomaId: Number,
@@ -402,7 +420,8 @@ const useAccount = () => {
         getTypesDocument,
         deleteExperienceInformation,
         deleteStudiesInformation,
-        deleteLanguagesInformation
+        deleteLanguagesInformation,
+        getListLanguage
     }
 }
 

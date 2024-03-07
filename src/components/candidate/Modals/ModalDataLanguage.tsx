@@ -2,7 +2,7 @@ import { Autocomplete, Box, Button, Divider, FormControl, IconButton, Modal, Tex
 import theme from "../../../../theme";
 import { useForm } from "react-hook-form";
 import useAccount from "../../../hooks/Candidate/Account/useAccount";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 
 const ModalDataLanguage = (props: {
@@ -15,7 +15,7 @@ const ModalDataLanguage = (props: {
     const userInfo = localStorage.getItem("userInfo");
     const userInfoJson = JSON.parse(userInfo || "{}");
     const { register, handleSubmit, reset } = useForm();
-    const { insertLanguagesInformation, } = useAccount();
+    const { insertLanguagesInformation, getListLanguage } = useAccount();
     const [selectedLanguageId, setSelectedLanguageId] = useState<number | null>(null);
 
     const onSubmitLanguageData = async (data: any) => {
@@ -36,13 +36,24 @@ const ModalDataLanguage = (props: {
         handleCloseModalEditDataLanguage();
     }
 
+    const handleGetListLanguage = async () => {
+        const response = await getListLanguage();
+        const dataLanguageList = response.response.data;
+        console.log(dataLanguageList)
+    }
+
     const idiomas = [
         { id: 1, name: "Español" },
         { id: 2, name: "Inglés" },
         { id: 3, name: "Quechua" },
     ]
 
-    //console.log(selectLanguageId)
+    useEffect(() => {
+        if (openModalLanguage) {
+            handleGetListLanguage();
+        }
+    }, [openModalLanguage]);
+
 
     return (
         <Modal

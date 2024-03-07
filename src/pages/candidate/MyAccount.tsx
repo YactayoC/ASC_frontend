@@ -45,6 +45,7 @@ const MyAccount = () => {
   const handleGetIncompletePersonalInformation = async () => {
     const response = await getIncompletePersonalInformation(user?.id_user);
     const dataPersonalInformation = response.response.data;
+    console.log(dataPersonalInformation)
     setPersonalIncompleteInformation(dataPersonalInformation);
     //console.log(dataPersonalInformation)
     //setSelectedFile(dataPersonalInformation.cv_visible);

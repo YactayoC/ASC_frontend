@@ -59,7 +59,7 @@ const MyCV = () => {
   const [studiesData, setStudiesData] = useState<any>([]);
   const [languagesData, setLanguagesData] = useState<any>([]);
   const [personalIncompleteInformation, setPersonalIncompleteInformation] = useState<any>({});
-  const { uploadFile } = useFiles();
+  const { uploadFile, deleteFile } = useFiles();
   const userInfo = localStorage.getItem("userInfo");
   const userInfoJson = JSON.parse(userInfo || "{}");
   const {
@@ -141,7 +141,8 @@ const MyCV = () => {
     event.target.value = ''; // Reset input value
   };
 
-  const handleDeleteFile = () => {
+  const handleDeleteFile = async () => {
+    await deleteFile(userInfoJson?.id_user);
     setSelectedFile(null);
     localStorage.removeItem('selectedFileDetails');
   };
@@ -166,7 +167,7 @@ const MyCV = () => {
     const dataPersonalInformation = response.response.data;
     setPersonalIncompleteInformation(dataPersonalInformation);
     console.log(dataPersonalInformation)
-    setSelectedFile(dataPersonalInformation.cv_visible);
+    setSelectedFile(dataPersonalInformation.cv);
     return
   }
 
@@ -577,8 +578,8 @@ const MyCV = () => {
                 </Box>
 
                 <TextField
-              aria-disabled
-              disabled
+                  aria-disabled
+                  disabled
                   label="Descripción del perfil"
                   variant="outlined"
                   value={personalIncompleteInformation.descripcion_perfil}
@@ -592,12 +593,12 @@ const MyCV = () => {
 
                   placeholder="Escribe una descripción de tu perfil"
                   rows={7}
-                  // onChange={(e) => {
-                  //   setPersonalIncompleteInformation({
-                  //     ...personalIncompleteInformation,
-                  //     descripcion_perfil: e.target.value,
-                  //   });
-                  // }}
+                // onChange={(e) => {
+                //   setPersonalIncompleteInformation({
+                //     ...personalIncompleteInformation,
+                //     descripcion_perfil: e.target.value,
+                //   });
+                // }}
                 />
               </Box>
             </Box>

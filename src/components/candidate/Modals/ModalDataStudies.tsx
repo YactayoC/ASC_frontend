@@ -1,8 +1,9 @@
-import { Autocomplete, Box, Button, Divider, FormControl, IconButton, Modal, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Divider, FormControl, FormHelperText, IconButton, Modal, TextField, Typography } from "@mui/material";
 import theme from "../../../../theme";
 import { useForm } from "react-hook-form";
 import useAccount from "../../../hooks/Candidate/Account/useAccount";
 import CloseIcon from '@mui/icons-material/Close';
+import { useState } from "react";
 
 const ModalDataStudies = (props: {
     openModalStudy: boolean,
@@ -12,8 +13,28 @@ const ModalDataStudies = (props: {
     const { openModalStudy, handleCloseModalEditDataStudies } = props;
     const userInfo = localStorage.getItem("userInfo");
     const userInfoJson = JSON.parse(userInfo || "{}");
-    const { register, handleSubmit, reset } = useForm();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const { insertStudiesInformation, } = useAccount();
+    const [startYear, setStartYear] = useState(null);
+    const [endYear, setEndYear] = useState(null);
+    const [descripcionTitle, setDescripcionTitle] = useState('');
+
+    const startYearOptions = Array.from({ length: 55 }, (_, i) => (1970 + i).toString()).filter(year => !endYear || parseInt(year) <= endYear);
+    const endYearOptions = Array.from({ length: 41 }, (_, i) => (1970 + i).toString()).filter(year => !startYear || parseInt(year) >= startYear);
+
+    const handleStartYearChange = (_event: any, value: any) => {
+        setStartYear(value);
+    };
+    const handleEndYearChange = (_event: any, value: any) => {
+        setEndYear(value);
+    };
+
+    const handleChange = (event: any) => {
+        const inputValue = event.target.value;
+        if (inputValue.length <= 500) {
+            setDescripcionTitle(inputValue);
+        }
+    };
 
     const onSubmitStudiesData = async (data: any) => {
         handleCloseModalEditDataStudies();
@@ -33,6 +54,7 @@ const ModalDataStudies = (props: {
 
     const handleClose = () => {
         handleCloseModalEditDataStudies();
+        reset();
     }
 
     return (
@@ -82,65 +104,149 @@ const ModalDataStudies = (props: {
                         marginTop: "1rem",
                     }}
                 >
-                    <TextField
-                        label="Descripción del titulo"
-                        variant="outlined"
-                        multiline
-                        minRows={4}
-                        fullWidth
-                        {...register("descripcionTitulo", { required: true })}
-                    />
+                    <Box>
+                        <TextField
+                            label="Descripción del título"
+                            variant="outlined"
+                            aria-disabled
+                            multiline
+                            value={descripcionTitle}
+                            minRows={5}
+                            fullWidth
+                            inputProps={{
+                                maxLength: 500,
+                                pattern: /^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s]+$/,
+                            }}
+                            {...register("descripcionTitulo", {
+                                required: "Por favor, ingrese la descripción del título",
+                                pattern: {
+                                    value: /^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s]+$/,
+                                    message: "Por favor, ingrese una descripción válida",
+                                },
+                                maxLength: {
+                                    value: 500,
+                                    message: "La descripción debe tener máximo 500 caracteres",
+                                },
+                            })}
+                            onChange={handleChange}
+                        />
+                        <FormHelperText>
+                            Caracteres restantes: {500 - descripcionTitle.length} de 500
+                        </FormHelperText>
+                        {errors.descripcionTitulo && (
+                            <Typography variant="caption" color="error">
+                                {String(errors.descripcionTitulo.message)}
+                            </Typography>
+                        )}
+                    </Box>
+                    <Box>
+                        <TextField
+                            label="Título"
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            inputProps={{
+                                maxLength: 50,
+                                pattern: /^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s]+$/,
+                            }}
+                            {...register("titulo", {
+                                required: "Por favor, ingrese el título",
+                                pattern: {
+                                    value: /^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s]+$/,
+                                    message: "Por favor, ingrese un título válido",
+                                },
+                                maxLength: {
+                                    value: 50,
+                                    message: "El título debe tener máximo 50 caracteres",
+                                },
+                            })}
+                        />
+                        {errors.titulo && (
+                            <Typography variant="caption" color="error">
+                                {String(errors.titulo.message)}
+                            </Typography>
+                        )}
+                    </Box>
 
-                    <TextField
-                        label="Titulo"
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        {...register("titulo", { required: true })}
-                    />
-
-                    <TextField
-                        label="Institución"
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        {...register("institucion", { required: true })}
-                    />
+                    <Box>
+                        <TextField
+                            label="Institución"
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            inputProps={{
+                                maxLength: 50,
+                                pattern: /^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s]+$/,
+                            }}
+                            {...register("institucion", {
+                                required: "Debe ingresar la institución",
+                                pattern: {
+                                    value: /^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s]+$/,
+                                    message: "Debe ingresar una institución válida",
+                                },
+                                maxLength: {
+                                    value: 50,
+                                    message: "Máximo 50 caracteres",
+                                },
+                            })}
+                        />
+                        {errors.institucion && (
+                            <Typography variant="caption" color="error">
+                                {String(errors.institucion.message)}
+                            </Typography>
+                        )}
+                    </Box>
                     <Box
                         sx={{
-                            display: "flex",
-                            columnGap: "1rem",
+                            display: 'flex',
+                            columnGap: '1rem',
                         }}
                     >
-                        <Autocomplete
-                            fullWidth
-                            options={["2022", "2023", "2024"]}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Año Inicio"
-                                    variant="outlined"
-                                    margin="normal"
-                                    fullWidth
-                                    {...register("añoInicio", { required: true })}
-                                />
-                            )}
-                        />
+                        <Box
+                            sx={{
+                                width: '100%',
+                            }}
+                        >
+                            <Autocomplete
+                                fullWidth
+                                options={startYearOptions}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Año Inicio"
+                                        variant="outlined"
+                                        margin="normal"
+                                        fullWidth
+                                        {...register('añoInicio', { required: true })}
+                                    />
+                                )}
+                                onChange={handleStartYearChange}
+                            />
+                            {errors.añoInicio && <Typography variant="caption" color="error">Debe ingresar el año de inicio</Typography>}
+                        </Box>
 
-                        <Autocomplete
-                            fullWidth
-                            options={["2022", "2023", "2024"]}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Año Fin"
-                                    variant="outlined"
-                                    margin="normal"
-                                    fullWidth
-                                    {...register("añoFin", { required: true })}
-                                />
-                            )}
-                        />
+                        <Box
+                            sx={{
+                                width: '100%',
+                            }}
+                        >
+                            <Autocomplete
+                                fullWidth
+                                options={endYearOptions}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Año Fin"
+                                        variant="outlined"
+                                        margin="normal"
+                                        fullWidth
+                                        {...register('añoFin', { required: true })}
+                                    />
+                                )}
+                                onChange={handleEndYearChange}
+                            />
+                            {errors.añoFin && <Typography variant="caption" color="error">Debe ingresar el año de fin</Typography>}
+                        </Box>
                     </Box>
 
                     <Button type="submit" variant="contained" color="primary">
