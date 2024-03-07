@@ -1,10 +1,9 @@
-import { Autocomplete, Box, Button, Divider, FormControl, IconButton, Modal, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Divider, FormControl, Modal, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import theme from "../../../../theme";
 import { useEffect, useState } from "react";
 import useAccount from '../../../hooks/Candidate/Account/useAccount';
 import { isValid, parse } from 'date-fns';
-import CloseIcon from '@mui/icons-material/Close';
 
 const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseModalEditDataPersonal: () => void }) => {
     const { openModalDataPersonal, handleCloseModalEditDataPersonal } = props;
@@ -62,9 +61,6 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
                     estadoCivil: optionCivilStatus,
                     tipoDocumentoId: selectedOptionDocumentTypeId,
                     documento: dataInfo.documento,
-                    numero: dataInfo.numero,
-                    direccion: dataInfo.direccion,
-                    descripcionPerfil: dataInfo.descripcion_perfil
                 });
 
             } else {
@@ -114,8 +110,6 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
 
         const fechaNacimientoDateFormat = `${year}-${month}-${day}`;
 
-
-
         const hasChanged = data.nombre !== initialFormValues.nombre ||
             data.apellidos !== initialFormValues.apellidos ||
             // data.nacionalidad !== initialFormValues.nacionalidad ||
@@ -140,7 +134,7 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
         }
 
         if (!hasChanged) {
-            //console.log("no se detectaron cambios")
+            console.log("no se detectaron cambios")
             return;
         }
 
@@ -284,7 +278,6 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
                     boxShadow: 24,
                     padding: "2rem",
                     paddingBlock: "3rem",
-                    borderRadius: 1,
                     [theme.breakpoints.down("sm")]: {
                         width: "95%",
                         padding: "1rem",
@@ -292,18 +285,6 @@ const ModalDataPersonal = (props: { openModalDataPersonal: boolean, handleCloseM
                     },
                 }}
             >
-                <IconButton
-                    aria-label="close"
-                    onClick={handleClose}
-                    sx={{
-                        position: 'absolute',
-                        right: 8,
-                        top: 8,
-                        color: (theme) => theme.palette.grey[500],
-                    }}
-                >
-                    <CloseIcon />
-                </IconButton>
                 <Typography variant="h6" id="modal-title" gutterBottom align="left">
                     Datos personal y de contacto
                 </Typography>

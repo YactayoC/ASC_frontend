@@ -9,11 +9,14 @@ import {
   Tabs,
   IconButton,
   FormControl,
+  InputAdornment,
 } from "@mui/material";
 import {
   ArrowBack,
   RadioButtonChecked,
   RadioButtonUnchecked,
+  Visibility,
+  VisibilityOff,
 } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import theme from "../../../../theme";
@@ -27,6 +30,7 @@ const Register = () => {
   const [tabValue, setTabValue] = useState(0);
   const { sendVerificationEmail, verifyCodeEmail } = useVerificationEmail();
   const { registerCompleteCandidate } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -34,6 +38,14 @@ const Register = () => {
     setError,
     formState: { errors },
   } = useForm<RegisterFormPostulant>();
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleMouseDownPassword = (event: any) => {
+    event.preventDefault();
+  };
 
   const onSubmit: SubmitHandler<RegisterFormPostulant> = (data) => {
     try {
@@ -104,10 +116,9 @@ const Register = () => {
       if (response?.ok) {
         handleNext();
       }
-
-      //console.log(response);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || "Error al verificar el código de verificación";
+      setError('email_code', { type: 'manual', message: errorMessage });
     }
   }
 
@@ -206,16 +217,16 @@ const Register = () => {
                   variant="outlined"
                   fullWidth
                   {...register("email", {
-                    required: "Debes ingresar un correo electrónico válido",
+                    required: "Debes ingresar un correo electrónico",
                     pattern: {
-                      value: /^\S+@\S+\.\S+$/,
-                      message: "Formato de correo electrónico no válido"
+                      value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|pe|org|net|info|...)$/,
+                      message: "Debes ingresar un correo electrónico válido",
                     },
-
-                  })}
+                  })
+                  }
                 />
                 {errors.email && (
-                  <Typography color="error" align="left" gutterBottom>
+                  <Typography variant="caption" color="error">
                     {errors.email.message}
                   </Typography>
                 )}
@@ -314,6 +325,10 @@ const Register = () => {
                     pattern: {
                       value: /^[A-Za-z\s]+$/,
                       message: "Solo se admiten letras",
+                    },
+                    maxLength: {
+                      value: 50,
+                      message: "Máximo 50 caracteres"
                     }
                   })}
                 />
@@ -335,6 +350,10 @@ const Register = () => {
                     pattern: {
                       value: /^[A-Za-z\s]+$/,
                       message: "Debe ingresar sus apellidos",
+                    },
+                    maxLength: {
+                      value: 50,
+                      message: "Máximo 50 caracteres"
                     }
                   })}
                 />
@@ -350,14 +369,27 @@ const Register = () => {
                   variant="outlined"
                   autoComplete="onSubmit"
                   fullWidth
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   {...register("password", {
                     required: "Debes ingresar una contraseña",
                     pattern: {
-                      value: /^(?=.*[A-Za-z])[A-Za-z\d]{8,}$/,
-                      message: "Debes ingresar una contraseña"
-                    }
+                      value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/,
+                      message: "La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y tener mínimo 8 caracteres",
+                    },
                   })}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
                 {errors.password && (
                   <Typography color="error" align="left" gutterBottom>

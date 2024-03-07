@@ -577,15 +577,27 @@ const MyCV = () => {
                 </Box>
 
                 <TextField
+              aria-disabled
+              disabled
                   label="Descripción del perfil"
                   variant="outlined"
                   value={personalIncompleteInformation.descripcion_perfil}
                   multiline
+                  suppressContentEditableWarning
                   sx={{
-                    width: "40rem",
+                    width: "65rem",
+                    fontWeight: "bold",
+                    cursor: "pointer",
                   }}
+
                   placeholder="Escribe una descripción de tu perfil"
-                  rows={3}
+                  rows={7}
+                  // onChange={(e) => {
+                  //   setPersonalIncompleteInformation({
+                  //     ...personalIncompleteInformation,
+                  //     descripcion_perfil: e.target.value,
+                  //   });
+                  // }}
                 />
               </Box>
             </Box>

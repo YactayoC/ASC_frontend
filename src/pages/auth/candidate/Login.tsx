@@ -138,7 +138,7 @@ const Login = () => {
                 {...register("email", {
                   required: "Debes ingresar un correo electrónico",
                   pattern: {
-                    value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|pe|org|net|info|...)$/,
                     message: "Debes ingresar un correo electrónico válido",
                   },
                 })
@@ -155,32 +155,39 @@ const Login = () => {
             <Typography variant="h5" align="left" gutterBottom>
               Ingresa tu contraseña
             </Typography>
-            <TextField
-              label="Contraseña"
-              variant="outlined"
-              fullWidth
-              type={showPassword ? "text" : "password"}
-              {...register("password", {
-                required: "Debes ingresar una contraseña",
-                minLength: {
-                  value: 6, // Asegúrate de que el valor mínimo coincida con el mensaje de error
-                  message: "La contraseña debe tener al menos 6 caracteres",
-                },
-              })}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
+            <Box>
+              <TextField
+                label="Contraseña"
+                variant="outlined"
+                fullWidth
+                type={showPassword ? "text" : "password"}
+                {...register("password", {
+                  required: "Debes ingresar una contraseña",
+                  pattern: {
+                    value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/,
+                    message: "La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y tener mínimo 8 caracteres",
+                  },
+                })}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              {errors.password && (
+                <Typography variant="caption" color="error">
+                  {errors.password.message}
+                </Typography>
+              )}
+            </Box>
           </Box>
 
           <Button variant="contained" color="primary" type="submit" onClick={(e) => e.preventDefault}>
