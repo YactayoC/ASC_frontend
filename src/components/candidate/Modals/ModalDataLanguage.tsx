@@ -16,6 +16,7 @@ const ModalDataLanguage = (props: {
     const userInfoJson = JSON.parse(userInfo || "{}");
     const { register, handleSubmit, reset } = useForm();
     const { insertLanguagesInformation, getListLanguage } = useAccount();
+    const [languageList, setLanguageList] = useState<any>([]);
     const [selectedLanguageId, setSelectedLanguageId] = useState<number | null>(null);
 
     const onSubmitLanguageData = async (data: any) => {
@@ -40,13 +41,8 @@ const ModalDataLanguage = (props: {
         const response = await getListLanguage();
         const dataLanguageList = response.response.data;
         console.log(dataLanguageList)
+        setLanguageList(dataLanguageList);
     }
-
-    const idiomas = [
-        { id: 1, name: "Español" },
-        { id: 2, name: "Inglés" },
-        { id: 3, name: "Quechua" },
-    ]
 
     useEffect(() => {
         if (openModalLanguage) {
@@ -114,9 +110,9 @@ const ModalDataLanguage = (props: {
                         {/* AUTOCOMPLETE DE IDIOMAS */}
                         <Autocomplete
                             fullWidth
-                            options={idiomas.map((option) => option.name)}
+                            options={languageList.map((option: any) => option.idioma)}
                             onChange={(_event, value) => {
-                                const idioma = idiomas.find(idioma => idioma.name === value);
+                                const idioma = languageList.find((item: any) => item.idioma === value);
                                 setSelectedLanguageId(idioma?.id || null); // Si no se encuentra el idioma, se asigna null
                             }}
                             renderInput={(params) => (
