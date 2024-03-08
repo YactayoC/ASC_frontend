@@ -35,6 +35,7 @@ import ModalDataPersonal from "../../components/candidate/Modals/ModalDataPerson
 import ModalDataExperience from "../../components/candidate/Modals/ModalDataExperience";
 import ModalDataStudies from "../../components/candidate/Modals/ModalDataStudies";
 import ModalDataLanguage from "../../components/candidate/Modals/ModalDataLanguage";
+import ModalDataPersonalCandidate from "../../components/candidate/Modals/ModalDataPersonalCandidate";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -1046,7 +1047,8 @@ const MyCV = () => {
         )}
       </Box>
 
-      <ModalDataPersonal openModalDataPersonal={openModalDataPersonal} handleCloseModalEditDataPersonal={handleCloseModalEditDataPersonal} />
+      {/* <ModalDataPersonal openModalDataPersonal={openModalDataPersonal} handleCloseModalEditDataPersonal={handleCloseModalEditDataPersonal} /> */}
+      <ModalDataPersonalCandidate openModalDataPersonal={openModalDataPersonal} handleCloseModalEditDataPersonal={handleCloseModalEditDataPersonal} />
       <ModalDataExperience openModalExperience={openModalExperience} handleCloseModalEditDataExperience={handleCloseModalEditDataExperience} onExperienceSaved={async () => {
         await handleGetExperiences();
       }} />
