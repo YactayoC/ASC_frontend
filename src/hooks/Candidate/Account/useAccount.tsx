@@ -107,8 +107,9 @@ const useAccount = () => {
         postulanteId: Number,
         nombre: string,
         apellidos: string,
+        paisId: Number,
         fechaNacimiento: string,
-        estadoCivil: string,
+        estadoCivil: Number,
         tipoDocumentoId: Number,
         documento: string,
         descripcionPerfil: string,
@@ -120,6 +121,7 @@ const useAccount = () => {
                 postulanteId,
                 nombre,
                 apellidos,
+                paisId,
                 fechaNacimiento,
                 estadoCivil,
                 tipoDocumentoId,
@@ -181,10 +183,28 @@ const useAccount = () => {
             throw err;
         }
     }
-    //candidate/get-countries
+
     const getCountries = async () => {
         try {
             const response: any = await apiClient.get(`/account/candidate/get-countries`);
+
+            const responseData = response.data;
+
+            return {
+                response: responseData.data,
+                status: response.status,
+                ok: true
+            };
+        }
+        catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
+    const getCivilStatus = async () => {
+        try {
+            const response: any = await apiClient.get(`/account/candidate/get-civil-status`);
 
             const responseData = response.data;
 
@@ -439,7 +459,8 @@ const useAccount = () => {
         deleteStudiesInformation,
         deleteLanguagesInformation,
         getListLanguage,
-        getCountries
+        getCountries,
+        getCivilStatus
     }
 }
 

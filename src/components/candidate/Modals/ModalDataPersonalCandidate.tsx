@@ -6,9 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 
 type DayOption = number | '';
-type DayState = DayOption;
 type YearOption = number | '';
-type YearState = YearOption;
 
 const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, handleCloseModalEditDataPersonal: () => void }) => {
     const { openModalDataPersonal, handleCloseModalEditDataPersonal } = props;
@@ -17,9 +15,6 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
     const userInfoJson = JSON.parse(userInfo || "{}");
     //REACT HOOK FORM
     const { register, handleSubmit, setValue, clearErrors, reset, formState: { errors } } = useForm();
-    //USESTATES DE LOS TEXTFIELDS - INCOMPLETE INFORMATION
-    const [lastNameCandidateInc, setLastNameCandidateInc] = useState('');
-    const [nameCandidateInc, setNameCandidateInc] = useState('');
     //USESTATES DE LOS TEXTFIELDS - COMPLETE INFORMATION
     const [lastNameCandidate, setLastNameCandidate] = useState('');
     const [nameCandidate, setNameCandidate] = useState('');
@@ -27,44 +22,111 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
     const [addressCandidate, setAddressCandidate] = useState('');
     const [dniCandidate, setDniCandidate] = useState('');
     const [descriptionProfileCandidate, setDescriptionProfileCandidate] = useState('');
-    const [countryCandidateId, setCountryCandidateId] = useState('');
+    const [countryCandidateId, setCountryCandidateId] = useState<any>('');
     const [dayId, setDayId] = useState<Number | null>(null);
     const [monthId, setMonthId] = useState<any>(null);
     const [yearId, setYearId] = useState<Number | null>(null);
-    const [typeDocumentId, setTypeDocumentId] = useState('');
+    const [typeDocumentId, setTypeDocumentId] = useState<any>('');
+    const [optionCivilStatus, setOptionCivilStatus] = useState<any>('');
     //USESTATE PARA EL AUTOCOMPLETE DE PAISES
     const [countriesList, setCountriesList] = useState<any[]>([]);
     //USESTATE PARA EL AUTOCOMPLETE DE TIPO DE DOCUMENTO
     const [dataDocumentType, setDataDocumentType] = useState<any[]>([]);
     //USESTATE PARA EL AUTOCOMPLETE DE ESTADO CIVIL
-    const [optionCivilStatus, setOptionCivilStatus] = useState('');
-    //FECHA DE NACIMIENTO DD - MM - YYYY
-    //const [day, setDay] = useState<DayState>('');
-    //const [month, setMonth] = useState<number | null>(null);
-    //const [year, setYear] = useState<YearState>('');
+    const [estadoCivilList, setEstadoCivilList] = useState<any[]>([]);
+    //VERIIFCAR SI SE CAMBIARON LOS DATOS COMPLETE
+    const [dataCandidate, setDataCandidate] = useState({});
 
     //HOOKS
-    const { getPersonalInformation, updatePersonalinformation, getTypesDocument, getCountries } = useAccount();
+    const { getPersonalInformation, updatePersonalinformation, getTypesDocument, getCountries, getCivilStatus } = useAccount();
 
     const handleClose = () => {
+        setLastNameCandidate('');
+        setNameCandidate('');
+        setPhoneCandidate('');
+        setAddressCandidate('');
+        setDniCandidate('');
         handleCloseModalEditDataPersonal();
-        //setDay('');
         setDayId(null);
-        //setYear('');
         setYearId(null);
-        //setMonth(null);
         setMonthId(null);
         setCountryCandidateId('');
-        //setSelectedOptionDocumentTypeId(null);
-        //setOptionCivilStatus('');
         setTypeDocumentId('');
+        setOptionCivilStatus('');
         reset();
     }
 
-    const onSubmitPersonalData = (data: any) => {
-        const dateComplete = `${dayId}-${monthId}-${yearId}`;
-        console.log(data);
-        console.log(dateComplete)
+    const onSubmitPersonalData = async (data: any) => {
+        const dateFormat: any = dayId !== null && monthId !== null && yearId !== null ? `${dayId}-${monthId}-${yearId}` : null;
+        console.log(dataCandidate) // LO QUE SE RECIBE DE LA CONSULTA
+
+        //LO QUE SE MANDARÁ A LA PETICION
+        const dataToSend = {
+            postulanteId: userInfoJson?.id_user,
+            nombre: data.nombre || nameCandidate || null,
+            apellidos: data.apellidos || lastNameCandidate || null,
+            numero: data.numero || phoneCandidate || null,
+            direccion: data.direccion || addressCandidate || null,
+            documento: dniCandidate || data.documento || null,
+            descripcionPerfil: data.descripcionPerfil || descriptionProfileCandidate || null,
+            fechaNacimiento: dateFormat || null,
+            paisId: countryCandidateId || null,
+            estadoCivil: optionCivilStatus || null,
+            tipoDocumentoId: typeDocumentId || null
+        }
+
+        if (JSON.stringify(dataToSend) === JSON.stringify(dataCandidate)) {
+            console.log("NO SE MANDARÁ")
+            return
+        }
+
+        console.log(dataToSend)
+        console.log("SE MANDARÁ")
+
+        // const dataToSendAwait = {
+        //     userInfoJson: userInfoJson?.id_user,
+        //     nombre: data.nombre || nameCandidate || null,
+        //     apellidos: data.apellidos || lastNameCandidate || null,
+        //     numero: data.numero || phoneCandidate || null,
+        //     direccion: data.direccion || addressCandidate || null,
+        //     documento: data.documento || dniCandidate || null,
+        //     descripcionPerfil: data.descripcionPerfil || descriptionProfileCandidate || null,
+        //     fechaNacimiento: dateFormat || null,
+        //     paisId: countryCandidateId || null,
+        //     estadoCivil: optionCivilStatus || null,
+        //     tipoDocumentoId: typeDocumentId || null,
+        // }
+        // console.log(dataToSendAwait)
+
+        const response = await updatePersonalinformation(
+            userInfoJson?.id_user,
+            data.nombre || nameCandidate || null,
+            data.apellidos || lastNameCandidate || null,
+            countryCandidateId || null,
+            dateFormat || null,
+            optionCivilStatus || null,
+            typeDocumentId || null,
+            data.documento || dniCandidate || null,
+            data.descripcionPerfil || descriptionProfileCandidate || null,
+            data.numero || phoneCandidate || null,
+            data.direccion || addressCandidate || null
+        );
+
+        console.log(response)
+
+        if (response.ok) {
+            window.location.reload();
+            handleClose();
+
+            const updatedUserInfo = {
+                ...userInfoJson,
+                nombresC: data.nombre || nameCandidate || null,
+                apellidosC: data.apellidos || lastNameCandidate || null,
+            }
+
+            localStorage.setItem("userInfo", JSON.stringify(updatedUserInfo));
+            window.location.reload();
+        }
     }
 
     //DAYS 1 AL 31
@@ -84,56 +146,69 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
         { id: 11, name: 'Noviembre' },
         { id: 12, name: 'Diciembre' }
     ];
-    //ESTADOS CIVIL
-    const estadoCivil = [
-        { value: 1, label: 'Soltero' },
-        { value: 2, label: 'Viudo' },
-        { value: 3, label: 'Casado' },
-    ]
     //AÑOS DEL 1970 AL 2024
     const years: YearOption[] = Array.from({ length: 54 }, (_, i) => 1970 + i);
 
     const handleGetPersonalInformation = async () => {
         const response = await getPersonalInformation(userInfoJson?.id_user);
         const dataPersonalInformation = response.response.data;
-        const yearInfo = new Date(dataPersonalInformation.fecha_nacimiento).getFullYear();
-        const monthInfo = new Date(dataPersonalInformation.fecha_nacimiento).getMonth();
-        const dayInfo = new Date(dataPersonalInformation.fecha_nacimiento).getDate();
-        console.log(dataPersonalInformation)
-        console.log("AÑO " + new Date(dataPersonalInformation.fecha_nacimiento).getFullYear())
-        console.log("MES " + new Date(dataPersonalInformation.fecha_nacimiento).getMonth())
-        console.log("DIA " + new Date(dataPersonalInformation.fecha_nacimiento).getDate())
-        let quantity = Object.keys(dataPersonalInformation).length;
 
-        if (quantity > 2) {
-            setLastNameCandidate(dataPersonalInformation.apellidos);
-            setNameCandidate(dataPersonalInformation.nombre);
-            setPhoneCandidate(dataPersonalInformation.numero);
-            setAddressCandidate(dataPersonalInformation.direccion);
-            setDniCandidate(dataPersonalInformation.documento);
-            setDescriptionProfileCandidate(dataPersonalInformation.descripcion_perfil);
-            setCountryCandidateId(dataPersonalInformation.pais_id);
-            setDayId(dayInfo);
-            setMonthId(monthInfo);
-            setYearId(yearInfo);
-            setTypeDocumentId(dataPersonalInformation.tipo_documento_id);
+        let yearInfo = null;
+        let monthInfo = null;
+        let dayInfo = null;
+
+        if (dataPersonalInformation.fecha_nacimiento) {
+            const [day, month, year] = dataPersonalInformation.fecha_nacimiento.split('-');
+            yearInfo = parseInt(year);
+            monthInfo = parseInt(month);
+            dayInfo = parseInt(day);
         }
-        else {
-            setLastNameCandidateInc(dataPersonalInformation.apellidos);
-            setNameCandidateInc(dataPersonalInformation.nombre);
-        }
+
+        console.log(dataPersonalInformation)
+
+        const dateFormat = dayId !== null && monthId !== null && yearId !== null ? `${dayId}-${monthId}-${yearId}` : null;
+
+        setLastNameCandidate(dataPersonalInformation.apellidos);
+        setNameCandidate(dataPersonalInformation.nombre);
+        setPhoneCandidate(dataPersonalInformation.numero);
+        setAddressCandidate(dataPersonalInformation.direccion);
+        setDniCandidate(dataPersonalInformation.documento);
+        setDescriptionProfileCandidate(dataPersonalInformation.descripcion_perfil);
+        setCountryCandidateId(dataPersonalInformation.pais_id);
+        setDayId(dayInfo || null);
+        setMonthId(monthInfo || null);
+        setYearId(yearInfo || null);
+        setTypeDocumentId(dataPersonalInformation.tipo_documento_id);
+        setOptionCivilStatus(dataPersonalInformation.estado_civil_id);
+        setDataCandidate({
+            postulanteId: userInfoJson?.id_user,
+            nombre: dataPersonalInformation.nombre || null,
+            apellidos: dataPersonalInformation.apellidos || null,
+            numero: dataPersonalInformation.numero || null,
+            direccion: dataPersonalInformation.direccion || null,
+            documento: dataPersonalInformation.documento || null,
+            descripcionPerfil: dataPersonalInformation.descripcion_perfil || null,
+            fechaNacimiento: dateFormat,
+            paisId: dataPersonalInformation.pais_id || null,
+            estadoCivil: dataPersonalInformation.estado_civil_id || null,
+            tipoDocumentoId: dataPersonalInformation.tipo_documento_id || null
+        });
+
     }
 
     const handleGetCountries = async () => {
         const response = await getCountries();
-        console.log(response.response)
         setCountriesList(response.response);
     }
 
     const handleGetTypesDocument = async () => {
         const response = await getTypesDocument();
         setDataDocumentType(response.response);
-        console.log(response.response)
+    }
+
+    const handleGetCivilStatus = async () => {
+        const response = await getCivilStatus();
+        setEstadoCivilList(response.response)
     }
 
     useEffect(() => {
@@ -141,6 +216,7 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
             handleGetPersonalInformation();
             handleGetCountries();
             handleGetTypesDocument();
+            handleGetCivilStatus();
         }
     }, [openModalDataPersonal]);
 
@@ -205,20 +281,20 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
                         <TextField
                             label="Nombres"
                             variant="outlined"
-                            value={nameCandidateInc || nameCandidate}
+                            value={nameCandidate}
                             margin="normal"
                             fullWidth
                             {...register("nombre", { required: false })}
-                            onChange={(e) => setNameCandidateInc(e.target.value)}
+                            onChange={(e) => setNameCandidate(e.target.value)}
                         />
                         <TextField
                             label="Apellidos"
                             variant="outlined"
-                            value={lastNameCandidateInc || lastNameCandidate}
+                            value={lastNameCandidate}
                             margin="normal"
                             fullWidth
                             {...register("apellidos", { required: false })}
-                            onChange={(e) => setLastNameCandidateInc(e.target.value)}
+                            onChange={(e) => setLastNameCandidate(e.target.value)}
                         />
                         <Autocomplete
                             fullWidth
@@ -258,7 +334,7 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
                             }}
                             //value={nacionalidadCandidate}
                             fullWidth
-                            {...register("celular", { required: false })}
+                            {...register("numero", { required: false })}
                             onChange={(e) => setPhoneCandidate(e.target.value)}
                         />
                         <TextField
@@ -358,12 +434,12 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
                             </Box>
                             <Autocomplete
                                 fullWidth
-                                options={estadoCivil}
-                                getOptionLabel={(option) => option.label} // Define cómo obtener la etiqueta de cada opción
-                                value={estadoCivil.find(ec => ec.label === optionCivilStatus) || null} // Establece el valor actual basado en la etiqueta
+                                options={estadoCivilList}
+                                getOptionLabel={(option) => option.name}
+                                value={estadoCivilList.find(ec => ec.id === optionCivilStatus) || null}
                                 onChange={(_event, newValue) => {
-                                    setOptionCivilStatus(newValue?.label || ''); // Actualiza el estado con la etiqueta de la nueva selección
-                                    setValue('estadoCivil', newValue?.label);
+                                    setOptionCivilStatus(newValue?.id || '');
+                                    setValue('estadoCivil', newValue?.name || '');
                                 }}
                                 renderInput={(params) => (
                                     <TextField
@@ -375,6 +451,7 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
                                     />
                                 )}
                             />
+
                         </Box>
                     </Box>
                     <Box
