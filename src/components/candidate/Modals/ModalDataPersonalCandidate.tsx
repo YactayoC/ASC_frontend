@@ -7,6 +7,8 @@ import CloseIcon from '@mui/icons-material/Close';
 
 type DayOption = number | '';
 type DayState = DayOption;
+type YearOption = number | '';
+type YearState = YearOption;
 
 const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, handleCloseModalEditDataPersonal: () => void }) => {
     const { openModalDataPersonal, handleCloseModalEditDataPersonal } = props;
@@ -25,24 +27,44 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
     const [addressCandidate, setAddressCandidate] = useState('');
     const [dniCandidate, setDniCandidate] = useState('');
     const [descriptionProfileCandidate, setDescriptionProfileCandidate] = useState('');
+    const [countryCandidateId, setCountryCandidateId] = useState('');
+    const [dayId, setDayId] = useState<Number | null>(null);
+    const [monthId, setMonthId] = useState<any>(null);
+    const [yearId, setYearId] = useState<Number | null>(null);
+    const [typeDocumentId, setTypeDocumentId] = useState('');
+    //USESTATE PARA EL AUTOCOMPLETE DE PAISES
+    const [countriesList, setCountriesList] = useState<any[]>([]);
+    //USESTATE PARA EL AUTOCOMPLETE DE TIPO DE DOCUMENTO
+    const [dataDocumentType, setDataDocumentType] = useState<any[]>([]);
+    //USESTATE PARA EL AUTOCOMPLETE DE ESTADO CIVIL
+    const [optionCivilStatus, setOptionCivilStatus] = useState('');
     //FECHA DE NACIMIENTO DD - MM - YYYY
-    //use estate day pero que sea Number
-    const [day, setDay] = useState<DayState>(''); 
-    const [month, setMonth] = useState<number | null>(null);
-    const [year, setYear] = useState('');
+    //const [day, setDay] = useState<DayState>('');
+    //const [month, setMonth] = useState<number | null>(null);
+    //const [year, setYear] = useState<YearState>('');
 
     //HOOKS
-    const { getPersonalInformation, updatePersonalinformation, getTypesDocument } = useAccount();
+    const { getPersonalInformation, updatePersonalinformation, getTypesDocument, getCountries } = useAccount();
 
     const handleClose = () => {
         handleCloseModalEditDataPersonal();
-        setDay('');
-        setMonth(null);
+        //setDay('');
+        setDayId(null);
+        //setYear('');
+        setYearId(null);
+        //setMonth(null);
+        setMonthId(null);
+        setCountryCandidateId('');
+        //setSelectedOptionDocumentTypeId(null);
+        //setOptionCivilStatus('');
+        setTypeDocumentId('');
         reset();
     }
 
     const onSubmitPersonalData = (data: any) => {
+        const dateComplete = `${dayId}-${monthId}-${yearId}`;
         console.log(data);
+        console.log(dateComplete)
     }
 
     //DAYS 1 AL 31
@@ -62,16 +84,39 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
         { id: 11, name: 'Noviembre' },
         { id: 12, name: 'Diciembre' }
     ];
-
+    //ESTADOS CIVIL
+    const estadoCivil = [
+        { value: 1, label: 'Soltero' },
+        { value: 2, label: 'Viudo' },
+        { value: 3, label: 'Casado' },
+    ]
+    //AÑOS DEL 1970 AL 2024
+    const years: YearOption[] = Array.from({ length: 54 }, (_, i) => 1970 + i);
 
     const handleGetPersonalInformation = async () => {
         const response = await getPersonalInformation(userInfoJson?.id_user);
         const dataPersonalInformation = response.response.data;
+        const yearInfo = new Date(dataPersonalInformation.fecha_nacimiento).getFullYear();
+        const monthInfo = new Date(dataPersonalInformation.fecha_nacimiento).getMonth();
+        const dayInfo = new Date(dataPersonalInformation.fecha_nacimiento).getDate();
         console.log(dataPersonalInformation)
+        console.log("AÑO " + new Date(dataPersonalInformation.fecha_nacimiento).getFullYear())
+        console.log("MES " + new Date(dataPersonalInformation.fecha_nacimiento).getMonth())
+        console.log("DIA " + new Date(dataPersonalInformation.fecha_nacimiento).getDate())
         let quantity = Object.keys(dataPersonalInformation).length;
-        // console.log(quantity)
 
         if (quantity > 2) {
+            setLastNameCandidate(dataPersonalInformation.apellidos);
+            setNameCandidate(dataPersonalInformation.nombre);
+            setPhoneCandidate(dataPersonalInformation.numero);
+            setAddressCandidate(dataPersonalInformation.direccion);
+            setDniCandidate(dataPersonalInformation.documento);
+            setDescriptionProfileCandidate(dataPersonalInformation.descripcion_perfil);
+            setCountryCandidateId(dataPersonalInformation.pais_id);
+            setDayId(dayInfo);
+            setMonthId(monthInfo);
+            setYearId(yearInfo);
+            setTypeDocumentId(dataPersonalInformation.tipo_documento_id);
         }
         else {
             setLastNameCandidateInc(dataPersonalInformation.apellidos);
@@ -79,9 +124,23 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
         }
     }
 
+    const handleGetCountries = async () => {
+        const response = await getCountries();
+        console.log(response.response)
+        setCountriesList(response.response);
+    }
+
+    const handleGetTypesDocument = async () => {
+        const response = await getTypesDocument();
+        setDataDocumentType(response.response);
+        console.log(response.response)
+    }
+
     useEffect(() => {
         if (openModalDataPersonal) {
             handleGetPersonalInformation();
+            handleGetCountries();
+            handleGetTypesDocument();
         }
     }, [openModalDataPersonal]);
 
@@ -146,7 +205,7 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
                         <TextField
                             label="Nombres"
                             variant="outlined"
-                            value={nameCandidateInc}
+                            value={nameCandidateInc || nameCandidate}
                             margin="normal"
                             fullWidth
                             {...register("nombre", { required: false })}
@@ -155,29 +214,32 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
                         <TextField
                             label="Apellidos"
                             variant="outlined"
-                            value={lastNameCandidateInc}
+                            value={lastNameCandidateInc || lastNameCandidate}
                             margin="normal"
                             fullWidth
                             {...register("apellidos", { required: false })}
                             onChange={(e) => setLastNameCandidateInc(e.target.value)}
                         />
-                        {/* <Autocomplete
+                        <Autocomplete
                             fullWidth
-                            disableClearable
-                            options={nationality}
-                            //value={{ value: 1, label: nacionalidadCandidate }}
+                            options={countriesList}
+                            getOptionLabel={(option) => option.name}
+                            value={countriesList.find(country => country.id === countryCandidateId) || null}
+                            onChange={(_event, newValue) => {
+                                setCountryCandidateId(newValue?.id || '');
+                                setValue('pais', newValue?.id || '');
+                            }}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label="Nacionalidad"
+                                    label="País"
                                     variant="outlined"
                                     margin="normal"
                                     fullWidth
-                                    {...register("nacionalidad", { required: true })}
                                 />
                             )}
+                        />
 
-                        /> */}
                     </Box>
                     <Box
                         sx={{
@@ -190,23 +252,23 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
                             label="Celular"
                             variant="outlined"
                             margin="normal"
-                            //value={phoneCandidate}
+                            value={phoneCandidate}
                             sx={{
                                 width: "60%",
                             }}
                             //value={nacionalidadCandidate}
                             fullWidth
                             {...register("celular", { required: false })}
-                        //onChange={(e) => setPhoneCandidate(e.target.value)}
+                            onChange={(e) => setPhoneCandidate(e.target.value)}
                         />
                         <TextField
                             label="Dirección"
                             variant="outlined"
                             margin="normal"
-                            //value={addressCandidate}
+                            value={addressCandidate}
                             fullWidth
                             {...register("direccion", { required: false })}
-                        //onChange={(e) => setAddressCandidate(e.target.value)}
+                            onChange={(e) => setAddressCandidate(e.target.value)}
                         />
                     </Box>
                     <Box
@@ -243,9 +305,9 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
                                     sx={{ width: "20%" }}
                                     disableClearable
                                     options={days}
-                                    value={day || ''}
-                                    onChange={(_event, newValue: DayOption) => setDay(newValue)}
-                                    getOptionLabel={(option: DayOption) => String(option)}
+                                    value={dayId !== null ? dayId as DayOption : ''}
+                                    onChange={(_event, newValue) => setDayId(Number(newValue))}
+                                    getOptionLabel={(option) => String(option)}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
@@ -261,8 +323,11 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
                                     disableClearable
                                     options={months}
                                     getOptionLabel={(option) => option.name}
-                                    value={months.find(m => m.id === Number(month)) || { id: 0, name: '' }}
-                                    onChange={(_event, newValue) => setMonth(newValue.id || null)}
+                                    value={monthId !== null ? months.find(m => m.id === monthId) : { id: Number(), name: '' }}
+                                    onChange={(_event, newValue) => {
+                                        setMonthId(newValue?.id || null);
+                                        //setMonth(newValue?.id || null); // También actualiza el estado del mes seleccionado
+                                    }}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
@@ -273,14 +338,13 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
                                         />
                                     )}
                                 />
-                                {/* <Autocomplete
-                                    sx={{
-                                        width: "70%",
-                                    }}
+                                <Autocomplete
+                                    sx={{ width: "70%" }}
                                     disableClearable
                                     options={years}
-                                    value={String(year)}
-                                    onChange={(_event, newValue) => setYear(String(newValue || ''))}
+                                    value={yearId !== null ? years.find(year => year === yearId) || '' : ''}
+                                    onChange={(_event, newValue: YearOption | null) => setYearId(newValue !== null ? Number(newValue) : null)}
+                                    getOptionLabel={(option: YearOption) => String(option)}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
@@ -290,18 +354,16 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
                                             fullWidth
                                         />
                                     )}
-
-                                /> */}
+                                />
                             </Box>
-                            {/* <Autocomplete
-                                sx={{
-                                    width: "40%",
-                                }}
+                            <Autocomplete
+                                fullWidth
                                 options={estadoCivil}
                                 getOptionLabel={(option) => option.label} // Define cómo obtener la etiqueta de cada opción
                                 value={estadoCivil.find(ec => ec.label === optionCivilStatus) || null} // Establece el valor actual basado en la etiqueta
                                 onChange={(_event, newValue) => {
                                     setOptionCivilStatus(newValue?.label || ''); // Actualiza el estado con la etiqueta de la nueva selección
+                                    setValue('estadoCivil', newValue?.label);
                                 }}
                                 renderInput={(params) => (
                                     <TextField
@@ -312,7 +374,7 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
                                         fullWidth
                                     />
                                 )}
-                            /> */}
+                            />
                         </Box>
                     </Box>
                     <Box
@@ -322,15 +384,16 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
                             columnGap: "1rem",
                         }}
                     >
-                        {/* <Autocomplete
+                        <Autocomplete
                             fullWidth
                             options={dataDocumentType}
                             getOptionLabel={(option) => option.name}
-                            value={dataDocumentType.find((td: any) => td.id === selectedOptionDocumentTypeId) || null}
+                            value={dataDocumentType.find((td: any) => td.id === typeDocumentId) || null}
                             onChange={(_event, newValue) => {
-                                setSelectedOptionDocumentTypeId(newValue?.id);
+                                //setSelectedOptionDocumentTypeId(newValue?.id);
+                                setTypeDocumentId(newValue?.id);
                                 setValue('tipoDocumento', newValue?.id);
-                                clearErrors('documento');
+                                //clearErrors('documento');
                             }}
                             renderInput={(params) => (
                                 <TextField
@@ -341,16 +404,16 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
                                     fullWidth
                                 />
                             )}
-                        /> */}
+                        />
                         <TextField
                             label="Documento"
                             variant="outlined"
                             margin="normal"
-                            //value={dniCandidate || ""}
-                            //disabled={!selectedOptionDocumentTypeId}
+                            value={dniCandidate}
+                            // disabled={!selectedOptionDocumentTypeId}
                             fullWidth
                             {...register("documento", { required: false })}
-                        //onChange={(e) => setDniCandidate(e.target.value)}
+                            onChange={(e) => setDniCandidate(e.target.value)}
                         />
                     </Box>
                     <TextField
@@ -359,9 +422,9 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
                         label="Descripción de perfil"
                         variant="outlined"
                         fullWidth
-                        //value={descriptionProfileCandidate}
+                        value={descriptionProfileCandidate}
                         {...register("descripcionPerfil", { required: false })}
-                    //onChange={(e) => setDescriptionProfileCandidate(e.target.value)}
+                        onChange={(e) => setDescriptionProfileCandidate(e.target.value)}
                     />
 
                     <Button type="submit" variant="contained" color="primary">

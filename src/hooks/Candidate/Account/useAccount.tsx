@@ -164,7 +164,6 @@ const useAccount = () => {
         }
     }
 
-    //candidate/get-types-document
     const getTypesDocument = async () => {
         try {
             const response: any = await apiClient.get(`/account/candidate/get-types-document`);
@@ -172,7 +171,25 @@ const useAccount = () => {
             const responseData = response.data;
 
             return {
-                response: responseData,
+                response: responseData.data,
+                status: response.status,
+                ok: true
+            };
+        }
+        catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    //candidate/get-countries
+    const getCountries = async () => {
+        try {
+            const response: any = await apiClient.get(`/account/candidate/get-countries`);
+
+            const responseData = response.data;
+
+            return {
+                response: responseData.data,
                 status: response.status,
                 ok: true
             };
@@ -421,7 +438,8 @@ const useAccount = () => {
         deleteExperienceInformation,
         deleteStudiesInformation,
         deleteLanguagesInformation,
-        getListLanguage
+        getListLanguage,
+        getCountries
     }
 }
 
