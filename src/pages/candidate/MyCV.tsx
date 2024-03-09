@@ -31,7 +31,6 @@ import {
   TimelineDot,
 } from '@mui/lab';
 import useFiles from "../../hooks/Files/useFiles";
-import ModalDataPersonal from "../../components/candidate/Modals/ModalDataPersonal";
 import ModalDataExperience from "../../components/candidate/Modals/ModalDataExperience";
 import ModalDataStudies from "../../components/candidate/Modals/ModalDataStudies";
 import ModalDataLanguage from "../../components/candidate/Modals/ModalDataLanguage";

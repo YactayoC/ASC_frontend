@@ -110,7 +110,6 @@ const ModalDataStudies = (props: {
                             variant="outlined"
                             aria-disabled
                             multiline
-                            value={descripcionTitle}
                             minRows={5}
                             fullWidth
                             inputProps={{
@@ -120,7 +119,7 @@ const ModalDataStudies = (props: {
                             {...register("descripcionTitulo", {
                                 required: "Por favor, ingrese la descripción del título",
                                 pattern: {
-                                    value: /^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s]+$/,
+                                    value: /^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s.,!?¿¡]+$/,
                                     message: "Por favor, ingrese una descripción válida",
                                 },
                                 maxLength: {
@@ -147,7 +146,6 @@ const ModalDataStudies = (props: {
                             fullWidth
                             inputProps={{
                                 maxLength: 50,
-                                pattern: /^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s]+$/,
                             }}
                             {...register("titulo", {
                                 required: "Por favor, ingrese el título",
@@ -176,7 +174,6 @@ const ModalDataStudies = (props: {
                             fullWidth
                             inputProps={{
                                 maxLength: 50,
-                                pattern: /^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s]+$/,
                             }}
                             {...register("institucion", {
                                 required: "Debe ingresar la institución",
