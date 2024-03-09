@@ -122,10 +122,10 @@ function Home() {
                 spacing={{ xs: 1, sm: 2 }}
               >
 
-                <ListItem key={area.id} sx={{ width: "fit-content" }}>
+                <ListItem key={area.area_id} sx={{ width: "fit-content" }}>
                   <Link onClick={() => handleGetOffersByAreaTop(area.area_id)} color="inherit" underline="hover">
                     <ListItemText >
-                      {area.nombre} (x)
+                      {area.nombre} ({area.contador})
                     </ListItemText>
                   </Link>
                 </ListItem>
