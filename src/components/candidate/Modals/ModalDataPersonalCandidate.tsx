@@ -40,7 +40,6 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [verifyNullTextFieldDocument, setVerifyNullTextFieldDocument] = useState(false);
 
-
     const handleAutocompleteChange = (_event: any, newValue: any) => {
         setTypeDocumentId(newValue?.id);
         setDniCandidate('');
@@ -48,11 +47,36 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
     };
 
     const handleDocumentoChange = (e: any) => {
-        setDniCandidate(e.target.value);
-        if (e.target.value.trim() === '' && typeDocumentId) {
+        const inputValue = e.target.value;
+        setDniCandidate(inputValue);
+
+        if (typeDocumentId === 1 && inputValue.trim().length < 8) {
+            setVerifyNullTextFieldDocument(true);
+        } else if (typeDocumentId === 2 && inputValue.trim().length < 12) {
+            setVerifyNullTextFieldDocument(true);
+        }
+        else if (typeDocumentId === 3 && inputValue.trim().length < 11) {
+            setVerifyNullTextFieldDocument(true);
+        }
+        else if (typeDocumentId === 4 && inputValue.trim().length < 12) {
             setVerifyNullTextFieldDocument(true);
         } else {
             setVerifyNullTextFieldDocument(false);
+        }
+    };
+
+    const getMaxLengthForDocument = (documentId: any) => {
+        switch (documentId) {
+            case 1: // DNI
+                return 8;
+            case 2: // CE
+                return 12;
+            case 3: //RUC
+                return 11;
+            case 4: //PASAPORTE
+                return 12;
+            default:
+                return 15; // Longitud máxima predeterminada si el tipo de documento no está definido
         }
     };
 
@@ -103,6 +127,10 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
         if (typeDocumentId && dniCandidate === null) {
             setVerifyNullTextFieldDocument(true);
             return;
+        }
+
+        if (verifyNullTextFieldDocument) {
+            return
         }
 
         //LO QUE SE MANDARÁ A LA PETICION
@@ -631,6 +659,7 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
                                 width: "100%",
                             }}
                         >
+
                             <TextField
                                 label="Documento"
                                 variant="outlined"
@@ -639,13 +668,14 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
                                 disabled={!typeDocumentId}
                                 fullWidth
                                 onChange={handleDocumentoChange}
+                                inputProps={{ maxLength: getMaxLengthForDocument(typeDocumentId) }}
                             />
                             {verifyNullTextFieldDocument &&
                                 <Typography
                                     color="red"
                                     variant="caption"
                                 >
-                                    Este campo es requerido
+                                    El documento ingresado no corresponde al tipo de documento seleccionado
                                 </Typography>
                             }
                         </Box>
