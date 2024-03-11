@@ -12,6 +12,9 @@ import LoginComp from "../pages/auth/company/LoginComp";
 import MyAccountComp from "../pages/company/MyAccountComp";
 import MyAdsComp from "../pages/company/MyAdsComp";
 import PostMyAd from "../pages/company/PostMyAd";
+import LinkInterestPageSoftware from '../pages/linkInterest-1';
+import LinkInterestPageQuestions from '../pages/linkInterest-2';
+import LinkInterestPageJobs from '../pages/linkInterest-3';
 
 export const AppRouter = () => {
   return (
@@ -24,6 +27,9 @@ export const AppRouter = () => {
         <Route path="/auth/candidate/register" element={<Register />} />
 
         {/* Candidate */}
+        <Route path="/link-interest-software" element={<LinkInterestPageSoftware />} />
+        <Route path="/link-interest-questions" element={<LinkInterestPageQuestions />} />
+        <Route path="/link-interest-jobs" element={<LinkInterestPageJobs />} />
         <Route path="/candidate/alerts" element={<Alerts />} />
         <Route path="/candidate/my-applications" element={<MyApplications />} />
         <Route path="/candidate/my-account" element={<MyAccount />} />

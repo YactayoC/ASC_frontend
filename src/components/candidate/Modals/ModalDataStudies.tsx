@@ -14,7 +14,7 @@ const ModalDataStudies = (props: {
     const userInfo = localStorage.getItem("userInfo");
     const userInfoJson = JSON.parse(userInfo || "{}");
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
-    const { insertStudiesInformation, } = useAccount();
+    const { insertStudiesInformation } = useAccount();
     const [startYear, setStartYear] = useState(null);
     const [endYear, setEndYear] = useState(null);
     const [descripcionTitle, setDescripcionTitle] = useState('');
@@ -94,6 +94,10 @@ const ModalDataStudies = (props: {
                     Agregar estudio
                 </Typography>
                 <Divider />
+                {/* 5. Agregar un tootltip para agregar una maestría / doctorado / y todo eso*/}
+                <Typography marginTop={"1rem"} variant="body1" align="left" gutterBottom>
+                    Agrega tus estudios (Bachiller, Licenciatura, Maestría, Doctorado), cursos, certificaciones y más.
+                </Typography>
                 <FormControl
                     component={"form"}
                     onSubmit={handleSubmit(onSubmitStudiesData)}

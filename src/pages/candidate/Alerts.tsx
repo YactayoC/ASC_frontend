@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Container,
+  IconButton,
   Typography,
 } from "@mui/material";
 import theme from "../../../theme";
@@ -13,6 +14,7 @@ import { HeaderMainPage } from "../../components/layout/HeaderMainPage";
 import useAlerts from "../../hooks/Candidate/Alerts/useAlerts";
 import ModalUpdateStatusPostulation from "../../components/candidate/Modals/ModalCreateAlert";
 import ModalUpdateAlert from "../../components/candidate/Modals/ModalUpdateAlert";
+import { Delete } from "@mui/icons-material";
 
 const Alerts = () => {
   const [open, setOpen] = useState(false);
@@ -21,7 +23,7 @@ const Alerts = () => {
   const user = userInfo ? JSON.parse(userInfo) : null;
   const [alerts, setAlerts] = useState<any>([]);
   const [currentAlertId, setCurrentAlertId] = useState<any>(null);
-  const { getAlerts } = useAlerts();
+  const { getAlerts, deleteAlert } = useAlerts();
 
   const handleOpen = () => {
     setOpen(true);
@@ -44,7 +46,15 @@ const Alerts = () => {
       user?.id_user,
     );
     setAlerts(response.response);
-    //console.log(response.response);
+  }
+
+  const handleDeleteAlert = async (idAlert: any) => {
+    if (idAlert) {
+      const response = await deleteAlert(idAlert);
+      if (response.ok) {
+        await handleGetAlerts();
+      }
+    }
   }
 
   const handleGetAlertData = (idAlert: any) => {
@@ -189,9 +199,26 @@ const Alerts = () => {
                     </Typography>
                   </Box>
 
-                  <Button variant="outlined" onClick={() => {
-                    handleGetAlertData(alert.id);
-                  }}>Editar</Button>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      rowGap: "1rem",
+                      alignItems: "flex-end",
+                    }}
+                  >
+                    <Button variant="outlined" onClick={() => {
+                      handleGetAlertData(alert.id);
+                    }}>Editar</Button>
+                    <IconButton
+                      sx={{
+                        width: "fit-content",
+                      }}
+                      onClick={() => { handleDeleteAlert(alert.id) }}
+                    >
+                      <Delete />
+                    </IconButton>
+                  </Box>
                 </Box>
               </Box>
             ))

@@ -8,6 +8,7 @@ import {
   IconButton,
   Divider,
   styled,
+  Tooltip,
 } from "@mui/material";
 import useAccount from "../../hooks/Candidate/Account/useAccount";
 import theme from "../../../theme";
@@ -362,31 +363,38 @@ const MyCV = () => {
               </Button>
             </Box>
 
-            <Button
-              variant="contained"
-              component="label"
-              color="primary"
-              startIcon={<CloudUpload />}
-              disabled={!!selectedFile}
-              sx={{
-                width: "fit-content",
-                [theme.breakpoints.down("sm")]: {
-                  width: "100%",
-                },
-              }}
+            <Tooltip
+              title="Solo se permite archivos en formato PDF, máximo 5MB"
+              placement="right"
+              arrow
             >
-              Cargar CV
-              <VisuallyHiddenInput
-                type="file"
-                onChange={handleFileChange}
-                accept=".pdf"
-                id="fileInputCV"
-              />
-            </Button>
+              <Button
+                variant="contained"
+                component="label"
+                color="primary"
+                startIcon={<CloudUpload />}
+                disabled={!!selectedFile}
+                sx={{
+                  width: "fit-content",
+                  [theme.breakpoints.down("sm")]: {
+                    width: "100%",
+                  },
+                }}
+              >
+                Cargar CV
+                <VisuallyHiddenInput
+                  type="file"
+                  onChange={handleFileChange}
+                  accept=".pdf"
+                  id="fileInputCV"
+                />
+              </Button>
+            </Tooltip>
             <Typography
               sx={{
                 color: "gray",
                 fontSize: "1rem",
+                marginTop: "-1rem",
               }}
             >
               * El documento sustentatorio va ser remitido en el proceso o etapa de la entrevista
@@ -810,8 +818,7 @@ const MyCV = () => {
                 Editar
               </Button>
             </Box>
-
-            <Box sx={{}}>
+            <Box>
               <Typography variant="h5" gutterBottom>
                 Formación académica
               </Typography>
@@ -1016,7 +1023,7 @@ const MyCV = () => {
                     ))}
                   </Box>
                 </Box>
-              </Box>
+                AST</Box>
             </Box>
           </Box>
         )}

@@ -153,7 +153,7 @@ function Home() {
             >
               <ListItem sx={{ width: "fit-content" }}>
                 <Link
-                  href="/software-planillas"
+                  href="/link-interest-software"
                   color="inherit"
                   underline="hover"
                 >
@@ -162,7 +162,7 @@ function Home() {
               </ListItem>
               <ListItem sx={{ width: "fit-content" }}>
                 <Link
-                  href="/como-podemos-ayudarte"
+                  href="/link-interest-questions"
                   color="inherit"
                   underline="hover"
                 >
@@ -171,7 +171,7 @@ function Home() {
               </ListItem>
               <ListItem sx={{ width: "fit-content" }}>
                 <Link
-                  href="/empleos-destacados"
+                  href="/link-interest-jobs"
                   color="inherit"
                   underline="hover"
                 >
