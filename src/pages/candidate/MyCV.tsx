@@ -18,8 +18,6 @@ import {
   Add,
   CloudUpload,
   DeleteOutline,
-  Edit,
-  Input,
   LocationOnOutlined,
   MailOutline,
   PhoneOutlined,
@@ -38,7 +36,6 @@ import ModalDataExperience from "../../components/candidate/Modals/ModalDataExpe
 import ModalDataStudies from "../../components/candidate/Modals/ModalDataStudies";
 import ModalDataLanguage from "../../components/candidate/Modals/ModalDataLanguage";
 import ModalDataPersonalCandidate from "../../components/candidate/Modals/ModalDataPersonalCandidate";
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import AvatarImage from "../../components/candidate/Avatar/AvatarImage";
 
 const VisuallyHiddenInput = styled("input")({
@@ -174,11 +171,6 @@ const MyCV = () => {
     //console.log(dataPersonalInformation)
     setSelectedFile(dataPersonalInformation.cv);
     return
-  }
-
-  const handleImageClick = () => {
-    const fileInput = document.getElementById('fileInput');
-    fileInput?.click();
   }
 
   const isMounted = useRef(true);

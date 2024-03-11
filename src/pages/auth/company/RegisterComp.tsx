@@ -119,7 +119,7 @@ const RegisterComp = () => {
 
   const handleRegisterInfoCandidate = async (data: any) => {
     try {
-      const response = await registerCompleteCompany(data);
+      await registerCompleteCompany(data);
       //console.log(response)
       navigate("/");
       //localStorage.setItem("userInfo", JSON.stringify(response?.response.data));

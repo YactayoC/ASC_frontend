@@ -139,7 +139,7 @@ const ModalUpdateAlert = (props: {
                         getOptionLabel={(option) => option.label}
                         onChange={(_event, newValue) => {
                             // Obtiene el ID y el label de la nueva ubicación seleccionada
-                            const newLocationValue = newValue ? String(newValue.provincia_id) : '';
+                            //const newLocationValue = newValue ? String(newValue.provincia_id) : '';
                             const newLocationLabel = newValue ? newValue.label : '';
 
                             // Actualiza el estado y localStorage con los nuevos valores

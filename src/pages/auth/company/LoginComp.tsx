@@ -35,7 +35,7 @@ const LoginComp = () => {
 
   const handleLogin = async (dataForm: LoginForm) => {
     try {
-      const response = await loginCompany(dataForm);
+      await loginCompany(dataForm);
       //console.log(response?.response)
       localStorage.setItem("isAuthenticated", "true");
       localStorage.setItem("isCompany", "true");
