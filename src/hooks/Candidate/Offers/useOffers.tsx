@@ -15,7 +15,7 @@ const useOffers = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -33,7 +33,7 @@ const useOffers = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -51,7 +51,7 @@ const useOffers = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -69,7 +69,7 @@ const useOffers = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -88,12 +88,10 @@ const useOffers = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
-
-    // APLY OFFER ROUTE
 
     const applyOffer = async (ofertaId: number, postulanteId: number) => {
         try {
@@ -108,7 +106,7 @@ const useOffers = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -127,7 +125,7 @@ const useOffers = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }

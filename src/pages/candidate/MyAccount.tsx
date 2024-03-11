@@ -16,8 +16,11 @@ import FormChangePassword from "../../components/candidate/SecurityTab/FormChang
 import FormDeactivateAccount from "../../components/candidate/SecurityTab/FormDeactivateAccount";
 import FormChangeVisibleCV from "../../components/candidate/SecurityTab/FormChangeVisibleCV";
 import useAccount from "../../hooks/Candidate/Account/useAccount";
+import ModalDataPersonalCandidate from "../../components/candidate/Modals/ModalDataPersonalCandidate";
+import AvatarImage from "../../components/candidate/Avatar/AvatarImage";
 
 const MyAccount = () => {
+  const [openModalDataPersonal, setOpenModalDataPersonal] = useState(false);
   const userInfo = localStorage.getItem("userInfo");
   const user = userInfo ? JSON.parse(userInfo as string) : null;
   const [tabValue, setTabValue] = useState(0);
@@ -45,12 +48,21 @@ const MyAccount = () => {
   const handleGetIncompletePersonalInformation = async () => {
     const response = await getIncompletePersonalInformation(user?.id_user);
     const dataPersonalInformation = response.response.data;
-    console.log(dataPersonalInformation)
-    setPersonalIncompleteInformation(dataPersonalInformation);
     //console.log(dataPersonalInformation)
+    setPersonalIncompleteInformation(dataPersonalInformation);
+    ////console.log(dataPersonalInformation)
     //setSelectedFile(dataPersonalInformation.cv_visible);
     return
   }
+
+  const handleOpenModalEditDataPersonal = async () => {
+    setOpenModalDataPersonal(true);
+  };
+
+  const handleCloseModalEditDataPersonal = () => {
+    setOpenModalDataPersonal(false);
+  };
+
 
   useEffect(() => {
     if (isMounted.current) {
@@ -138,16 +150,7 @@ const MyAccount = () => {
                 },
               }}
             >
-              <img
-                src="https://fotosprofesionales.es/wp-content/uploads/2023/08/fotografo-de-retrato-madrid-foto-corporativa-hombre-12.jpg"
-                alt="avatar"
-                style={{
-                  width: "8rem",
-                  height: "10rem",
-                  cursor: "pointer",
-                }}
-              />
-
+              <AvatarImage />
               <Box
                 sx={{
                   display: "flex",
@@ -165,9 +168,7 @@ const MyAccount = () => {
                   <Typography variant="h5" gutterBottom>
                     {personalIncompleteInformation.nombre} {personalIncompleteInformation.apellidos}
                   </Typography>
-                  <IconButton onClick={() => {
-                    console.log("first")
-                  }}>
+                  <IconButton onClick={handleOpenModalEditDataPersonal}>
                     <EditOutlined />
                   </IconButton>
                 </Box>
@@ -214,6 +215,7 @@ const MyAccount = () => {
       </Box >
 
       <ModalChangeEmail openModalEmail={openModalEmail} handleCloseModalChangeEmail={handleCloseModalEmail} />
+      <ModalDataPersonalCandidate openModalDataPersonal={openModalDataPersonal} handleCloseModalEditDataPersonal={handleCloseModalEditDataPersonal} />
     </>
   );
 };

@@ -17,6 +17,8 @@ import {
   Add,
   CloudUpload,
   DeleteOutline,
+  Edit,
+  Input,
   LocationOnOutlined,
   MailOutline,
   PhoneOutlined,
@@ -35,6 +37,8 @@ import ModalDataExperience from "../../components/candidate/Modals/ModalDataExpe
 import ModalDataStudies from "../../components/candidate/Modals/ModalDataStudies";
 import ModalDataLanguage from "../../components/candidate/Modals/ModalDataLanguage";
 import ModalDataPersonalCandidate from "../../components/candidate/Modals/ModalDataPersonalCandidate";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import AvatarImage from "../../components/candidate/Avatar/AvatarImage";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -101,21 +105,21 @@ const MyCV = () => {
     //HARÁ LA PETICIÓN PARA LISTAR LAS EXPERIENCIAS
     const repsonse = await getExperienceInformation(userInfoJson?.id_user);
     setExperiencesData(repsonse.response.data);
-    // console.log(repsonse.response.data)
+    // //console.log(repsonse.response.data)
   }
 
   const handleGetStudies = async () => {
     //HARÁ LA PETICIÓN PARA LISTAR LOS ESTUDIOS
     const response = await getStudiesInformation(userInfoJson?.id_user);
     setStudiesData(response.response.studies);
-    console.log(response.response.studies)
+    //console.log(response.response.studies)
   }
 
   const handleGetLanguages = async () => {
     //HARÁ LA PETICIÓN PARA LISTAR LOS IDIOMAS
     const response = await getLanguagesInformation(userInfoJson?.id_user);
     setLanguagesData(response.response.data);
-    console.log(response.response.data)
+    //console.log(response.response.data)
   }
 
   const handleFileChange = async (event: any) => {
@@ -124,11 +128,11 @@ const MyCV = () => {
     if (file) {
       setSelectedFile({ name: file.name, size: file.size });
 
-      //console.log(file, userId)
+      ////console.log(file, userId)
 
       //const response = await uploadFile(file, userId);
       await uploadFile(file, userId);
-      //console.log(response);
+      ////console.log(response);
 
       localStorage.setItem('selectedFileDetails', JSON.stringify({
         name: file.name,
@@ -166,9 +170,14 @@ const MyCV = () => {
     const response = await getIncompletePersonalInformation(userInfoJson?.id_user);
     const dataPersonalInformation = response.response.data;
     setPersonalIncompleteInformation(dataPersonalInformation);
-    console.log(dataPersonalInformation)
+    //console.log(dataPersonalInformation)
     setSelectedFile(dataPersonalInformation.cv);
     return
+  }
+
+  const handleImageClick = () => {
+    const fileInput = document.getElementById('fileInput');
+    fileInput?.click();
   }
 
   const isMounted = useRef(true);
@@ -264,16 +273,7 @@ const MyCV = () => {
                 },
               }}
             >
-              <img
-                src="https://fotosprofesionales.es/wp-content/uploads/2023/08/fotografo-de-retrato-madrid-foto-corporativa-hombre-12.jpg"
-                alt="avatar"
-                style={{
-                  width: "8rem",
-                  height: "10rem",
-                  cursor: "pointer",
-                }}
-              />
-
+              <AvatarImage />
               <Box
                 sx={{
                   display: "flex",
@@ -457,16 +457,7 @@ const MyCV = () => {
                 },
               }}
             >
-              <img
-                src="https://fotosprofesionales.es/wp-content/uploads/2023/08/fotografo-de-retrato-madrid-foto-corporativa-hombre-12.jpg"
-                alt="avatar"
-                style={{
-                  width: "8rem",
-                  height: "10rem",
-                  cursor: "pointer",
-                }}
-              />
-
+              <AvatarImage />
               <Box
                 sx={{
                   display: "flex",
@@ -593,12 +584,6 @@ const MyCV = () => {
 
                   placeholder="Escribe una descripción de tu perfil"
                   rows={7}
-                // onChange={(e) => {
-                //   setPersonalIncompleteInformation({
-                //     ...personalIncompleteInformation,
-                //     descripcion_perfil: e.target.value,
-                //   });
-                // }}
                 />
               </Box>
             </Box>
@@ -737,16 +722,7 @@ const MyCV = () => {
                 },
               }}
             >
-              <img
-                src="https://fotosprofesionales.es/wp-content/uploads/2023/08/fotografo-de-retrato-madrid-foto-corporativa-hombre-12.jpg"
-                alt="avatar"
-                style={{
-                  width: "8rem",
-                  height: "10rem",
-                  cursor: "pointer",
-                }}
-              />
-
+              <AvatarImage />
               <Box
                 sx={{
                   display: "flex",

@@ -37,12 +37,12 @@ const ModalDataExperience = (props: {
       setFuncionesValue(inputValue);
     }
   };
-  
-  const onSubmitExperienceData = async (data: any) => {
-    handleCloseModalEditDataExperience();
 
-    console.log(userInfoJson?.id_user);
-    console.log(data);
+  const onSubmitExperienceData = async (data: any) => {
+    handleClose();
+
+    ////console.log(userInfoJson?.id_user);
+    ////console.log(data);
 
     await insertExperienceInformation(
       userInfoJson?.id_user,
@@ -59,6 +59,7 @@ const ModalDataExperience = (props: {
 
   const handleClose = () => {
     handleCloseModalEditDataExperience();
+    setFuncionesValue('');
     reset();
   }
 
@@ -144,10 +145,6 @@ const ModalDataExperience = (props: {
               fullWidth
               {...register("funciones", {
                 required: "Debe ingresar las funciones",
-                pattern: {
-                  value: /^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s]+$/,
-                  message: "Debe ingresar funciones válidas",
-                },
                 maxLength: {
                   value: 500,
                   message: "Máximo 500 caracteres"
@@ -158,7 +155,6 @@ const ModalDataExperience = (props: {
             <FormHelperText>
               Caracteres restantes: {500 - funcionesValue.length} de 500
             </FormHelperText>
-            {errors.funciones && <Typography variant="caption" color="error">{String(errors.funciones.message)}</Typography>}
           </Box>
 
           <Box>

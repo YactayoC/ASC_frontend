@@ -57,7 +57,7 @@ const RegisterComp = () => {
       }
     }
     catch (err) {
-      console.log(err);
+      //console.log(err);
     }
   }
 
@@ -90,14 +90,14 @@ const RegisterComp = () => {
   const handleSendVerificationEmail = async (data: any) => {
     try {
       const response = await sendVerificationEmailCompany(data);
-      console.log(response)
+      //console.log(response)
       //em caso sea exitoso la peticion
       if (response.ok) {
         handleNext();
       }
 
     } catch (error: any) {
-      console.log(error)
+      //console.log(error)
       const errorMessage = error?.response?.data?.message || "Error al enviar el correo de verificación";
       setError('email', { type: 'manual', message: errorMessage });
     }
@@ -106,28 +106,28 @@ const RegisterComp = () => {
   const handleVerifyCodeEmail = async (data: any) => {
     try {
       const response = await verifyCodeEmailCompany(data);
-      console.log(response);
+      //console.log(response);
 
       if (response.ok) {
         handleNext();
       }
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }
 
   const handleRegisterInfoCandidate = async (data: any) => {
     try {
       const response = await registerCompleteCompany(data);
-      console.log(response)
+      //console.log(response)
       navigate("/");
       //localStorage.setItem("userInfo", JSON.stringify(response?.response.data));
       localStorage.setItem("isCompany", "true");
       localStorage.setItem("isAuthenticated", "true");
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }
 

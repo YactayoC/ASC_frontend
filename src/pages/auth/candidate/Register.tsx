@@ -64,7 +64,7 @@ const Register = () => {
       }
     }
     catch (error) {
-      console.log(error);
+      //console.log(error);
     }
 
   }
@@ -97,7 +97,7 @@ const Register = () => {
   const handleSendVerificationEmail = async (data: any) => {
     try {
       const response = await sendVerificationEmail(data);
-      console.log(response);
+      //console.log(response);
 
       if (response?.ok) {
         handleNext();
@@ -124,7 +124,7 @@ const Register = () => {
 
   const handleRegisterInfoCandidate = async (data: any) => {
     try {
-      //console.log(data)
+      ////console.log(data)
       await registerCompleteCandidate(data);
       navigate("/");
       //localStorage.setItem("userInfo", JSON.stringify(response?.response.data));
@@ -132,7 +132,7 @@ const Register = () => {
       localStorage.setItem("isAuthenticated", "true");
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }
 

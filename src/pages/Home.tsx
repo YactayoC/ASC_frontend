@@ -25,6 +25,8 @@ function Home() {
   const navigate = useNavigate();
   const { getAreasTop } = useOffers();
   const [areasTop, setAreasTop] = useState<any>([]);
+  const [countCompany, setCountCompany] = useState(null);
+  const [countOffers, setCountOffers] = useState(null);
 
   const handleGetOffersByAreaTop = async (id: number) => {
     navigate(`/candidate/search/featured-area/${id}`);
@@ -32,7 +34,9 @@ function Home() {
 
   const handleDataAreasTop = async () => {
     const data = await getAreasTop();
-    setAreasTop(data.response)
+    setAreasTop(data.response.areas)
+    setCountCompany(data.response.countCompanies)
+    setCountOffers(data.response.countOffers)
     console.log(data.response)
   }
 
@@ -55,7 +59,7 @@ function Home() {
         style={{
           backgroundImage: `url('/work.jpg')`,
           backgroundSize: "cover",
-          backgroundPosition: "top center",
+          backgroundPosition: "center",
           position: "relative",
         }}
       >
@@ -87,7 +91,7 @@ function Home() {
               gutterBottom
               color="#a7a7a7"
             >
-              Existen 1800 ofertas de empleo de 40 empresas
+              Existen {Number(countOffers)} ofertas de empleo de {Number(countCompany)} empresas
             </Typography>
           </Box>
         </Container>
@@ -115,25 +119,20 @@ function Home() {
           >
             Áreas destacadas
           </Typography>
-          <Box display="flex">
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={{ xs: 1, sm: 2 }}
+          >
             {areasTop.map((area: any) => (
-              <Stack
-                direction={{ xs: "column", sm: "row" }}
-                spacing={{ xs: 1, sm: 2 }}
-              >
-
-                <ListItem key={area.area_id} sx={{ width: "fit-content" }}>
-                  <Link onClick={() => handleGetOffersByAreaTop(area.area_id)} color="inherit" underline="hover">
-                    <ListItemText >
-                      {area.nombre} ({area.contador})
-                    </ListItemText>
-                  </Link>
-                </ListItem>
-
-
-              </Stack>
+              <ListItem key={area.area_id} sx={{ width: "fit-content" }}>
+                <Link onClick={() => handleGetOffersByAreaTop(area.area_id)} color="inherit" underline="hover">
+                  <ListItemText >
+                    {area.nombre} ({area.contador})
+                  </ListItemText>
+                </Link>
+              </ListItem>
             ))}
-          </Box>
+          </Stack>
         </Container>
         <Container>
           <Typography

@@ -14,7 +14,7 @@ const FormChangeVisibleCV = () => {
     const onSubmitDeactivateAccount = async (data: any) => {
         const response = await deactivateAccount(user.id_user, data.reason);
         if (response.ok) {
-            console.log(response);
+            //console.log(response);
             navigate("/")
             localStorage.clear();
         }

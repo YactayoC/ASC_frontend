@@ -9,7 +9,8 @@ import CloseIcon from '@mui/icons-material/Close';
 const ModalUpdateAlert = (props: {
     openModalUpdateStatus: boolean,
     handleCloseModalUpdateStatus: () => void
-    alertId: any
+    alertId: any,
+    onAlertSaved: () => void
 }) => {
 
     const { openModalUpdateStatus, handleCloseModalUpdateStatus, alertId } = props;
@@ -21,6 +22,9 @@ const ModalUpdateAlert = (props: {
     const { register, handleSubmit, setValue } = useForm();
     const { updateAlert, getAlertById } = useAlerts();
     const handleClose = () => {
+        setFrecuencia("");
+        setPuestoInteres("");
+        setLocationLabel("");
         handleCloseModalUpdateStatus();
     }
 
@@ -34,17 +38,15 @@ const ModalUpdateAlert = (props: {
     );
 
     const onSubmit = async (data: any) => {
-        //EN CASO LOS DATOS DE TODOS LOS CAMPOS SON LOS MISMO NO HACER NINGUNA PETICION
-
-        const response = await updateAlert(
+        await updateAlert(
             alertId,
             data.puesto,
             locationLabel,
             data.frecuencia,
             user.id_user
         );
-
-        console.log(response)
+        props.onAlertSaved();
+        handleClose();
     }
 
     const frequentsOptions = [
@@ -62,11 +64,8 @@ const ModalUpdateAlert = (props: {
                     setPuestoInteres(puesto_interes);
                     setLocationLabel(ubicacion);
                     setFrecuencia(frecuencia);
-
-                    // Configura los valores iniciales en el formulario
                     setValue("puesto", puesto_interes);
                     setValue("frecuencia", frecuencia);
-                    // No necesitas setValue para 'ubicacion' porque se maneja a través de 'locationLabel' y el estado seleccionado en Autocomplete
                 }
             }
         };
@@ -128,6 +127,7 @@ const ModalUpdateAlert = (props: {
                         type="text"
                         fullWidth
                         {...register("puesto", { required: true })}
+                        onChange={(e) => setPuestoInteres(e.target.value)}
                     />
 
                     <Autocomplete
@@ -143,8 +143,8 @@ const ModalUpdateAlert = (props: {
                             const newLocationLabel = newValue ? newValue.label : '';
 
                             // Actualiza el estado y localStorage con los nuevos valores
-                            console.log(newLocationValue);
-                            console.log(newLocationLabel);
+                            //console.log(newLocationValue);
+                            //console.log(newLocationLabel);
                             setLocationLabel(newLocationLabel); // Esto garantiza que el label se actualice para mostrar el valor correcto
 
                         }}

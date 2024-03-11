@@ -43,8 +43,14 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import SearchJob from "../../components/common/SearchJob";
 import theme from "../../../theme";
 import useMediaQuery from '@mui/material/useMediaQuery';
+import ModalDataStudies from "../../components/candidate/Modals/ModalDataStudies";
+import ModalDataLanguage from "../../components/candidate/Modals/ModalDataLanguage";
 
 const PostMyAd = () => {
+
+
+    const [openModalStudy, setOpenModalStudy] = useState(false);
+    const [openModalLanguage, setOpenModalLanguage] = useState(false);
     const [tabValueHorizontal, setTabValueHorizontal] = useState(0);
     const [tabValueVertical, setTabValueVertical] = useState(0);
     const [tabSubValueVertical, setSubTabValueVertical] = useState(0);
@@ -168,6 +174,14 @@ const PostMyAd = () => {
         }
     };
 
+    const handleCloseModalEditDataStudies = () => {
+        setOpenModalStudy(false);
+    }
+
+    const handleCloseModalEditDataLanguage = () => {
+        setOpenModalLanguage(false);
+    }
+
     const handleChangeVertical = (_e: any, newValue: number) => {
         setTabValueVertical(newValue);
         setPreguntaAbiertas([]);
@@ -278,276 +292,146 @@ const PostMyAd = () => {
     }, [openBar]);
 
     return (
-        <Box>
-            <HeaderButtons showLogo={true} />
-            <HeaderMainPage />
-            {showSearchBar ? (
+        <>
+            <Box>
+                <HeaderButtons showLogo={true} />
+                <HeaderMainPage />
+                {showSearchBar ? (
 
+                    <Box
+                        sx={{
+                            width: "60%",
+                            paddingTop: "3rem",
+                            margin: "auto",
+                        }}
+                    >
+                        <SearchJob />
+                        <Typography sx={{
+                            marginTop: "0.9rem",
+                        }}>1800 perfiles encontrados</Typography>
+                    </Box>
+                ) : (
+
+                    <Box
+                        sx={{
+                            width: "60%",
+                            paddingTop: "3rem",
+                            margin: "auto",
+                        }}
+                    >
+                        <SearchJob />
+                        <Typography sx={{
+                            marginTop: "0.9rem",
+                        }}>1800 perfiles encontrados</Typography>
+                    </Box>
+                )}
                 <Box
                     sx={{
-                        width: "60%",
-                        paddingTop: "3rem",
+                        display: "flex",
+                        flexDirection: "row",
+                        columnGap: "3rem",
+                        pt: "3rem",
+                        width: "85%",
                         margin: "auto",
+                        marginBottom: "4rem",
+                        backgroundColor: "white",
+                        paddingTop: "0",
+                        marginTop: "3rem",
+                        padding: "3rem",
+                        borderRadius: "3rem",
                     }}
                 >
-                    <SearchJob />
-                    <Typography sx={{
-                        marginTop: "0.9rem",
-                    }}>1800 perfiles encontrados</Typography>
-                </Box>
-            ) : (
+                    {preview ? (
+                        <>
+                            <Tabs
+                                value={tabValueVertical}
+                                orientation="vertical"
+                                onChange={handleChangeVertical}
+                                sx={{
+                                    marginTop: "4rem",
+                                    borderRight: 1,
+                                    borderColor: "divider",
+                                    [theme.breakpoints.down("xxxl")]: {
+                                        display: "none",
+                                    }
+                                }}
+                            >
+                                <Tab label="Datos del aviso" value={0} />
+                                <Tab label="Datos de la publicación" value={1} />
+                                <Tab label="Proceso de selección" value={2} />
+                            </Tabs>
 
-                <Box
-                    sx={{
-                        width: "60%",
-                        paddingTop: "3rem",
-                        margin: "auto",
-                    }}
-                >
-                    <SearchJob />
-                    <Typography sx={{
-                        marginTop: "0.9rem",
-                    }}>1800 perfiles encontrados</Typography>
-                </Box>
-            )}
-            <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    columnGap: "3rem",
-                    pt: "3rem",
-                    width: "85%",
-                    margin: "auto",
-                    marginBottom: "4rem",
-                    backgroundColor: "white",
-                    paddingTop: "0",
-                    marginTop: "3rem",
-                    padding: "3rem",
-                    borderRadius: "3rem",
-                }}
-            >
-                {preview ? (
-                    <>
-                        <Tabs
-                            value={tabValueVertical}
-                            orientation="vertical"
-                            onChange={handleChangeVertical}
-                            sx={{
-                                marginTop: "4rem",
-                                borderRight: 1,
-                                borderColor: "divider",
-                                [theme.breakpoints.down("xxxl")]: {
-                                    display: "none",
-                                }
-                            }}
-                        >
-                            <Tab label="Datos del aviso" value={0} />
-                            <Tab label="Datos de la publicación" value={1} />
-                            <Tab label="Proceso de selección" value={2} />
-                        </Tabs>
-
-                        <Box sx={{ flexGrow: 1, width: "100%" }}>
-                            {tabValueVertical === 0 && (
-                                <Box>
-                                    {isXXXLDown && (
-                                        <div>
-                                            <IconButton
-                                                aria-label="more"
-                                                id="long-button"
-                                                aria-controls={open ? 'long-menu' : undefined}
-                                                aria-expanded={open ? 'true' : undefined}
-                                                aria-haspopup="true"
-                                                onClick={handleClickMoreOptions}
-                                            >
-                                                <MenuIcon />
-                                            </IconButton>
-                                            <Menu
-                                                id="long-menu"
-                                                MenuListProps={{
-                                                    'aria-labelledby': 'long-button',
-                                                }}
-                                                anchorEl={anchorEl}
-                                                open={open}
-                                                onClose={handleClose}
-                                            >
-                                                {options.map((option) => (
-                                                    <MenuItem key={option.label} selected={option.label === 'Pyxis'} onClick={() => {
-                                                        handleClose();
-                                                        setTabValueVertical(option.id);
-                                                    }}>
-                                                        {option.label}
-                                                    </MenuItem>
-                                                ))}
-                                            </Menu>
-                                        </div>
-                                    )}
-                                    <Tabs
-                                        value={tabValueHorizontal}
-                                        onChange={handleChange}
-                                        aria-label="Horizontal tabs example"
-                                        variant="scrollable"
-                                        scrollButtons="auto"
-                                        allowScrollButtonsMobile
-                                        sx={{
-                                            borderBottom: 1,
-                                            borderColor: "divider",
-                                        }}
-                                    >
-                                        <Tab label="Perfil de puesto" value={0} />
-                                        <Tab onClick={() => {
-                                            setShowSearchBar(false)
-                                        }} label="Requisitos" value={1} />
-                                        <Tab label="Cuestionario de preguntas" value={2} />
-                                    </Tabs>
-
-                                    {tabValueHorizontal === 0 && (
-                                        <Box
+                            <Box sx={{ flexGrow: 1, width: "100%" }}>
+                                {tabValueVertical === 0 && (
+                                    <Box>
+                                        {isXXXLDown && (
+                                            <div>
+                                                <IconButton
+                                                    aria-label="more"
+                                                    id="long-button"
+                                                    aria-controls={open ? 'long-menu' : undefined}
+                                                    aria-expanded={open ? 'true' : undefined}
+                                                    aria-haspopup="true"
+                                                    onClick={handleClickMoreOptions}
+                                                >
+                                                    <MenuIcon />
+                                                </IconButton>
+                                                <Menu
+                                                    id="long-menu"
+                                                    MenuListProps={{
+                                                        'aria-labelledby': 'long-button',
+                                                    }}
+                                                    anchorEl={anchorEl}
+                                                    open={open}
+                                                    onClose={handleClose}
+                                                >
+                                                    {options.map((option) => (
+                                                        <MenuItem key={option.label} selected={option.label === 'Pyxis'} onClick={() => {
+                                                            handleClose();
+                                                            setTabValueVertical(option.id);
+                                                        }}>
+                                                            {option.label}
+                                                        </MenuItem>
+                                                    ))}
+                                                </Menu>
+                                            </div>
+                                        )}
+                                        <Tabs
+                                            value={tabValueHorizontal}
+                                            onChange={handleChange}
+                                            aria-label="Horizontal tabs example"
+                                            variant="scrollable"
+                                            scrollButtons="auto"
+                                            allowScrollButtonsMobile
                                             sx={{
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                rowGap: "2.1rem",
-                                                paddingTop: "1rem",
-                                                width: "auto",
-                                                [theme.breakpoints.down("lg")]: {
-                                                    paddingRight: "0",
-                                                    rowGap: "1rem",
-                                                },
+                                                borderBottom: 1,
+                                                borderColor: "divider",
                                             }}
                                         >
-                                            <FormControlLabel
-                                                control={<Checkbox name="hideCompanyName" />}
-                                                label="Ocultar el nombre de la empresa"
-                                                sx={{
-                                                    alignSelf: "flex-end",
-                                                    [theme.breakpoints.down("lg")]: {
-                                                        alignSelf: "flex-start",
-                                                    }
-                                                }}
-                                            />
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    flexDirection: "row",
-                                                    columnGap: "2rem",
-                                                    justifyContent: "space-between",
-                                                    [theme.breakpoints.down("lg")]: {
-                                                        flexDirection: "column",
-                                                        rowGap: "1rem",
-                                                    }
-                                                }}
-                                            >
-                                                <TextField
-                                                    label="Nombre de la empresa"
-                                                    variant="outlined"
-                                                    fullWidth
-                                                />
-                                                <Autocomplete
-                                                    disablePortal
-                                                    id="combo-box-demo"
-                                                    options={sectorCompany}
-                                                    sx={{
-                                                        width: "20rem",
-                                                        [theme.breakpoints.down("lg")]: {
-                                                            width: "100%",
-                                                        }
-                                                    }}
+                                            <Tab label="Perfil de puesto" value={0} />
+                                            <Tab onClick={() => {
+                                                setShowSearchBar(false)
+                                            }} label="Requisitos" value={1} />
+                                            <Tab label="Cuestionario de preguntas" value={2} />
+                                        </Tabs>
 
-                                                    renderInput={(params) => (
-                                                        <TextField {...params} label="Área" />
-                                                    )}
-                                                />
-                                            </Box>
+                                        {tabValueHorizontal === 0 && (
                                             <Box
                                                 sx={{
                                                     display: "flex",
-                                                    flexDirection: "row",
-                                                    columnGap: "2rem",
-                                                    justifyContent: "space-between",
-                                                    alignItems: "center",
+                                                    flexDirection: "column",
+                                                    rowGap: "2.1rem",
+                                                    paddingTop: "1rem",
+                                                    width: "auto",
                                                     [theme.breakpoints.down("lg")]: {
-                                                        flexDirection: "column",
+                                                        paddingRight: "0",
                                                         rowGap: "1rem",
-                                                    }
+                                                    },
                                                 }}
                                             >
-                                                <TextField
-                                                    label="Número de vacantes"
-                                                    type="number"
-                                                    fullWidth
-                                                />
-                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                    <DatePicker
-                                                        label="Fecha de contratación"
-                                                        sx={{
-                                                            width: "30rem",
-                                                            [theme.breakpoints.down("lg")]: {
-                                                                width: "100%",
-
-                                                            }
-                                                        }}
-                                                    />
-                                                </LocalizationProvider>
-                                                <Autocomplete
-                                                    disablePortal
-                                                    id="combo-box-demo"
-                                                    options={sectorCompany}
-                                                    sx={{
-                                                        width: "30rem",
-                                                        [theme.breakpoints.down("lg")]: {
-                                                            width: "100%",
-                                                        }
-                                                    }}
-                                                    renderInput={(params) => (
-                                                        <TextField {...params} label="Modalidad de trabajo" />
-                                                    )}
-                                                />
-                                            </Box>
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    flexDirection: "row",
-                                                    columnGap: "2rem",
-                                                    justifyContent: "space-between",
-                                                    alignItems: "center",
-                                                    [theme.breakpoints.down("lg")]: {
-                                                        flexDirection: "column",
-                                                        rowGap: "1rem",
-                                                    }
-                                                }}
-                                            >
-                                                <Autocomplete
-                                                    disablePortal
-                                                    id="combo-box-demo"
-                                                    options={sectorCompany}
-                                                    sx={{
-                                                        width: "20rem",
-                                                        [theme.breakpoints.down("lg")]: {
-                                                            width: "100%",
-                                                        }
-                                                    }}
-                                                    renderInput={(params) => (
-                                                        <TextField {...params} label="Tipo de Jornada" />
-                                                    )}
-                                                />
-                                                <Typography sx={{
-                                                    [theme.breakpoints.down("lg")]: {
-                                                        width: "100%",
-                                                        textAlign: "left",
-                                                    }
-                                                }} >Rango salarial</Typography>
-                                                <TextField label="Desde" sx={{
-                                                    [theme.breakpoints.down("lg")]: {
-                                                        width: "100%",
-                                                    }
-                                                }} />
-                                                <TextField label="Hasta" sx={{
-                                                    [theme.breakpoints.down("lg")]: {
-                                                        width: "100%",
-                                                    }
-                                                }} />
                                                 <FormControlLabel
                                                     control={<Checkbox name="hideCompanyName" />}
-                                                    label="Ocultar salario"
+                                                    label="Ocultar el nombre de la empresa"
                                                     sx={{
                                                         alignSelf: "flex-end",
                                                         [theme.breakpoints.down("lg")]: {
@@ -555,22 +439,84 @@ const PostMyAd = () => {
                                                         }
                                                     }}
                                                 />
-                                            </Box>
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    flexDirection: "column",
-                                                    rowGap: "1rem",
-                                                }}
-                                            >
-                                                <Typography
+                                                <Box
                                                     sx={{
-                                                        fontSize: "1.1rem",
-                                                        fontWeight: "bold",
+                                                        display: "flex",
+                                                        flexDirection: "row",
+                                                        columnGap: "2rem",
+                                                        justifyContent: "space-between",
+                                                        [theme.breakpoints.down("lg")]: {
+                                                            flexDirection: "column",
+                                                            rowGap: "1rem",
+                                                        }
                                                     }}
                                                 >
-                                                    Ubicación
-                                                </Typography>
+                                                    <TextField
+                                                        label="Nombre de la empresa"
+                                                        variant="outlined"
+                                                        fullWidth
+                                                    />
+                                                    <Autocomplete
+                                                        disablePortal
+                                                        id="combo-box-demo"
+                                                        options={sectorCompany}
+                                                        sx={{
+                                                            width: "20rem",
+                                                            [theme.breakpoints.down("lg")]: {
+                                                                width: "100%",
+                                                            }
+                                                        }}
+
+                                                        renderInput={(params) => (
+                                                            <TextField {...params} label="Área" />
+                                                        )}
+                                                    />
+                                                </Box>
+                                                <Box
+                                                    sx={{
+                                                        display: "flex",
+                                                        flexDirection: "row",
+                                                        columnGap: "2rem",
+                                                        justifyContent: "space-between",
+                                                        alignItems: "center",
+                                                        [theme.breakpoints.down("lg")]: {
+                                                            flexDirection: "column",
+                                                            rowGap: "1rem",
+                                                        }
+                                                    }}
+                                                >
+                                                    <TextField
+                                                        label="Número de vacantes"
+                                                        type="number"
+                                                        fullWidth
+                                                    />
+                                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                        <DatePicker
+                                                            label="Fecha de contratación"
+                                                            sx={{
+                                                                width: "30rem",
+                                                                [theme.breakpoints.down("lg")]: {
+                                                                    width: "100%",
+
+                                                                }
+                                                            }}
+                                                        />
+                                                    </LocalizationProvider>
+                                                    <Autocomplete
+                                                        disablePortal
+                                                        id="combo-box-demo"
+                                                        options={sectorCompany}
+                                                        sx={{
+                                                            width: "30rem",
+                                                            [theme.breakpoints.down("lg")]: {
+                                                                width: "100%",
+                                                            }
+                                                        }}
+                                                        renderInput={(params) => (
+                                                            <TextField {...params} label="Modalidad de trabajo" />
+                                                        )}
+                                                    />
+                                                </Box>
                                                 <Box
                                                     sx={{
                                                         display: "flex",
@@ -588,932 +534,630 @@ const PostMyAd = () => {
                                                         disablePortal
                                                         id="combo-box-demo"
                                                         options={sectorCompany}
-                                                        fullWidth
+                                                        sx={{
+                                                            width: "20rem",
+                                                            [theme.breakpoints.down("lg")]: {
+                                                                width: "100%",
+                                                            }
+                                                        }}
                                                         renderInput={(params) => (
-                                                            <TextField {...params} label="Departamnento" />
+                                                            <TextField {...params} label="Tipo de Jornada" />
                                                         )}
                                                     />
-                                                    <Autocomplete
-                                                        disablePortal
-                                                        id="combo-box-demo"
-                                                        options={sectorCompany}
-                                                        fullWidth
-                                                        renderInput={(params) => (
-                                                            <TextField {...params} label="Provincia" />
-                                                        )}
-                                                    />
-                                                    <Autocomplete
-                                                        disablePortal
-                                                        id="combo-box-demo"
-                                                        options={sectorCompany}
-                                                        fullWidth
-                                                        renderInput={(params) => (
-                                                            <TextField {...params} label="Distrito" />
-                                                        )}
+                                                    <Typography sx={{
+                                                        [theme.breakpoints.down("lg")]: {
+                                                            width: "100%",
+                                                            textAlign: "left",
+                                                        }
+                                                    }} >Rango salarial</Typography>
+                                                    <TextField label="Desde" sx={{
+                                                        [theme.breakpoints.down("lg")]: {
+                                                            width: "100%",
+                                                        }
+                                                    }} />
+                                                    <TextField label="Hasta" sx={{
+                                                        [theme.breakpoints.down("lg")]: {
+                                                            width: "100%",
+                                                        }
+                                                    }} />
+                                                    <FormControlLabel
+                                                        control={<Checkbox name="hideCompanyName" />}
+                                                        label="Ocultar salario"
+                                                        sx={{
+                                                            alignSelf: "flex-end",
+                                                            [theme.breakpoints.down("lg")]: {
+                                                                alignSelf: "flex-start",
+                                                            }
+                                                        }}
                                                     />
                                                 </Box>
-                                            </Box>
-                                            <TextField
-                                                id="outlined-multiline-static"
-                                                label="Descripción del anuncio"
-                                                multiline
-                                                rows={7}
-                                            />
-                                            <Button
-                                                variant="contained"
-                                                sx={{
-                                                    width: "10rem",
-                                                    alignSelf: "flex-end",
-                                                    [theme.breakpoints.down("lg")]: {
-                                                        width: "100%",
-                                                    }
-                                                }}
-                                                onClick={() => {
-                                                    setTabValueHorizontal(1);
-                                                }}
-
-                                            >
-                                                Siguiente
-                                            </Button>
-                                        </Box>
-                                    )}
-
-                                    {tabValueHorizontal === 1 && (
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                rowGap: "2rem",
-                                                paddingTop: "1rem",
-                                                width: "100%",
-
-                                                [theme.breakpoints.down("mddd")]: {
-                                                    paddingRight: "2rem",
-                                                }
-                                            }}
-                                        >
-                                            <FormControlLabel
-                                                control={<Checkbox name="hideCompanyName" />}
-                                                label="Aviso para personas con discapacidad"
-                                                sx={{
-                                                    marginBottom: "-1.5rem",
-                                                }}
-                                            />
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    columnGap: "1.2rem",
-                                                    width: "100%",
-                                                    [theme.breakpoints.down("lg")]: {
-                                                        flexDirection: "column",
-                                                        rowGap: "1rem",
-                                                        paddingLeft: "3rem",
-                                                    },
-                                                    [theme.breakpoints.down("md")]: {
-                                                        flexDirection: "column",
-                                                        rowGap: "1rem",
-                                                        paddingLeft: "3rem",
-                                                    }
-                                                }}
-                                            >
-                                                <FormControlLabel
-                                                    control={<Checkbox name="hideCompanyName" />}
-                                                    label="Auditiva"
-                                                />
-                                                <FormControlLabel
-                                                    control={<Checkbox name="hideCompanyName" />}
-                                                    label="Deficiencia Psicosocial"
-                                                />
-                                                <FormControlLabel
-                                                    control={<Checkbox name="hideCompanyName" />}
-                                                    label="Mental"
-                                                />
-                                                <FormControlLabel
-                                                    control={<Checkbox name="hideCompanyName" />}
-                                                    label="Sensorial"
-                                                />
-                                                <FormControlLabel
-                                                    control={<Checkbox name="hideCompanyName" />}
-                                                    label="Auditiva"
-                                                />
-                                                <FormControlLabel
-                                                    control={<Checkbox name="hideCompanyName" />}
-                                                    label="Visual"
-                                                />
-                                            </Box>
-
-                                            <TextField
-                                                id="outlined-multiline-static"
-                                                label="Descripción"
-                                                multiline
-                                                rows={5}
-                                            />
-                                            <Typography
-                                                sx={{
-                                                    fontSize: "1.1rem",
-                                                    fontWeight: "bold",
-                                                }}
-                                            >
-                                                Rango de edad
-                                            </Typography>
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    flexDirection: "row",
-                                                    columnGap: "2rem",
-                                                    justifyContent: "space-between",
-                                                    alignItems: "center",
-                                                    [theme.breakpoints.down("lg")]: {
-                                                        flexDirection: "column",
-                                                        rowGap: "1rem",
-                                                    }
-                                                }}
-                                            >
-                                                <TextField label="Mínimo" variant="outlined" fullWidth />
-
-                                                <TextField label="Máximo" variant="outlined" fullWidth />
-                                                <Autocomplete
-                                                    disablePortal
-                                                    id="combo-box-demo"
-                                                    options={sectorCompany}
-                                                    fullWidth
-                                                    renderInput={(params) => (
-                                                        <TextField {...params} label="Género" />
-                                                    )}
-                                                />
-
-                                                <TextField
-                                                    label="Tiempo de experiencia"
-                                                    variant="outlined"
-                                                    type="number"
-                                                    fullWidth
-                                                />
-                                                <Autocomplete
-                                                    disablePortal
-                                                    id="combo-box-demo"
-                                                    options={sectorCompany}
-                                                    fullWidth
-                                                    renderInput={(params) => (
-                                                        <TextField {...params} label="Nivel de educación" />
-                                                    )}
-                                                />
-                                            </Box>
-                                            <Typography
-                                                sx={{
-                                                    fontSize: "1.1rem",
-                                                    fontWeight: "bold",
-                                                }}
-                                            >
-                                                Formación complementaria (Opcional)
-                                            </Typography>
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    flexDirection: "row",
-                                                    columnGap: "10rem",
-                                                    [theme.breakpoints.down("lg")]: {
-                                                        flexDirection: "column",
-                                                        rowGap: "1rem",
-                                                    },
-                                                }}
-                                            >
-                                                <Button
-                                                    variant="outlined"
-                                                    startIcon={<Add />}
-                                                    sx={{
-                                                        alignSelf: "center",
-                                                        [theme.breakpoints.down("lg")]: {
-                                                            alignSelf: "flex-start",
-                                                            width: "100%",
-                                                        }
-                                                    }}
-                                                >
-                                                    Incluir estudios
-                                                </Button>
-                                                <Button
-                                                    variant="outlined"
-                                                    startIcon={<Add />}
-                                                >
-                                                    Idiomas (Opcional)
-                                                </Button>
-                                            </Box>
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    flexDirection: "row",
-                                                    columnGap: "2rem",
-                                                    alignItems: "center",
-                                                    [theme.breakpoints.down("lg")]: {
-                                                        flexDirection: "column",
-                                                        rowGap: "1rem",
-                                                        alignItems: "flex-start",
-                                                    },
-                                                }}
-                                            >
-                                                <Typography
-                                                    sx={{
-                                                        fontSize: "1.1rem",
-                                                        fontWeight: "bold",
-                                                    }}
-                                                >
-                                                    Habilidades (Opcional)
-                                                </Typography>
-
-                                                <Button
-                                                    variant="outlined"
-                                                    startIcon={<Add />}
-                                                    sx={{
-                                                        [theme.breakpoints.down("lg")]: {
-                                                            width: "100%",
-                                                        }
-                                                    }}
-                                                >
-                                                    Agregar habilidades
-                                                </Button>
-                                            </Box>
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    flexDirection: "row",
-                                                    columnGap: "2rem",
-                                                    alignItems: "center",
-                                                    [theme.breakpoints.down("lg")]: {
-                                                        flexDirection: "column",
-                                                        rowGap: "1rem",
-                                                        alignItems: "flex-start",
-                                                    },
-                                                }}
-                                            >
-                                                <FormControlLabel
-                                                    control={<Checkbox name="hideCompanyName" />}
-                                                    label="Licencia de conducir"
-                                                />
-                                                <TextField
-                                                    label="Ingresar tipo de licencia"
-                                                    variant="outlined"
-                                                    sx={{
-                                                        width: "20rem",
-                                                        [theme.breakpoints.down("lg")]: {
-                                                            width: "100%",
-                                                        }
-                                                    }}
-                                                />
-                                            </Box>
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    columnGap: "1.2rem",
-                                                    [theme.breakpoints.down("lg")]: {
-                                                        flexDirection: "column",
-                                                        rowGap: "1rem",
-                                                    },
-                                                }}
-                                            >
-                                                <FormControlLabel
-                                                    control={<Checkbox name="hideCompanyName" />}
-                                                    label="Vehículo propio"
-                                                />
-                                                <FormControlLabel
-                                                    control={<Checkbox name="hideCompanyName" />}
-                                                    label="Disponibilidad para viajar"
-                                                />
-                                                <FormControlLabel
-                                                    control={<Checkbox name="hideCompanyName" />}
-                                                    label="Disponibilidad para cambiar de residencia"
-                                                />
-                                            </Box>
-
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    columnGap: "1.2rem",
-                                                    justifyContent: "flex-end",
-                                                }}
-                                            >
-                                                <Button
-                                                    variant="contained"
-                                                    sx={{
-                                                        width: "10rem",
-                                                        alignSelf: "flex-end",
-                                                    }}
-                                                    onClick={() => {
-                                                        setTabValueHorizontal(0);
-                                                    }}
-                                                >
-                                                    Retroceder
-                                                </Button>
-                                                <Button
-                                                    variant="contained"
-                                                    sx={{
-                                                        width: "10rem",
-                                                        alignSelf: "flex-end",
-                                                    }}
-                                                    onClick={() => {
-                                                        setTabValueHorizontal(2);
-                                                    }}
-                                                >
-                                                    Siguiente
-                                                </Button>
-                                            </Box>
-                                        </Box>
-                                    )}
-                                    {tabValueHorizontal === 2 && (
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                rowGap: "2rem",
-                                                paddingTop: "2rem",
-                                                justifyContent: "flex-end",
-                                            }}
-                                        >
-                                            <Box
-                                                sx={{
-                                                    width: "100%",
-                                                    display: "flex",
-                                                    justifyContent: "space-between",
-                                                    [theme.breakpoints.down("mdd")]: {
-                                                        flexDirection: "column",
-                                                        justifyContent: "flex-end",
-                                                        rowGap: "1rem",
-                                                    }
-                                                }}
-                                            >
-                                                <Autocomplete
-                                                    disablePortal
-                                                    disableClearable
-                                                    id="combo-box-demo"
-                                                    options={questionType}
-                                                    onInputChange={handleSelectComboBox}
-                                                    sx={{
-                                                        width: "20rem",
-                                                        [theme.breakpoints.down("lg")]: {
-                                                            width: "100%",
-                                                        }
-                                                    }}
-                                                    renderInput={(params) => (
-                                                        <TextField {...params} label="Tipo de pregunta" />
-                                                    )}
-                                                />
-                                                {selectComboBox === "Cerrada" && (
-                                                    <Button
-                                                        onClick={handleAddClosedQuestion}
-                                                    >
-                                                        Agregar pregunta
-                                                    </Button>
-                                                )}
-                                            </Box>
-
-                                            {selectComboBox === "Cerrada" && preguntas.map((pregunta, preguntaIndex) => (
-                                                <TableContainer component={Paper} key={pregunta.id}>
-                                                    <Table aria-label="simple table">
-                                                        <TableHead>
-                                                            <TableRow>
-                                                                <TableCell>Pregunta / Respuestas</TableCell>
-                                                                <TableCell>Tiempo / Peso</TableCell>
-                                                                <TableCell align="right">Acciones</TableCell>
-                                                            </TableRow>
-                                                        </TableHead>
-                                                        <TableBody>
-                                                            {/* Fila para la pregunta */}
-                                                            <TableRow>
-                                                                <TableCell component="th" scope="row">
-                                                                    <TextField
-                                                                        fullWidth
-                                                                        label="Pregunta"
-                                                                        variant="outlined"
-                                                                        value={pregunta.pregunta}
-                                                                        onChange={(e) => handleQuestionCloseChange(e, preguntaIndex)}
-                                                                        sx={{
-                                                                            width: "30rem",
-                                                                        }}
-                                                                    />
-                                                                </TableCell>
-                                                                <TableCell />
-                                                                <TableCell align="right">
-                                                                    {/* Botones de acción para la pregunta */}
-                                                                </TableCell>
-                                                            </TableRow>
-                                                            {/* Filas para las respuestas */}
-                                                            {pregunta.respuestas.map((respuesta, respuestaIndex) => (
-                                                                <TableRow key={respuesta.id}>
-                                                                    <TableCell>
-                                                                        <TextField
-                                                                            fullWidth
-                                                                            label="Respuesta"
-                                                                            variant="outlined"
-                                                                            value={respuesta.respuesta}
-                                                                            onChange={(e) => handleResponseChange(e, preguntaIndex, respuestaIndex)}
-                                                                            sx={{ width: "20rem" }}
-                                                                        />
-                                                                    </TableCell>
-                                                                    <TableCell>
-                                                                        <Box
-                                                                            sx={{
-                                                                                display: "flex",
-                                                                                columnGap: "1.2rem",
-                                                                                alignItems: "center",
-                                                                            }}
-                                                                        >
-                                                                            <Autocomplete
-                                                                                disablePortal
-                                                                                value={respuesta.peso}
-                                                                                onChange={(_e, newValue) => handlePesoChange(newValue, preguntaIndex, respuestaIndex)}
-                                                                                options={questionWeight.map(option => option.label)}
-                                                                                renderInput={(params) => <TextField {...params} label="Peso" />}
-                                                                                sx={{ width: "20rem" }}
-                                                                            />
-
-                                                                            <IconButton
-                                                                                onClick={() => handleAddResponse(preguntaIndex)}
-                                                                            >
-                                                                                <Add />
-                                                                            </IconButton>
-                                                                        </Box>
-                                                                    </TableCell>
-                                                                    <TableCell align="right">
-                                                                        {/* Botones de acción para cada respuesta */}
-                                                                        <IconButton>
-                                                                            <Edit />
-                                                                        </IconButton>
-                                                                        <IconButton onClick={() => handleRemoveRespuesta(preguntaIndex, respuestaIndex)}>
-                                                                            <Delete />
-                                                                        </IconButton>
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                            ))}
-                                                        </TableBody>
-                                                    </Table>
-                                                    {openBar && (
-
-                                                        <Snackbar
-                                                            open={openBar}
-                                                            sx={{
-                                                                width: "100%",
-                                                                display: "flex",
-                                                                justifyContent: "center",
-                                                            }}
-                                                            autoHideDuration={1000}>
-
-                                                            <Alert
-
-                                                                onClose={handleCloseSnackBar}
-                                                                severity="error">
-                                                                Se permiten hasta 20 preguntas
-                                                            </Alert>
-                                                        </Snackbar>
-                                                    )}
-                                                    {/* Botón para agregar respuesta a la pregunta actual */}
-                                                </TableContainer>
-                                            ))}
-                                            {selectComboBox === "Abierta" && preguntaAbiertas.map((preguntaAbierta, preguntaIndex) => (
-                                                <TableContainer component={Paper} key={preguntaAbierta.id}>
-                                                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                                                        <TableHead>
-                                                            <TableRow>
-                                                                <TableCell>Pregunta</TableCell>
-                                                                <TableCell align="right">Acciones</TableCell>
-                                                            </TableRow>
-                                                        </TableHead>
-                                                        <TableBody>
-                                                            <TableRow>
-                                                                <TableCell component="th" scope="row">
-                                                                    <TextField
-                                                                        fullWidth
-                                                                        label="Pregunta"
-                                                                        variant="outlined"
-                                                                        value={preguntaAbierta.pregunta}
-                                                                        onChange={(e) => handleQuestionOpenChange(e, preguntaIndex)}
-                                                                        sx={{
-                                                                            width: "30rem",
-                                                                        }}
-                                                                    />
-
-                                                                </TableCell>
-                                                                <TableCell align="right">
-                                                                    <IconButton
-                                                                        onClick={() => handleAddQuestionOpen()}
-                                                                    >
-                                                                        <Add />
-                                                                    </IconButton>
-                                                                    <IconButton>
-                                                                        <Edit />
-                                                                    </IconButton>
-                                                                    <IconButton
-                                                                        onClick={() => handleRemoveClosedQuestion(preguntaIndex)}
-                                                                    >
-                                                                        <Delete />
-                                                                    </IconButton>
-                                                                </TableCell>
-                                                            </TableRow>
-                                                        </TableBody>
-                                                    </Table>
-
-                                                    {openBar && (
-
-                                                        <Snackbar
-                                                            open={openBar}
-                                                            sx={{
-                                                                width: "100%",
-                                                                display: "flex",
-                                                                justifyContent: "center",
-                                                            }}
-                                                            autoHideDuration={1000}>
-
-                                                            <Alert
-
-                                                                onClose={handleCloseSnackBar}
-                                                                severity="error">
-                                                                Se permiten hasta 20 preguntas 
-                                                            </Alert>
-                                                        </Snackbar>
-                                                    )}
-                                                </TableContainer>
-                                            ))}
-                                        </Box>
-                                    )}
-                                </Box>
-                            )}
-                            {tabValueVertical === 1 && (
-                                <Box
-                                    sx={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        rowGap: "2.1rem",
-                                        width: "auto",
-                                    }}
-                                >
-                                    {isXXXLDown && (
-                                        <div>
-                                            <IconButton
-                                                aria-label="more"
-                                                id="long-button"
-                                                aria-controls={open ? 'long-menu' : undefined}
-                                                aria-expanded={open ? 'true' : undefined}
-                                                aria-haspopup="true"
-                                                onClick={handleClickMoreOptions}
-                                            >
-                                                <MenuIcon />
-                                            </IconButton>
-                                            <Menu
-                                                id="long-menu"
-                                                MenuListProps={{
-                                                    'aria-labelledby': 'long-button',
-                                                }}
-                                                anchorEl={anchorEl}
-                                                open={open}
-                                                onClose={handleClose}
-                                            >
-                                                {options.map((option) => (
-                                                    <MenuItem key={option.label} selected={option.label === 'Pyxis'} onClick={() => {
-                                                        handleClose();
-                                                        setTabValueVertical(option.id);
-                                                    }}>
-                                                        {option.label}
-                                                    </MenuItem>
-                                                ))}
-                                            </Menu>
-                                        </div>
-                                    )}
-
-                                    <Typography
-                                        sx={{
-                                            fontSize: "1.8rem",
-                                            fontWeight: "bold",
-                                            [theme.breakpoints.down("mdd")]: {
-                                                textAlign: "center",
-                                            },
-                                        }}
-                                    >Fechas de publicación</Typography>
-                                    <FormControlLabel
-                                        control={<Checkbox name="hideCompanyName" />}
-                                        label="Activar la publicación y/o desactivación automática"
-                                    />
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            columnGap: "1.6rem",
-                                            width: "100%",
-                                            [theme.breakpoints.down("sm")]: {
-                                                flexDirection: "column",
-                                                rowGap: "1rem",
-                                            },
-                                        }}
-                                    >
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DatePicker
-                                                label=""
-                                                sx={{
-                                                    width: "25rem",
-                                                    [theme.breakpoints.down("sm")]: {
-                                                        width: "100%",
-                                                    },
-                                                }}
-                                            />
-                                        </LocalizationProvider>
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DatePicker
-                                                label=""
-                                                sx={{
-
-                                                    width: "25rem",
-                                                    [theme.breakpoints.down("sm")]: {
-                                                        width: "100%",
-                                                    },
-                                                }}
-                                            />
-                                        </LocalizationProvider>
-
-                                    </Box>
-
-                                    <Typography
-                                        sx={{
-                                            fontSize: "1.4rem",
-                                            fontWeight: "bold",
-                                            [theme.breakpoints.down("mdd")]: {
-                                                textAlign: "center",
-                                            },
-                                        }}
-                                    >Datos de divulgación</Typography>
-
-                                    <Box>
-                                        <Tabs
-                                            value={tabSubValueVertical}
-                                            orientation="horizontal"
-                                            onChange={handleChangeTabSubVertical}
-                                        >
-                                            <Tab label="Redes sociales" value={0} />
-                                            <Tab label="Por correo electrónico" value={1} />
-                                        </Tabs>
-                                        {tabSubValueVertical === 0 && (
-                                            <>
                                                 <Box
                                                     sx={{
                                                         display: "flex",
                                                         flexDirection: "column",
-                                                        padding: "2rem 0 2rem 5rem",
-                                                        rowGap: "1.5rem",
-                                                        width: "40%",
+                                                        rowGap: "1rem",
                                                     }}
                                                 >
-                                                    <Box
-                                                        sx={{
-                                                            display: "flex",
-                                                            columnGap: "1.5rem",
-                                                            alignItems: "center",
-                                                            justifyContent: "space-between",
-                                                        }}
-                                                    >
-                                                        <Typography
-                                                            sx={{
-                                                                fontSize: "1.1rem",
-                                                                fontWeight: "bold",
-                                                            }}>
-                                                            Facebook
-                                                        </Typography>
-                                                        <Button component="label" variant="contained" startIcon={<Facebook />}
-                                                            sx={{
-                                                                backgroundColor: "#3b5998",
-                                                                "&:hover": {
-                                                                    backgroundColor: "#3b5998",
-                                                                }
-                                                            }}>
-                                                            Compartir
-                                                        </Button>
-                                                    </Box>
-                                                    <Box
-                                                        sx={{
-                                                            display: "flex",
-                                                            columnGap: "1.5rem",
-                                                            alignItems: "center",
-                                                            justifyContent: "space-between",
-                                                        }}
-                                                    >
-                                                        <Typography
-                                                            sx={{
-                                                                fontSize: "1.1rem",
-                                                                fontWeight: "bold",
-                                                            }}>
-                                                            Twitter
-                                                        </Typography>
-                                                        <Button component="label" variant="contained" startIcon={<Twitter />}
-                                                            sx={{
-                                                                backgroundColor: "#00acee",
-                                                                "&:hover": {
-                                                                    backgroundColor: "#00acee",
-                                                                }
-                                                            }}
-                                                        >
-                                                            Compartir
-                                                        </Button>
-                                                    </Box>
-                                                    <Box
-                                                        sx={{
-                                                            display: "flex",
-                                                            columnGap: "1.5rem",
-                                                            alignItems: "center",
-                                                            justifyContent: "space-between",
-                                                        }}
-                                                    >
-                                                        <Typography
-                                                            sx={{
-                                                                fontSize: "1.1rem",
-                                                                fontWeight: "bold",
-                                                            }}>
-                                                            LinkedIn
-                                                        </Typography>
-                                                        <Button component="label" variant="contained" startIcon={<LinkedIn />}
-                                                            sx={{
-                                                                backgroundColor: "#0e76a8",
-                                                                "&:hover": {
-                                                                    backgroundColor: "#0e76a8",
-                                                                }
-                                                            }}
-                                                        >
-                                                            Compartir
-                                                        </Button>
-                                                    </Box>
-                                                </Box>
-                                                <Box>
-
                                                     <Typography
                                                         sx={{
                                                             fontSize: "1.1rem",
-                                                        }}>
-                                                        Su posición debe ser PUBLICADA antes de que se comparta en las redes sociales.
+                                                            fontWeight: "bold",
+                                                        }}
+                                                    >
+                                                        Ubicación
                                                     </Typography>
+                                                    <Box
+                                                        sx={{
+                                                            display: "flex",
+                                                            flexDirection: "row",
+                                                            columnGap: "2rem",
+                                                            justifyContent: "space-between",
+                                                            alignItems: "center",
+                                                            [theme.breakpoints.down("lg")]: {
+                                                                flexDirection: "column",
+                                                                rowGap: "1rem",
+                                                            }
+                                                        }}
+                                                    >
+                                                        <Autocomplete
+                                                            disablePortal
+                                                            id="combo-box-demo"
+                                                            options={sectorCompany}
+                                                            fullWidth
+                                                            renderInput={(params) => (
+                                                                <TextField {...params} label="Departamnento" />
+                                                            )}
+                                                        />
+                                                        <Autocomplete
+                                                            disablePortal
+                                                            id="combo-box-demo"
+                                                            options={sectorCompany}
+                                                            fullWidth
+                                                            renderInput={(params) => (
+                                                                <TextField {...params} label="Provincia" />
+                                                            )}
+                                                        />
+                                                        <Autocomplete
+                                                            disablePortal
+                                                            id="combo-box-demo"
+                                                            options={sectorCompany}
+                                                            fullWidth
+                                                            renderInput={(params) => (
+                                                                <TextField {...params} label="Distrito" />
+                                                            )}
+                                                        />
+                                                    </Box>
                                                 </Box>
-                                            </>
+                                                <TextField
+                                                    id="outlined-multiline-static"
+                                                    label="Descripción del anuncio"
+                                                    multiline
+                                                    rows={7}
+                                                />
+                                                <Button
+                                                    variant="contained"
+                                                    sx={{
+                                                        width: "10rem",
+                                                        alignSelf: "flex-end",
+                                                        [theme.breakpoints.down("lg")]: {
+                                                            width: "100%",
+                                                        }
+                                                    }}
+                                                    onClick={() => {
+                                                        setTabValueHorizontal(1);
+                                                    }}
+
+                                                >
+                                                    Siguiente
+                                                </Button>
+                                            </Box>
                                         )}
-                                        {tabSubValueVertical === 1 && (
+
+                                        {tabValueHorizontal === 1 && (
                                             <Box
                                                 sx={{
                                                     display: "flex",
                                                     flexDirection: "column",
                                                     rowGap: "2rem",
-                                                    padding: "2rem 0 2rem 0",
+                                                    paddingTop: "1rem",
+                                                    width: "100%",
+
+                                                    [theme.breakpoints.down("mddd")]: {
+                                                        paddingRight: "2rem",
+                                                    }
                                                 }}
                                             >
+                                                <FormControlLabel
+                                                    control={<Checkbox name="hideCompanyName" />}
+                                                    label="Aviso para personas con discapacidad"
+                                                    sx={{
+                                                        marginBottom: "-1.5rem",
+                                                    }}
+                                                />
+                                                <Box
+                                                    sx={{
+                                                        display: "flex",
+                                                        columnGap: "1.2rem",
+                                                        width: "100%",
+                                                        [theme.breakpoints.down("lg")]: {
+                                                            flexDirection: "column",
+                                                            rowGap: "1rem",
+                                                            paddingLeft: "3rem",
+                                                        },
+                                                        [theme.breakpoints.down("md")]: {
+                                                            flexDirection: "column",
+                                                            rowGap: "1rem",
+                                                            paddingLeft: "3rem",
+                                                        }
+                                                    }}
+                                                >
+                                                    <FormControlLabel
+                                                        control={<Checkbox name="hideCompanyName" />}
+                                                        label="Auditiva"
+                                                    />
+                                                    <FormControlLabel
+                                                        control={<Checkbox name="hideCompanyName" />}
+                                                        label="Deficiencia Psicosocial"
+                                                    />
+                                                    <FormControlLabel
+                                                        control={<Checkbox name="hideCompanyName" />}
+                                                        label="Mental"
+                                                    />
+                                                    <FormControlLabel
+                                                        control={<Checkbox name="hideCompanyName" />}
+                                                        label="Sensorial"
+                                                    />
+                                                    <FormControlLabel
+                                                        control={<Checkbox name="hideCompanyName" />}
+                                                        label="Auditiva"
+                                                    />
+                                                    <FormControlLabel
+                                                        control={<Checkbox name="hideCompanyName" />}
+                                                        label="Visual"
+                                                    />
+                                                </Box>
+
+                                                <TextField
+                                                    id="outlined-multiline-static"
+                                                    label="Descripción"
+                                                    multiline
+                                                    rows={5}
+                                                />
                                                 <Typography
                                                     sx={{
-                                                        fontSize: "1.2rem",
+                                                        fontSize: "1.1rem",
                                                         fontWeight: "bold",
                                                     }}
-                                                >Enlace para compartir</Typography>
-                                                <Box sx={{
-                                                    display: "flex",
-                                                    columnGap: "1.2rem",
-                                                    alignItems: "center",
-                                                }}>
-                                                    <TextField
-                                                        variant="outlined"
-                                                        label="Enlace"
-                                                        onChange={handleTextFieldChange}
-                                                        sx={{
-                                                            width: "70%",
-                                                        }}
+                                                >
+                                                    Rango de edad
+                                                </Typography>
+                                                <Box
+                                                    sx={{
+                                                        display: "flex",
+                                                        flexDirection: "row",
+                                                        columnGap: "2rem",
+                                                        justifyContent: "space-between",
+                                                        alignItems: "center",
+                                                        [theme.breakpoints.down("lg")]: {
+                                                            flexDirection: "column",
+                                                            rowGap: "1rem",
+                                                        }
+                                                    }}
+                                                >
+                                                    <TextField label="Mínimo" variant="outlined" fullWidth />
+
+                                                    <TextField label="Máximo" variant="outlined" fullWidth />
+                                                    <Autocomplete
+                                                        disablePortal
+                                                        id="combo-box-demo"
+                                                        options={sectorCompany}
+                                                        fullWidth
+                                                        renderInput={(params) => (
+                                                            <TextField {...params} label="Género" />
+                                                        )}
                                                     />
-                                                    <Button component="label" variant="contained" onClick={handleCopyTextField}>
-                                                        Copiar
-                                                    </Button>
+
+                                                    <TextField
+                                                        label="Tiempo de experiencia"
+                                                        variant="outlined"
+                                                        type="number"
+                                                        fullWidth
+                                                    />
+                                                    <Autocomplete
+                                                        disablePortal
+                                                        id="combo-box-demo"
+                                                        options={sectorCompany}
+                                                        fullWidth
+                                                        renderInput={(params) => (
+                                                            <TextField {...params} label="Nivel de educación" />
+                                                        )}
+                                                    />
                                                 </Box>
                                                 <Typography
                                                     sx={{
                                                         fontSize: "1.1rem",
-                                                    }}>
-                                                    Accederá al enlace después de haber publicado el aviso.
-                                                </Typography>
-                                                <Typography
-                                                    sx={{
-                                                        fontSize: "1.2rem",
                                                         fontWeight: "bold",
                                                     }}
-                                                >Publicar aviso mediante correo electrónico</Typography>
-                                                <Box sx={{
-                                                    display: "flex",
-                                                    columnGap: "1.2rem",
-                                                    alignItems: "center",
-                                                }}>
-                                                    <TextField
+                                                >
+                                                    Formación complementaria (Opcional)
+                                                </Typography>
+                                                <Box
+                                                    sx={{
+                                                        display: "flex",
+                                                        flexDirection: "row",
+                                                        columnGap: "10rem",
+                                                        [theme.breakpoints.down("lg")]: {
+                                                            flexDirection: "column",
+                                                            rowGap: "1rem",
+                                                        },
+                                                    }}
+                                                >
+                                                    <Button
                                                         variant="outlined"
-                                                        label="Enlace"
-                                                        onChange={handleTextFieldChange}
+                                                        startIcon={<Add />}
+                                                        onClick={() => setOpenModalStudy(true)}
                                                         sx={{
-                                                            width: "70%",
+                                                            alignSelf: "center",
+                                                            [theme.breakpoints.down("lg")]: {
+                                                                alignSelf: "flex-start",
+                                                                width: "100%",
+                                                            }
                                                         }}
-                                                    />
-                                                    <Button component="label" variant="contained" onClick={handleCopyTextField}>
-                                                        Guardar
+                                                    >
+                                                        Incluir estudios
                                                     </Button>
-                                                    <Button component="label" variant="contained" onClick={handleCopyTextField}>
-                                                        Enviar
+                                                    <Button
+                                                        variant="outlined"
+                                                        startIcon={<Add />}
+                                                        onClick={() => setOpenModalLanguage(true)}
+                                                    >
+                                                        Idiomas (Opcional)
                                                     </Button>
                                                 </Box>
-
-                                                <FormControlLabel
-                                                    control={<Checkbox name="hideCompanyName" />}
-                                                    label="¿Desea personalizar su correo electrónico?"
-                                                />
-
-                                                <Typography
+                                                <Box
                                                     sx={{
-                                                        fontSize: "1.2rem",
-                                                        fontWeight: "bold",
+                                                        display: "flex",
+                                                        flexDirection: "row",
+                                                        columnGap: "2rem",
+                                                        alignItems: "center",
+                                                        [theme.breakpoints.down("lg")]: {
+                                                            flexDirection: "column",
+                                                            rowGap: "1rem",
+                                                            alignItems: "flex-start",
+                                                        },
                                                     }}
-                                                >Editor de texto</Typography>
-                                                <TextField
-                                                    variant="outlined"
-                                                    multiline
-                                                    fullWidth
-                                                    rows={7}
-                                                />
+                                                >
+                                                    <Typography
+                                                        sx={{
+                                                            fontSize: "1.1rem",
+                                                            fontWeight: "bold",
+                                                        }}
+                                                    >
+                                                        Habilidades (Opcional)
+                                                    </Typography>
+
+                                                    <Button
+                                                        variant="outlined"
+                                                        startIcon={<Add />}
+                                                        sx={{
+                                                            [theme.breakpoints.down("lg")]: {
+                                                                width: "100%",
+                                                            }
+                                                        }}
+                                                    >
+                                                        Agregar habilidades
+                                                    </Button>
+                                                </Box>
+                                                <Box
+                                                    sx={{
+                                                        display: "flex",
+                                                        flexDirection: "row",
+                                                        columnGap: "2rem",
+                                                        alignItems: "center",
+                                                        [theme.breakpoints.down("lg")]: {
+                                                            flexDirection: "column",
+                                                            rowGap: "1rem",
+                                                            alignItems: "flex-start",
+                                                        },
+                                                    }}
+                                                >
+                                                    <FormControlLabel
+                                                        control={<Checkbox name="hideCompanyName" />}
+                                                        label="Licencia de conducir"
+                                                    />
+                                                    <TextField
+                                                        label="Ingresar tipo de licencia"
+                                                        variant="outlined"
+                                                        sx={{
+                                                            width: "20rem",
+                                                            [theme.breakpoints.down("lg")]: {
+                                                                width: "100%",
+                                                            }
+                                                        }}
+                                                    />
+                                                </Box>
+                                                <Box
+                                                    sx={{
+                                                        display: "flex",
+                                                        columnGap: "1.2rem",
+                                                        [theme.breakpoints.down("lg")]: {
+                                                            flexDirection: "column",
+                                                            rowGap: "1rem",
+                                                        },
+                                                    }}
+                                                >
+                                                    <FormControlLabel
+                                                        control={<Checkbox name="hideCompanyName" />}
+                                                        label="Vehículo propio"
+                                                    />
+                                                    <FormControlLabel
+                                                        control={<Checkbox name="hideCompanyName" />}
+                                                        label="Disponibilidad para viajar"
+                                                    />
+                                                    <FormControlLabel
+                                                        control={<Checkbox name="hideCompanyName" />}
+                                                        label="Disponibilidad para cambiar de residencia"
+                                                    />
+                                                </Box>
+
+                                                <Box
+                                                    sx={{
+                                                        display: "flex",
+                                                        columnGap: "1.2rem",
+                                                        justifyContent: "flex-end",
+                                                    }}
+                                                >
+                                                    <Button
+                                                        variant="contained"
+                                                        sx={{
+                                                            width: "10rem",
+                                                            alignSelf: "flex-end",
+                                                        }}
+                                                        onClick={() => {
+                                                            setTabValueHorizontal(0);
+                                                        }}
+                                                    >
+                                                        Retroceder
+                                                    </Button>
+                                                    <Button
+                                                        variant="contained"
+                                                        sx={{
+                                                            width: "10rem",
+                                                            alignSelf: "flex-end",
+                                                        }}
+                                                        onClick={() => {
+                                                            setTabValueHorizontal(2);
+                                                        }}
+                                                    >
+                                                        Siguiente
+                                                    </Button>
+                                                </Box>
+                                            </Box>
+                                        )}
+                                        {tabValueHorizontal === 2 && (
+                                            <Box
+                                                sx={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    rowGap: "2rem",
+                                                    paddingTop: "2rem",
+                                                    justifyContent: "flex-end",
+                                                }}
+                                            >
+                                                <Box
+                                                    sx={{
+                                                        width: "100%",
+                                                        display: "flex",
+                                                        justifyContent: "space-between",
+                                                        [theme.breakpoints.down("mdd")]: {
+                                                            flexDirection: "column",
+                                                            justifyContent: "flex-end",
+                                                            rowGap: "1rem",
+                                                        }
+                                                    }}
+                                                >
+                                                    <Autocomplete
+                                                        disablePortal
+                                                        disableClearable
+                                                        id="combo-box-demo"
+                                                        options={questionType}
+                                                        onInputChange={handleSelectComboBox}
+                                                        sx={{
+                                                            width: "20rem",
+                                                            [theme.breakpoints.down("lg")]: {
+                                                                width: "100%",
+                                                            }
+                                                        }}
+                                                        renderInput={(params) => (
+                                                            <TextField {...params} label="Tipo de pregunta" />
+                                                        )}
+                                                    />
+                                                    {selectComboBox === "Cerrada" && (
+                                                        <Button
+                                                            onClick={handleAddClosedQuestion}
+                                                        >
+                                                            Agregar pregunta
+                                                        </Button>
+                                                    )}
+                                                </Box>
+
+                                                {selectComboBox === "Cerrada" && preguntas.map((pregunta, preguntaIndex) => (
+                                                    <TableContainer component={Paper} key={pregunta.id}>
+                                                        <Table aria-label="simple table">
+                                                            <TableHead>
+                                                                <TableRow>
+                                                                    <TableCell>Pregunta / Respuestas</TableCell>
+                                                                    <TableCell>Tiempo / Peso</TableCell>
+                                                                    <TableCell align="right">Acciones</TableCell>
+                                                                </TableRow>
+                                                            </TableHead>
+                                                            <TableBody>
+                                                                {/* Fila para la pregunta */}
+                                                                <TableRow>
+                                                                    <TableCell component="th" scope="row">
+                                                                        <TextField
+                                                                            fullWidth
+                                                                            label="Pregunta"
+                                                                            variant="outlined"
+                                                                            value={pregunta.pregunta}
+                                                                            onChange={(e) => handleQuestionCloseChange(e, preguntaIndex)}
+                                                                            sx={{
+                                                                                width: "30rem",
+                                                                            }}
+                                                                        />
+                                                                    </TableCell>
+                                                                    <TableCell />
+                                                                    <TableCell align="right">
+                                                                        {/* Botones de acción para la pregunta */}
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                                {/* Filas para las respuestas */}
+                                                                {pregunta.respuestas.map((respuesta, respuestaIndex) => (
+                                                                    <TableRow key={respuesta.id}>
+                                                                        <TableCell>
+                                                                            <TextField
+                                                                                fullWidth
+                                                                                label="Respuesta"
+                                                                                variant="outlined"
+                                                                                value={respuesta.respuesta}
+                                                                                onChange={(e) => handleResponseChange(e, preguntaIndex, respuestaIndex)}
+                                                                                sx={{ width: "20rem" }}
+                                                                            />
+                                                                        </TableCell>
+                                                                        <TableCell>
+                                                                            <Box
+                                                                                sx={{
+                                                                                    display: "flex",
+                                                                                    columnGap: "1.2rem",
+                                                                                    alignItems: "center",
+                                                                                }}
+                                                                            >
+                                                                                <Autocomplete
+                                                                                    disablePortal
+                                                                                    value={respuesta.peso}
+                                                                                    onChange={(_e, newValue) => handlePesoChange(newValue, preguntaIndex, respuestaIndex)}
+                                                                                    options={questionWeight.map(option => option.label)}
+                                                                                    renderInput={(params) => <TextField {...params} label="Peso" />}
+                                                                                    sx={{ width: "20rem" }}
+                                                                                />
+
+                                                                                <IconButton
+                                                                                    onClick={() => handleAddResponse(preguntaIndex)}
+                                                                                >
+                                                                                    <Add />
+                                                                                </IconButton>
+                                                                            </Box>
+                                                                        </TableCell>
+                                                                        <TableCell align="right">
+                                                                            {/* Botones de acción para cada respuesta */}
+                                                                            <IconButton>
+                                                                                <Edit />
+                                                                            </IconButton>
+                                                                            <IconButton onClick={() => handleRemoveRespuesta(preguntaIndex, respuestaIndex)}>
+                                                                                <Delete />
+                                                                            </IconButton>
+                                                                        </TableCell>
+                                                                    </TableRow>
+                                                                ))}
+                                                            </TableBody>
+                                                        </Table>
+                                                        {openBar && (
+
+                                                            <Snackbar
+                                                                open={openBar}
+                                                                sx={{
+                                                                    width: "100%",
+                                                                    display: "flex",
+                                                                    justifyContent: "center",
+                                                                }}
+                                                                autoHideDuration={1000}>
+
+                                                                <Alert
+
+                                                                    onClose={handleCloseSnackBar}
+                                                                    severity="error">
+                                                                    Se permiten hasta 20 preguntas
+                                                                </Alert>
+                                                            </Snackbar>
+                                                        )}
+                                                        {/* Botón para agregar respuesta a la pregunta actual */}
+                                                    </TableContainer>
+                                                ))}
+                                                {selectComboBox === "Abierta" && preguntaAbiertas.map((preguntaAbierta, preguntaIndex) => (
+                                                    <TableContainer component={Paper} key={preguntaAbierta.id}>
+                                                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                                            <TableHead>
+                                                                <TableRow>
+                                                                    <TableCell>Pregunta</TableCell>
+                                                                    <TableCell align="right">Acciones</TableCell>
+                                                                </TableRow>
+                                                            </TableHead>
+                                                            <TableBody>
+                                                                <TableRow>
+                                                                    <TableCell component="th" scope="row">
+                                                                        <TextField
+                                                                            fullWidth
+                                                                            label="Pregunta"
+                                                                            variant="outlined"
+                                                                            value={preguntaAbierta.pregunta}
+                                                                            onChange={(e) => handleQuestionOpenChange(e, preguntaIndex)}
+                                                                            sx={{
+                                                                                width: "30rem",
+                                                                            }}
+                                                                        />
+
+                                                                    </TableCell>
+                                                                    <TableCell align="right">
+                                                                        <IconButton
+                                                                            onClick={() => handleAddQuestionOpen()}
+                                                                        >
+                                                                            <Add />
+                                                                        </IconButton>
+                                                                        <IconButton>
+                                                                            <Edit />
+                                                                        </IconButton>
+                                                                        <IconButton
+                                                                            onClick={() => handleRemoveClosedQuestion(preguntaIndex)}
+                                                                        >
+                                                                            <Delete />
+                                                                        </IconButton>
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            </TableBody>
+                                                        </Table>
+
+                                                        {openBar && (
+
+                                                            <Snackbar
+                                                                open={openBar}
+                                                                sx={{
+                                                                    width: "100%",
+                                                                    display: "flex",
+                                                                    justifyContent: "center",
+                                                                }}
+                                                                autoHideDuration={1000}>
+
+                                                                <Alert
+
+                                                                    onClose={handleCloseSnackBar}
+                                                                    severity="error">
+                                                                    Se permiten hasta 20 preguntas
+                                                                </Alert>
+                                                            </Snackbar>
+                                                        )}
+                                                    </TableContainer>
+                                                ))}
                                             </Box>
                                         )}
                                     </Box>
-
-                                    <Box sx={{
-                                        display: "flex", justifyContent: "space-between",
-                                        [theme.breakpoints.down("lgg")]: {
-                                            flexDirection: "column",
-                                            rowGap: "1rem",
-                                        },
-                                    }}>
-                                        <Button
-                                            variant="contained"
-                                            sx={{
-                                                width: "10rem",
-                                                [theme.breakpoints.down("lgg")]: {
-                                                    width: "100%",
-                                                },
-                                            }}
-                                            onClick={() => {
-                                                setTabValueVertical(0);
-                                            }}
-                                        >
-                                            Retroceder
-                                        </Button>
-                                        <Box sx={{
-                                            display: "flex", columnGap: "1.2rem",
-                                            [theme.breakpoints.down("lgg")]: {
-                                                flexDirection: "column",
-                                                rowGap: "1rem",
-                                            },
-                                        }}>
-                                            <Button
-                                                variant="contained"
-                                                sx={{
-                                                    width: "10rem",
-                                                    [theme.breakpoints.down("lgg")]: {
-                                                        width: "100%",
-                                                    },
-                                                }}
-                                                onClick={handleChangePreview}
-                                            >
-                                                Vista previa
-                                            </Button>
-                                            <Button
-                                                variant="contained"
-                                                sx={{
-                                                    width: "10rem",
-                                                    [theme.breakpoints.down("lgg")]: {
-                                                        width: "100%",
-                                                    },
-                                                }}
-                                            >
-                                                Publicar
-                                            </Button>
-                                            <Button
-                                                variant="contained"
-                                                sx={{
-                                                    width: "10rem",
-                                                    [theme.breakpoints.down("lgg")]: {
-                                                        width: "100%",
-                                                    },
-                                                }}
-                                                onClick={() => {
-                                                    setTabValueVertical(2);
-                                                }}
-                                            >
-                                                Siguiente
-                                            </Button>
-                                        </Box>
-                                    </Box>
-                                </Box>
-                            )}
-                            {tabValueVertical === 2 && (
-                                <>
+                                )}
+                                {tabValueVertical === 1 && (
                                     <Box
                                         sx={{
                                             display: "flex",
                                             flexDirection: "column",
                                             rowGap: "2.1rem",
                                             width: "auto",
-                                            [theme.breakpoints.down("xxl")]: {
-                                                //paddingRight: "2rem",
-                                            },
-                                            [theme.breakpoints.down("mdd")]: {
-                                                paddingRight: "0",
-                                            },
                                         }}
                                     >
                                         {isXXXLDown && (
@@ -1548,6 +1192,7 @@ const PostMyAd = () => {
                                                 </Menu>
                                             </div>
                                         )}
+
                                         <Typography
                                             sx={{
                                                 fontSize: "1.8rem",
@@ -1556,193 +1201,253 @@ const PostMyAd = () => {
                                                     textAlign: "center",
                                                 },
                                             }}
-                                        >Etapas del proceso de selección</Typography>
-                                        <ToggleButtonGroup
-                                            color="primary"
-                                            value={alignment}
-                                            exclusive
-                                            onChange={handleChangeToogle}
-                                            aria-label="Platform"
-                                            sx={{
-                                                [theme.breakpoints.down("mdd")]: {
-                                                    flexDirection: "column",
-                                                    justifyContent: "center",
-                                                    alignItems: "center",
-                                                    textAlign: "center",
-                                                },
-                                            }}
-                                        >
-                                            <ToggleButton
-                                                sx={{
-                                                    width: "15rem",
-                                                    height: "5rem",
-                                                    fontSize: "1rem",
-                                                }}
-                                                value="inscritos"
-                                            >
-                                                Inscritos
-                                            </ToggleButton>
-                                            <ToggleButton
-                                                sx={{
-                                                    width: "15rem",
-                                                    height: "5rem",
-                                                    fontSize: "1rem",
-                                                    [theme.breakpoints.down("mdd")]: {
-                                                        //width: "100%",
-                                                        borderLeft: "0.8px solid rgba(0, 0, 0, 0.12) !important",
-                                                    },
-                                                }}
-                                                value="descartados"
-                                            >
-                                                Descartados
-                                            </ToggleButton>
-                                            <ToggleButton
-                                                sx={{
-                                                    width: "15rem",
-                                                    height: "5rem",
-                                                    fontSize: "1rem",
-                                                    [theme.breakpoints.down("mdd")]: {
-                                                        //width: "100%",
-                                                        borderLeft: "0.8px solid rgba(0, 0, 0, 0.12) !important",
-                                                    },
-                                                }}
-                                                value="finalistas"
-                                            >
-                                                Finalistas
-                                            </ToggleButton>
-                                            <ToggleButton
-                                                sx={{
-                                                    width: "15rem",
-                                                    height: "5rem",
-                                                    fontSize: "1rem",
-                                                    [theme.breakpoints.down("mdd")]: {
-                                                        //width: "100%",
-                                                        borderLeft: "0.8px solid rgba(0, 0, 0, 0.12) !important",
-                                                    },
-                                                }}
-                                                value="contratados"
-                                            >
-                                                Contratados
-                                            </ToggleButton>
-                                            <Button
-                                                variant="text"
-                                                sx={{
-                                                    width: "15rem",
-                                                    height: "5rem",
-                                                    fontSize: "1rem",
-                                                    marginLeft: "2rem",
-                                                    [theme.breakpoints.down("mdd")]: {
-                                                        //width: "100%",
-                                                        marginLeft: "0",
-                                                        marginTop: "1rem",
-                                                    },
-                                                }}
-                                            >
-                                                <Box>
-                                                    <Add />
-                                                    <Box>Incluir carpetas</Box>
-                                                </Box>
-                                            </Button>
-                                        </ToggleButtonGroup>
+                                        >Fechas de publicación</Typography>
+                                        <FormControlLabel
+                                            control={<Checkbox name="hideCompanyName" />}
+                                            label="Activar la publicación y/o desactivación automática"
+                                        />
                                         <Box
                                             sx={{
                                                 display: "flex",
-                                                flexDirection: "column",
-                                                rowGap: "1.3rem",
-                                                width: "auto",
+                                                columnGap: "1.6rem",
+                                                width: "100%",
+                                                [theme.breakpoints.down("sm")]: {
+                                                    flexDirection: "column",
+                                                    rowGap: "1rem",
+                                                },
                                             }}
                                         >
-
-                                            <Typography
-                                                sx={{
-                                                    fontSize: "1.6rem",
-                                                    fontWeight: "bold",
-                                                    [theme.breakpoints.down("mdd")]: {
-                                                        textAlign: "center",
-                                                    },
-                                                }}
-                                            >Envio de correo automático</Typography>
-
-                                            <Typography
-                                                sx={{
-                                                    fontSize: "1.3rem",
-                                                    fontWeight: "bold",
-                                                    paddingLeft: "3rem",
-                                                    [theme.breakpoints.down("mdd")]: {
-                                                        paddingLeft: "0",
-                                                        textAlign: "center",
-                                                    },
-                                                }}
-                                            >Seleccione la plantilla a enviar:</Typography>
-                                            <RadioGroup
-                                                row
-                                                sx={{
-                                                    paddingLeft: "7rem",
-                                                    [theme.breakpoints.down("mdd")]: {
-                                                        //display: "flex",
-                                                        flexDirection: "column",
-                                                        paddingLeft: "0",
-                                                        alignContent: "center",
-                                                    },
-                                                }}
-                                            >
-                                                <FormControlLabel value="test" control={<Radio />} label="Pruebas Psicológica" />
-                                                <FormControlLabel value="unfit" control={<Radio />} label="No Apto" />
-                                                <FormControlLabel value="interview" control={<Radio />} label="Entrevista Presencial" />
-                                            </RadioGroup>
-
-                                            <TextField
-                                                id="outlined-multiline-static"
-                                                label="Asunto del mensaje"
-                                            />
-                                            <TextField
-                                                id="outlined-multiline-static"
-                                                label="Mensaje al canditato"
-                                                multiline
-                                                rows={7}
-                                            />
-
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    columnGap: "1.2rem",
-                                                    alignItems: "center",
-                                                    [theme.breakpoints.down("mdd")]: {
-                                                        flexDirection: "column",
-                                                        rowGap: "1rem",
-                                                        alignItems: "flex-start",
-                                                    },
-                                                }}
-                                            >
-                                                <Button component="label" variant="contained"
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <DatePicker
+                                                    label=""
                                                     sx={{
-                                                        height: "4rem",
-                                                        [theme.breakpoints.down("mdd")]: {
+                                                        width: "25rem",
+                                                        [theme.breakpoints.down("sm")]: {
                                                             width: "100%",
-                                                            alignItems: "center",
-                                                        }
+                                                        },
                                                     }}
-                                                    startIcon={<CloudUploadIcon />}>
-                                                    <Typography sx={{
-                                                        textAlign: "center",
-                                                        [theme.breakpoints.down("mdd")]: {
+                                                />
+                                            </LocalizationProvider>
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <DatePicker
+                                                    label=""
+                                                    sx={{
+
+                                                        width: "25rem",
+                                                        [theme.breakpoints.down("sm")]: {
                                                             width: "100%",
-                                                            textAlign: "center",
-                                                        }
-
-                                                    }}>Adjuntar archivo</Typography>
-                                                    <VisuallyHiddenInput type="file" />
-                                                </Button>
-                                                <Typography sx={{
-                                                    [theme.breakpoints.down("mdd")]: {
-                                                        width: "100%",
-                                                        textAlign: "center",
-                                                    }
-                                                }}>Formatos de archivo permitidos: .jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .ppt, .pptx y .pdf<br />Cada archivo puede tener un tamaño máximo de 5 MB</Typography>
-                                            </Box>
-
+                                                        },
+                                                    }}
+                                                />
+                                            </LocalizationProvider>
 
                                         </Box>
+
+                                        <Typography
+                                            sx={{
+                                                fontSize: "1.4rem",
+                                                fontWeight: "bold",
+                                                [theme.breakpoints.down("mdd")]: {
+                                                    textAlign: "center",
+                                                },
+                                            }}
+                                        >Datos de divulgación</Typography>
+
+                                        <Box>
+                                            <Tabs
+                                                value={tabSubValueVertical}
+                                                orientation="horizontal"
+                                                onChange={handleChangeTabSubVertical}
+                                            >
+                                                <Tab label="Redes sociales" value={0} />
+                                                <Tab label="Por correo electrónico" value={1} />
+                                            </Tabs>
+                                            {tabSubValueVertical === 0 && (
+                                                <>
+                                                    <Box
+                                                        sx={{
+                                                            display: "flex",
+                                                            flexDirection: "column",
+                                                            padding: "2rem 0 2rem 5rem",
+                                                            rowGap: "1.5rem",
+                                                            width: "40%",
+                                                        }}
+                                                    >
+                                                        <Box
+                                                            sx={{
+                                                                display: "flex",
+                                                                columnGap: "1.5rem",
+                                                                alignItems: "center",
+                                                                justifyContent: "space-between",
+                                                            }}
+                                                        >
+                                                            <Typography
+                                                                sx={{
+                                                                    fontSize: "1.1rem",
+                                                                    fontWeight: "bold",
+                                                                }}>
+                                                                Facebook
+                                                            </Typography>
+                                                            <Button component="label" variant="contained" startIcon={<Facebook />}
+                                                                sx={{
+                                                                    backgroundColor: "#3b5998",
+                                                                    "&:hover": {
+                                                                        backgroundColor: "#3b5998",
+                                                                    }
+                                                                }}>
+                                                                Compartir
+                                                            </Button>
+                                                        </Box>
+                                                        <Box
+                                                            sx={{
+                                                                display: "flex",
+                                                                columnGap: "1.5rem",
+                                                                alignItems: "center",
+                                                                justifyContent: "space-between",
+                                                            }}
+                                                        >
+                                                            <Typography
+                                                                sx={{
+                                                                    fontSize: "1.1rem",
+                                                                    fontWeight: "bold",
+                                                                }}>
+                                                                Twitter
+                                                            </Typography>
+                                                            <Button component="label" variant="contained" startIcon={<Twitter />}
+                                                                sx={{
+                                                                    backgroundColor: "#00acee",
+                                                                    "&:hover": {
+                                                                        backgroundColor: "#00acee",
+                                                                    }
+                                                                }}
+                                                            >
+                                                                Compartir
+                                                            </Button>
+                                                        </Box>
+                                                        <Box
+                                                            sx={{
+                                                                display: "flex",
+                                                                columnGap: "1.5rem",
+                                                                alignItems: "center",
+                                                                justifyContent: "space-between",
+                                                            }}
+                                                        >
+                                                            <Typography
+                                                                sx={{
+                                                                    fontSize: "1.1rem",
+                                                                    fontWeight: "bold",
+                                                                }}>
+                                                                LinkedIn
+                                                            </Typography>
+                                                            <Button component="label" variant="contained" startIcon={<LinkedIn />}
+                                                                sx={{
+                                                                    backgroundColor: "#0e76a8",
+                                                                    "&:hover": {
+                                                                        backgroundColor: "#0e76a8",
+                                                                    }
+                                                                }}
+                                                            >
+                                                                Compartir
+                                                            </Button>
+                                                        </Box>
+                                                    </Box>
+                                                    <Box>
+
+                                                        <Typography
+                                                            sx={{
+                                                                fontSize: "1.1rem",
+                                                            }}>
+                                                            Su posición debe ser PUBLICADA antes de que se comparta en las redes sociales.
+                                                        </Typography>
+                                                    </Box>
+                                                </>
+                                            )}
+                                            {tabSubValueVertical === 1 && (
+                                                <Box
+                                                    sx={{
+                                                        display: "flex",
+                                                        flexDirection: "column",
+                                                        rowGap: "2rem",
+                                                        padding: "2rem 0 2rem 0",
+                                                    }}
+                                                >
+                                                    <Typography
+                                                        sx={{
+                                                            fontSize: "1.2rem",
+                                                            fontWeight: "bold",
+                                                        }}
+                                                    >Enlace para compartir</Typography>
+                                                    <Box sx={{
+                                                        display: "flex",
+                                                        columnGap: "1.2rem",
+                                                        alignItems: "center",
+                                                    }}>
+                                                        <TextField
+                                                            variant="outlined"
+                                                            label="Enlace"
+                                                            onChange={handleTextFieldChange}
+                                                            sx={{
+                                                                width: "70%",
+                                                            }}
+                                                        />
+                                                        <Button component="label" variant="contained" onClick={handleCopyTextField}>
+                                                            Copiar
+                                                        </Button>
+                                                    </Box>
+                                                    <Typography
+                                                        sx={{
+                                                            fontSize: "1.1rem",
+                                                        }}>
+                                                        Accederá al enlace después de haber publicado el aviso.
+                                                    </Typography>
+                                                    <Typography
+                                                        sx={{
+                                                            fontSize: "1.2rem",
+                                                            fontWeight: "bold",
+                                                        }}
+                                                    >Publicar aviso mediante correo electrónico</Typography>
+                                                    <Box sx={{
+                                                        display: "flex",
+                                                        columnGap: "1.2rem",
+                                                        alignItems: "center",
+                                                    }}>
+                                                        <TextField
+                                                            variant="outlined"
+                                                            label="Enlace"
+                                                            onChange={handleTextFieldChange}
+                                                            sx={{
+                                                                width: "70%",
+                                                            }}
+                                                        />
+                                                        <Button component="label" variant="contained" onClick={handleCopyTextField}>
+                                                            Guardar
+                                                        </Button>
+                                                        <Button component="label" variant="contained" onClick={handleCopyTextField}>
+                                                            Enviar
+                                                        </Button>
+                                                    </Box>
+
+                                                    <FormControlLabel
+                                                        control={<Checkbox name="hideCompanyName" />}
+                                                        label="¿Desea personalizar su correo electrónico?"
+                                                    />
+
+                                                    <Typography
+                                                        sx={{
+                                                            fontSize: "1.2rem",
+                                                            fontWeight: "bold",
+                                                        }}
+                                                    >Editor de texto</Typography>
+                                                    <TextField
+                                                        variant="outlined"
+                                                        multiline
+                                                        fullWidth
+                                                        rows={7}
+                                                    />
+                                                </Box>
+                                            )}
+                                        </Box>
+
                                         <Box sx={{
                                             display: "flex", justifyContent: "space-between",
                                             [theme.breakpoints.down("lgg")]: {
@@ -1759,7 +1464,7 @@ const PostMyAd = () => {
                                                     },
                                                 }}
                                                 onClick={() => {
-                                                    setTabValueVertical(1);
+                                                    setTabValueVertical(0);
                                                 }}
                                             >
                                                 Retroceder
@@ -1811,50 +1516,341 @@ const PostMyAd = () => {
                                             </Box>
                                         </Box>
                                     </Box>
-                                </>
-                            )}
-                        </Box>
-                    </>
-                ) : (
-                    <Box
-                        sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            rowGap: "2.1rem",
-                            paddingTop: "1rem",
-                            width: "100%",
-                        }}
-                    >
-                        <Typography
-                            sx={{
-                                fontSize: "3.5rem",
-                                fontWeight: "bold",
-                            }}
-                        >Titulo del aviso</Typography>
+                                )}
+                                {tabValueVertical === 2 && (
+                                    <>
+                                        <Box
+                                            sx={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                rowGap: "2.1rem",
+                                                width: "auto",
+                                                [theme.breakpoints.down("xxl")]: {
+                                                    //paddingRight: "2rem",
+                                                },
+                                                [theme.breakpoints.down("mdd")]: {
+                                                    paddingRight: "0",
+                                                },
+                                            }}
+                                        >
+                                            {isXXXLDown && (
+                                                <div>
+                                                    <IconButton
+                                                        aria-label="more"
+                                                        id="long-button"
+                                                        aria-controls={open ? 'long-menu' : undefined}
+                                                        aria-expanded={open ? 'true' : undefined}
+                                                        aria-haspopup="true"
+                                                        onClick={handleClickMoreOptions}
+                                                    >
+                                                        <MenuIcon />
+                                                    </IconButton>
+                                                    <Menu
+                                                        id="long-menu"
+                                                        MenuListProps={{
+                                                            'aria-labelledby': 'long-button',
+                                                        }}
+                                                        anchorEl={anchorEl}
+                                                        open={open}
+                                                        onClose={handleClose}
+                                                    >
+                                                        {options.map((option) => (
+                                                            <MenuItem key={option.label} selected={option.label === 'Pyxis'} onClick={() => {
+                                                                handleClose();
+                                                                setTabValueVertical(option.id);
+                                                            }}>
+                                                                {option.label}
+                                                            </MenuItem>
+                                                        ))}
+                                                    </Menu>
+                                                </div>
+                                            )}
+                                            <Typography
+                                                sx={{
+                                                    fontSize: "1.8rem",
+                                                    fontWeight: "bold",
+                                                    [theme.breakpoints.down("mdd")]: {
+                                                        textAlign: "center",
+                                                    },
+                                                }}
+                                            >Etapas del proceso de selección</Typography>
+                                            <ToggleButtonGroup
+                                                color="primary"
+                                                value={alignment}
+                                                exclusive
+                                                onChange={handleChangeToogle}
+                                                aria-label="Platform"
+                                                sx={{
+                                                    [theme.breakpoints.down("mdd")]: {
+                                                        flexDirection: "column",
+                                                        justifyContent: "center",
+                                                        alignItems: "center",
+                                                        textAlign: "center",
+                                                    },
+                                                }}
+                                            >
+                                                <ToggleButton
+                                                    sx={{
+                                                        width: "15rem",
+                                                        height: "5rem",
+                                                        fontSize: "1rem",
+                                                    }}
+                                                    value="inscritos"
+                                                >
+                                                    Inscritos
+                                                </ToggleButton>
+                                                <ToggleButton
+                                                    sx={{
+                                                        width: "15rem",
+                                                        height: "5rem",
+                                                        fontSize: "1rem",
+                                                        [theme.breakpoints.down("mdd")]: {
+                                                            //width: "100%",
+                                                            borderLeft: "0.8px solid rgba(0, 0, 0, 0.12) !important",
+                                                        },
+                                                    }}
+                                                    value="descartados"
+                                                >
+                                                    Descartados
+                                                </ToggleButton>
+                                                <ToggleButton
+                                                    sx={{
+                                                        width: "15rem",
+                                                        height: "5rem",
+                                                        fontSize: "1rem",
+                                                        [theme.breakpoints.down("mdd")]: {
+                                                            //width: "100%",
+                                                            borderLeft: "0.8px solid rgba(0, 0, 0, 0.12) !important",
+                                                        },
+                                                    }}
+                                                    value="finalistas"
+                                                >
+                                                    Finalistas
+                                                </ToggleButton>
+                                                <ToggleButton
+                                                    sx={{
+                                                        width: "15rem",
+                                                        height: "5rem",
+                                                        fontSize: "1rem",
+                                                        [theme.breakpoints.down("mdd")]: {
+                                                            //width: "100%",
+                                                            borderLeft: "0.8px solid rgba(0, 0, 0, 0.12) !important",
+                                                        },
+                                                    }}
+                                                    value="contratados"
+                                                >
+                                                    Contratados
+                                                </ToggleButton>
+                                                <Button
+                                                    variant="text"
+                                                    sx={{
+                                                        width: "15rem",
+                                                        height: "5rem",
+                                                        fontSize: "1rem",
+                                                        marginLeft: "2rem",
+                                                        [theme.breakpoints.down("mdd")]: {
+                                                            //width: "100%",
+                                                            marginLeft: "0",
+                                                            marginTop: "1rem",
+                                                        },
+                                                    }}
+                                                >
+                                                    <Box>
+                                                        <Add />
+                                                        <Box>Incluir carpetas</Box>
+                                                    </Box>
+                                                </Button>
+                                            </ToggleButtonGroup>
+                                            <Box
+                                                sx={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    rowGap: "1.3rem",
+                                                    width: "auto",
+                                                }}
+                                            >
 
-                        <Box sx={{
-                            display: "flex", justifyContent: "space-between",
-                            [theme.breakpoints.down("lgg")]: {
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: "1.6rem",
+                                                        fontWeight: "bold",
+                                                        [theme.breakpoints.down("mdd")]: {
+                                                            textAlign: "center",
+                                                        },
+                                                    }}
+                                                >Envio de correo automático</Typography>
+
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: "1.3rem",
+                                                        fontWeight: "bold",
+                                                        paddingLeft: "3rem",
+                                                        [theme.breakpoints.down("mdd")]: {
+                                                            paddingLeft: "0",
+                                                            textAlign: "center",
+                                                        },
+                                                    }}
+                                                >Seleccione la plantilla a enviar:</Typography>
+                                                <RadioGroup
+                                                    row
+                                                    sx={{
+                                                        paddingLeft: "7rem",
+                                                        [theme.breakpoints.down("mdd")]: {
+                                                            //display: "flex",
+                                                            flexDirection: "column",
+                                                            paddingLeft: "0",
+                                                            alignContent: "center",
+                                                        },
+                                                    }}
+                                                >
+                                                    <FormControlLabel value="test" control={<Radio />} label="Pruebas Psicológica" />
+                                                    <FormControlLabel value="unfit" control={<Radio />} label="No Apto" />
+                                                    <FormControlLabel value="interview" control={<Radio />} label="Entrevista Presencial" />
+                                                </RadioGroup>
+
+                                                <TextField
+                                                    id="outlined-multiline-static"
+                                                    label="Asunto del mensaje"
+                                                />
+                                                <TextField
+                                                    id="outlined-multiline-static"
+                                                    label="Mensaje al canditato"
+                                                    multiline
+                                                    rows={7}
+                                                />
+
+                                                <Box
+                                                    sx={{
+                                                        display: "flex",
+                                                        columnGap: "1.2rem",
+                                                        alignItems: "center",
+                                                        [theme.breakpoints.down("mdd")]: {
+                                                            flexDirection: "column",
+                                                            rowGap: "1rem",
+                                                            alignItems: "flex-start",
+                                                        },
+                                                    }}
+                                                >
+                                                    <Button component="label" variant="contained"
+                                                        sx={{
+                                                            height: "4rem",
+                                                            [theme.breakpoints.down("mdd")]: {
+                                                                width: "100%",
+                                                                alignItems: "center",
+                                                            }
+                                                        }}
+                                                        startIcon={<CloudUploadIcon />}>
+                                                        <Typography sx={{
+                                                            textAlign: "center",
+                                                            [theme.breakpoints.down("mdd")]: {
+                                                                width: "100%",
+                                                                textAlign: "center",
+                                                            }
+
+                                                        }}>Adjuntar archivo</Typography>
+                                                        <VisuallyHiddenInput type="file" />
+                                                    </Button>
+                                                    <Typography sx={{
+                                                        [theme.breakpoints.down("mdd")]: {
+                                                            width: "100%",
+                                                            textAlign: "center",
+                                                        }
+                                                    }}>Formatos de archivo permitidos: .jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .ppt, .pptx y .pdf<br />Cada archivo puede tener un tamaño máximo de 5 MB</Typography>
+                                                </Box>
+
+
+                                            </Box>
+                                            <Box sx={{
+                                                display: "flex", justifyContent: "space-between",
+                                                [theme.breakpoints.down("lgg")]: {
+                                                    flexDirection: "column",
+                                                    rowGap: "1rem",
+                                                },
+                                            }}>
+                                                <Button
+                                                    variant="contained"
+                                                    sx={{
+                                                        width: "10rem",
+                                                        [theme.breakpoints.down("lgg")]: {
+                                                            width: "100%",
+                                                        },
+                                                    }}
+                                                    onClick={() => {
+                                                        setTabValueVertical(1);
+                                                    }}
+                                                >
+                                                    Retroceder
+                                                </Button>
+                                                <Box sx={{
+                                                    display: "flex", columnGap: "1.2rem",
+                                                    [theme.breakpoints.down("lgg")]: {
+                                                        flexDirection: "column",
+                                                        rowGap: "1rem",
+                                                    },
+                                                }}>
+                                                    <Button
+                                                        variant="contained"
+                                                        sx={{
+                                                            width: "10rem",
+                                                            [theme.breakpoints.down("lgg")]: {
+                                                                width: "100%",
+                                                            },
+                                                        }}
+                                                        onClick={handleChangePreview}
+                                                    >
+                                                        Vista previa
+                                                    </Button>
+                                                    <Button
+                                                        variant="contained"
+                                                        sx={{
+                                                            width: "10rem",
+                                                            [theme.breakpoints.down("lgg")]: {
+                                                                width: "100%",
+                                                            },
+                                                        }}
+                                                    >
+                                                        Publicar
+                                                    </Button>
+                                                    <Button
+                                                        variant="contained"
+                                                        sx={{
+                                                            width: "10rem",
+                                                            [theme.breakpoints.down("lgg")]: {
+                                                                width: "100%",
+                                                            },
+                                                        }}
+                                                        onClick={() => {
+                                                            setTabValueVertical(2);
+                                                        }}
+                                                    >
+                                                        Siguiente
+                                                    </Button>
+                                                </Box>
+                                            </Box>
+                                        </Box>
+                                    </>
+                                )}
+                            </Box>
+                        </>
+                    ) : (
+                        <Box
+                            sx={{
+                                display: "flex",
                                 flexDirection: "column",
-                                rowGap: "1rem",
-                            },
-                        }}>
-                            <Button
-                                variant="contained"
+                                rowGap: "2.1rem",
+                                paddingTop: "1rem",
+                                width: "100%",
+                            }}
+                        >
+                            <Typography
                                 sx={{
-                                    width: "10rem",
-                                    [theme.breakpoints.down("lgg")]: {
-                                        width: "100%",
-                                    },
+                                    fontSize: "3.5rem",
+                                    fontWeight: "bold",
                                 }}
-                                onClick={() => {
-                                    setTabValueVertical(0);
-                                }}
-                            >
-                                Retroceder
-                            </Button>
+                            >Titulo del aviso</Typography>
+
                             <Box sx={{
-                                display: "flex", columnGap: "1.2rem",
+                                display: "flex", justifyContent: "space-between",
                                 [theme.breakpoints.down("lgg")]: {
                                     flexDirection: "column",
                                     rowGap: "1rem",
@@ -1868,41 +1864,67 @@ const PostMyAd = () => {
                                             width: "100%",
                                         },
                                     }}
-                                    onClick={handleChangePreview}
-                                >
-                                    Vista previa
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    sx={{
-                                        width: "10rem",
-                                        [theme.breakpoints.down("lgg")]: {
-                                            width: "100%",
-                                        },
-                                    }}
-                                >
-                                    Publicar
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    sx={{
-                                        width: "10rem",
-                                        [theme.breakpoints.down("lgg")]: {
-                                            width: "100%",
-                                        },
-                                    }}
                                     onClick={() => {
-                                        setTabValueVertical(2);
+                                        setTabValueVertical(0);
                                     }}
                                 >
-                                    Siguiente
+                                    Retroceder
                                 </Button>
+                                <Box sx={{
+                                    display: "flex", columnGap: "1.2rem",
+                                    [theme.breakpoints.down("lgg")]: {
+                                        flexDirection: "column",
+                                        rowGap: "1rem",
+                                    },
+                                }}>
+                                    <Button
+                                        variant="contained"
+                                        sx={{
+                                            width: "10rem",
+                                            [theme.breakpoints.down("lgg")]: {
+                                                width: "100%",
+                                            },
+                                        }}
+                                        onClick={handleChangePreview}
+                                    >
+                                        Vista previa
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        sx={{
+                                            width: "10rem",
+                                            [theme.breakpoints.down("lgg")]: {
+                                                width: "100%",
+                                            },
+                                        }}
+                                    >
+                                        Publicar
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        sx={{
+                                            width: "10rem",
+                                            [theme.breakpoints.down("lgg")]: {
+                                                width: "100%",
+                                            },
+                                        }}
+                                        onClick={() => {
+                                            setTabValueVertical(2);
+                                        }}
+                                    >
+                                        Siguiente
+                                    </Button>
+                                </Box>
                             </Box>
                         </Box>
-                    </Box>
-                )}
+                    )}
+                </Box>
             </Box>
-        </Box>
+
+            <ModalDataStudies openModalStudy={openModalStudy} handleCloseModalEditDataStudies={handleCloseModalEditDataStudies} onStudtySave={() => { }} />
+            <ModalDataLanguage openModalLanguage={openModalLanguage} handleCloseModalEditDataLanguage={handleCloseModalEditDataLanguage} onLanguageSave={() => { }} />
+        </>
+
     );
 };
 

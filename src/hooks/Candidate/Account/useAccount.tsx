@@ -19,7 +19,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -40,7 +40,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -61,7 +61,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -80,7 +80,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -98,7 +98,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -140,7 +140,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -161,7 +161,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -179,7 +179,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -197,7 +197,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -215,7 +215,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -234,7 +234,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -267,7 +267,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -285,7 +285,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -304,7 +304,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -336,7 +336,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -354,7 +354,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -373,7 +373,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -391,7 +391,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -417,7 +417,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -435,7 +435,7 @@ const useAccount = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }

@@ -103,7 +103,7 @@ const SearchJob = () => {
               label="Puesto"
               value={search}
               onChange={(e) => {
-                //console.log(e.target.value); // Para depuración
+                ////console.log(e.target.value); // Para depuración
                 setSearch(e.target.value);
               }}
               sx={{

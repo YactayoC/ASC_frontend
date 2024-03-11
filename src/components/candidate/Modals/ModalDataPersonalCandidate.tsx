@@ -84,6 +84,7 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
     const { getPersonalInformation, updatePersonalinformation, getTypesDocument, getCountries, getCivilStatus } = useAccount();
 
     const handleClose = () => {
+        setDescriptionProfileCandidate('');
         setLastNameCandidate('');
         setNameCandidate('');
         setPhoneCandidate('');
@@ -103,15 +104,15 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
     const onSubmitPersonalData = async (data: any) => {
         setFormSubmitted(true);
         const dateFormat: any = dayId !== null && monthId !== null && yearId !== null ? `${dayId}-${monthId}-${yearId}` : null;
-        console.log(dataCandidate) // LO QUE SE RECIBE DE LA CONSULTA
+        //console.log(dataCandidate) // LO QUE SE RECIBE DE LA CONSULTA
 
         if (!data.nombre && !nameCandidate) {
-            console.log("El campo de nombres está vacío. No se enviará la solicitud.");
+            //console.log("El campo de nombres está vacío. No se enviará la solicitud.");
             return;
         }
 
         if (!data.apellidos && !lastNameCandidate) {
-            console.log("El campo de apellidos está vacío. No se enviará la solicitud.");
+            //console.log("El campo de apellidos está vacío. No se enviará la solicitud.");
             return;
         }
         if (dayId === null && monthId === null && yearId === null) {
@@ -150,7 +151,7 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
 
 
         if (JSON.stringify(dataToSend) === JSON.stringify(dataCandidate)) {
-            console.log("NO SE MANDARÁ")
+            //console.log("NO SE MANDARÁ")
             return
         }
 
@@ -168,19 +169,17 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
             data.direccion || addressCandidate || null
         );
 
-        console.log(response)
+        //console.log(response)
 
         if (response.ok) {
-            window.location.reload();
-            handleClose();
 
             const updatedUserInfo = {
                 ...userInfoJson,
                 nombresC: data.nombre || nameCandidate || null,
                 apellidosC: data.apellidos || lastNameCandidate || null,
             }
-
             localStorage.setItem("userInfo", JSON.stringify(updatedUserInfo));
+            handleClose();
             window.location.reload();
         }
     }
@@ -220,7 +219,7 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
             dayInfo = parseInt(day);
         }
 
-        console.log(dataPersonalInformation)
+        //console.log(dataPersonalInformation)
 
         const dateFormat = dayInfo !== null && monthInfo !== null && yearInfo !== null ? `${dayInfo}-${monthInfo}-${yearInfo}` : null;
 
@@ -691,16 +690,12 @@ const ModalDataPersonalCandidate = (props: { openModalDataPersonal: boolean, han
                             {...register("descripcionPerfil", { required: false })}
                             onChange={(e) => {
                                 let newValue = e.target.value.slice(0, 500); // Limitar a 500 caracteres
-                                newValue = newValue.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚ\s]/g, ''); // Eliminar caracteres no deseados
                                 setDescriptionProfileCandidate(newValue);
                             }}
                         />
-
                         <FormHelperText>
                             Caracteres restantes: {descriptionProfileCandidate ? (descriptionProfileCandidate.length > 0 ? 500 - descriptionProfileCandidate.length : 0) : 500} de 500
                         </FormHelperText>
-
-
                     </Box>
                     <Button type="submit" variant="contained" color="primary">
                         Guardar

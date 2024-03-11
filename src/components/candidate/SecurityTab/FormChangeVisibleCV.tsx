@@ -6,7 +6,7 @@ import useAccount from "../../../hooks/Candidate/Account/useAccount";
 
 const FormDeactivateAccount = () => {
 
-    const { register, handleSubmit} = useForm();
+    const { register, handleSubmit } = useForm();
     const [cvVisible, setCvVisible] = useState(1);
     const userInfo = localStorage.getItem("userInfo");
     const user = userInfo ? JSON.parse(userInfo as string) : null;
@@ -14,13 +14,13 @@ const FormDeactivateAccount = () => {
 
     const convertBooleanToNumber = (value: boolean) => { return value ? 1 : 0; }
 
-    //console.log("cvVisible", cvVisible)
+    ////console.log("cvVisible", cvVisible)
 
     const onSubmitVisibleCV = async (data: any) => {
         if (convertBooleanToNumber(user?.cv_visible) !== Number(data.visibleCV)) {
             const response = await changeVisibilityCV(Number(data.visibleCV), user.id_user);
             if (response.ok) { // Asumiendo que response.ok indica éxito
-                console.log(response)
+                //console.log(response)
                 setCvVisible(Number(data.visibleCV));
                 // Actualiza el estado local y el almacenamiento local con el nuevo valor
                 const updatedUser = { ...user, cv_visible: data.visibleCV === "1" };
@@ -31,7 +31,7 @@ const FormDeactivateAccount = () => {
             }
         } else if (convertBooleanToNumber(user?.cv_visible) === Number(data.visibleCV)) {
             // Si el valor no ha cambiado, simplemente retorna sin hacer nada
-            console.log("No se realizó ningún cambio en la visibilidad del CV");
+            //console.log("No se realizó ningún cambio en la visibilidad del CV");
             return;
         }
     };

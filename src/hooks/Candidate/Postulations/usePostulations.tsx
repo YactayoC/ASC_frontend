@@ -14,7 +14,7 @@ const usePostulations = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -36,7 +36,7 @@ const usePostulations = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }

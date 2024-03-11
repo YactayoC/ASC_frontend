@@ -44,12 +44,12 @@ const Alerts = () => {
       user?.id_user,
     );
     setAlerts(response.response);
-    console.log(response.response);
+    //console.log(response.response);
   }
 
   const handleGetAlertData = (idAlert: any) => {
     if (idAlert) {
-      console.log(idAlert);
+      //console.log(idAlert);
       setCurrentAlertId(idAlert);
       handleOpenEditAlert();
     }
@@ -62,7 +62,7 @@ const Alerts = () => {
       const handleDataAlerts = async () => {
         const response = await getAlerts(user?.id_user);
         setAlerts(response.response);
-        console.log(response.response);
+        //console.log(response.response);
       };
 
       handleDataAlerts();
@@ -95,14 +95,6 @@ const Alerts = () => {
           }}
         >
           <SearchJob />
-          <Typography
-            variant="body1"
-            textAlign="left"
-            gutterBottom
-            color="#a7a7a7"
-          >
-            Existen 1800 ofertas de empleo de 40 empresas
-          </Typography>
         </Box>
 
         {/* Cuadro de alertas */}
@@ -215,7 +207,9 @@ const Alerts = () => {
       <ModalUpdateStatusPostulation openModalUpdateStatus={open} handleCloseModalUpdateStatus={handleClose} onAlertSaved={async () => {
         await handleGetAlerts();
       }} />
-      <ModalUpdateAlert openModalUpdateStatus={openModalEditAlert} handleCloseModalUpdateStatus={handleCloseEditAlert} alertId={currentAlertId} />
+      <ModalUpdateAlert openModalUpdateStatus={openModalEditAlert} handleCloseModalUpdateStatus={handleCloseEditAlert} alertId={currentAlertId} onAlertSaved={async () => {
+        await handleGetAlerts();
+      }} />
 
       <ButtonSocials />
     </>

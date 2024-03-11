@@ -35,14 +35,14 @@ const Login = () => {
   const handleLogin = async (dataForm: LoginForm) => {
     try {
       const response = await loginCandidate(dataForm);
-      console.log(response?.response)
+      //console.log(response?.response)
 
       localStorage.setItem("isAuthenticated", "true");
       localStorage.setItem("isCompany", "false");
       navigate("/");
     }
     catch (error: any) {
-      //console.log(error);
+      ////console.log(error);
       const errorMessage = error?.response?.data?.message || "Correo o contraseña incorrectos";
       setError("email", {
         type: "manual",

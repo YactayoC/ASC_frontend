@@ -40,7 +40,7 @@ const ResultsSearch = () => {
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const { value, location, featuredArea } = useParams<{ value: string; location?: string; featuredArea?: string }>();
-  console.log(featuredArea)
+  //console.log(featuredArea)
   const [searchParamsString, setSearchParamsString] = useState('');
   const isFirstRun = useRef(true);
   const [buttonOrderBy, setButtonOrderBy] = useState("recientes");
@@ -123,11 +123,9 @@ const ResultsSearch = () => {
       const response = await applyOffer(selectDataIdJob.oferta_id, user.id_user);
       if (response.ok) {
         setUserAppliedOffers((prev) => [...prev, selectDataIdJob.oferta_id]);
-        //localStorage.setItem("postulatedJobIds", JSON.stringify(postulatedJobIds));
-        //setOpenConfirmationPost(true);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error applying offer:", error);
     }
   }
 
@@ -160,7 +158,7 @@ const ResultsSearch = () => {
     }
 
     if (currentParamsString === searchParamsString) {
-      console.log("Los parámetros de búsqueda no han cambiado. Evitando nueva petición.");
+      //console.log("Los parámetros de búsqueda no han cambiado. Evitando nueva petición.");
       return;
     }
 
@@ -181,7 +179,6 @@ const ResultsSearch = () => {
       setSearchParamsString(currentParamsString);
 
       setSelectedJob(response.response);
-      console.log(response.response);
       setSelectDataIdJob(response.response[0]);
 
     };
@@ -594,20 +591,40 @@ const ResultsSearch = () => {
                             </Box>
                             <img
                               src={selectDataIdJob?.empresa.avatar}
-                              alt=""
+                              alt={selectDataIdJob?.empresa.nombre_completo}
                               style={{
-                                width: "3rem",
+                                width: "5rem",
                                 height: "3rem",
                               }}
                             />
-                          </Box>
 
+                          </Box>
                           <Typography
                             sx={{
                               fontSize: "1rem",
                             }}
                           >
                             {selectDataIdJob?.empresa.direccion}, {selectDataIdJob?.empresa.provincia}
+                          </Typography>
+                          <Typography
+                            sx={{
+                              fontSize: "1.1rem",
+                            }}
+                            variant="h6"
+                            color="#DA1B0E"
+                            fontWeight={800}
+                          >
+                            {selectDataIdJob.destacado === true ? "Destacado" : ""}
+                          </Typography>
+                          <Typography
+                            sx={{
+                              fontSize: "1.1rem",
+                            }}
+                            variant="h6"
+                            color="#DA1B0E"
+                            fontWeight={800}
+                          >
+                            {selectDataIdJob.urgente === true ? "Urgente" : ""}
                           </Typography>
                           <Box
                             sx={{
@@ -758,9 +775,9 @@ const ResultsSearch = () => {
                         </Box>
                         <img
                           src={selectDataIdJob?.empresa.avatar}
-                          alt=""
+                          alt={selectDataIdJob?.empresa.nombre_completo}
                           style={{
-                            width: "3rem",
+                            width: "5rem",
                             height: "3rem",
                           }}
                         />
@@ -771,6 +788,26 @@ const ResultsSearch = () => {
                         }}
                       >
                         {selectDataIdJob?.empresa.direccion}, {selectDataIdJob?.empresa.provincia}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: "1.1rem",
+                        }}
+                        variant="h6"
+                        color="#DA1B0E"
+                        fontWeight={800}
+                      >
+                        {selectDataIdJob.destacado === true ? "Destacado" : ""}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: "1.1rem",
+                        }}
+                        variant="h6"
+                        color="#DA1B0E"
+                        fontWeight={800}
+                      >
+                        {selectDataIdJob.urgente === true ? "Urgente" : ""}
                       </Typography>
                       <Box
                         sx={{

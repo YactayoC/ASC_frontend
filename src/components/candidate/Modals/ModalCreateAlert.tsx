@@ -39,10 +39,10 @@ const ModalUpdateStatusPostulation = (props: {
         { label: "Mensual" },
     ];
 
-    //QUIERO QUE IMPRIMA console.log(seedLocations); SOLAMENTE CUANDO ESTÉ ABIERTO EL MODAL
+    //QUIERO QUE IMPRIMA //console.log(seedLocations); SOLAMENTE CUANDO ESTÉ ABIERTO EL MODAL
     useEffect(() => {
         if (openModalUpdateStatus) {
-            console.log(seedLocations);
+            ////console.log(seedLocations);
             return
         }
     }, [openModalUpdateStatus]);
@@ -129,12 +129,12 @@ const ModalUpdateStatusPostulation = (props: {
                         getOptionLabel={(option) => option.label}
                         onChange={(_event, newValue) => {
                             // Obtiene el ID y el label de la nueva ubicación seleccionada
-                            const newLocationValue = newValue ? String(newValue.provincia_id) : '';
+                            //const newLocationValue = newValue ? String(newValue.provincia_id) : '';
                             const newLocationLabel = newValue ? newValue.label : '';
 
                             // Actualiza el estado y localStorage con los nuevos valores
-                            console.log(newLocationValue);
-                            console.log(newLocationLabel);
+                            ////console.log(newLocationValue);
+                            ////console.log(newLocationLabel);
                             setLocationLabel(newLocationLabel); // Esto garantiza que el label se actualice para mostrar el valor correcto
 
                         }}

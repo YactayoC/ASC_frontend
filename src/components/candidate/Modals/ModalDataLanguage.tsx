@@ -40,7 +40,7 @@ const ModalDataLanguage = (props: {
     const handleGetListLanguage = async () => {
         const response = await getListLanguage();
         const dataLanguageList = response.response.data;
-        console.log(dataLanguageList)
+        ////console.log(dataLanguageList)
         setLanguageList(dataLanguageList);
     }
 

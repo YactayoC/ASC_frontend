@@ -132,11 +132,6 @@ const ModalDataStudies = (props: {
                         <FormHelperText>
                             Caracteres restantes: {500 - descripcionTitle.length} de 500
                         </FormHelperText>
-                        {errors.descripcionTitulo && (
-                            <Typography variant="caption" color="error">
-                                {String(errors.descripcionTitulo.message)}
-                            </Typography>
-                        )}
                     </Box>
                     <Box>
                         <TextField

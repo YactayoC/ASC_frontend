@@ -15,7 +15,7 @@ const useAlerts = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -43,13 +43,13 @@ const useAlerts = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
 
     const updateAlert = async (
-        alertId: Number, 
+        alertId: Number,
         puesto_interes: string,
         ubicacion: string,
         frecuencia: string,
@@ -73,7 +73,7 @@ const useAlerts = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }
@@ -92,7 +92,7 @@ const useAlerts = () => {
             };
         }
         catch (err) {
-            console.log(err);
+            //console.log(err);
             throw err;
         }
     }

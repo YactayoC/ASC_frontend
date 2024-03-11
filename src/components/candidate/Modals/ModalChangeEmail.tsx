@@ -16,8 +16,8 @@ const ModalChangeEmail = (props: {
     const { changeEmailCandidate } = useAccount();
 
     const onSubmitChangeEmail = async (data: any) => {
-        console.log(userInfoJson?.id_user);
-        console.log(data.emailNuevo);
+        ////console.log(userInfoJson?.id_user);
+        ////console.log(data.emailNuevo);
 
         const response = await changeEmailCandidate(
             userInfoJson?.id_user,

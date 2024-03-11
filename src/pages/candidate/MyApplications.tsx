@@ -78,7 +78,7 @@ const MyApplications = () => {
 
   const mounted = useRef(false);
 
-  //console.log(currentDescriptionData)
+  ////console.log(currentDescriptionData)
 
   useEffect(() => {
     if (!mounted.current) {
@@ -86,7 +86,7 @@ const MyApplications = () => {
       const handleGetPostulations = async () => {
         const postulations = await getPostulations(userInfoJson.id_user);
         setAllPostulations(postulations.response);
-        console.log(postulations.response);
+        //console.log(postulations.response);
         //setCurrentDescriptionData(postulations.response.descripcion_estado);
       };
 
@@ -120,14 +120,6 @@ const MyApplications = () => {
           }}
         >
           <SearchJob />
-          <Typography
-            variant="body1"
-            textAlign="left"
-            gutterBottom
-            color="#a7a7a7"
-          >
-            Existen 1800 ofertas de empleo de 40 empresas
-          </Typography>
         </Box>
 
         {/* Cuadro de alertas */}
@@ -340,7 +332,7 @@ const MyApplications = () => {
 
                     <Button variant="outlined"
                       onClick={() => {
-                        console.log(postulation.id)
+                        //console.log(postulation.id)
                         handleOpen(postulation.id);
                       }}>Actualiza tu proceso</Button>
                   </Box>

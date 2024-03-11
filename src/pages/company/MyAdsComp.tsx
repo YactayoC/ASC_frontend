@@ -27,7 +27,7 @@ import { PersonSearch, CreateOutlined, Print, ContentCopy, Delete } from "@mui/i
 
 const MyAdsComp = () => {
 
-  console.log(location);
+  //console.log(location);
 
   const top100Films = [
     { label: 'Publicar' },
@@ -161,7 +161,7 @@ const MyAdsComp = () => {
               maxHeight: "40rem",
               overflowY: "auto",
               borderRight: "1px solid #e0e0e0",
-             
+
             }}
           >
             <Box
@@ -259,110 +259,110 @@ const MyAdsComp = () => {
             }}
           >
             <Box
-                sx={{
-                  display: "flex",  
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                rowGap: "1rem",
+                height: "100%",
+              }}
+            >
+              <Box sx={{
+                marginBottom: "1.5rem",
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+                [theme.breakpoints.down('lg')]: {
                   flexDirection: "column",
                   rowGap: "1rem",
-                  height: "100%",
-                }}
-              >
-                <Box sx={{
-                  marginBottom: "1.5rem",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }
+              }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  sx={{
+                    width: "9rem",
+                    height: "6rem",
+                    backgroundColor: "#1F96DF",
+                    "&:hover": {
+                      backgroundColor: "#1F96DF",
+                    }
+                  }}
+
+                >
+                  50<br /> Inscritos
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  sx={{
+                    width: "9rem",
+                    height: "6rem",
+                    backgroundColor: "#DFAE1F",
+                    "&:hover": {
+                      backgroundColor: "#DFAE1F",
+                    }
+                  }}
+                >
+                  2<br /> Descartados
+                </Button>
+              </Box>
+              <Box
+                sx={{
+                  paddingTop: "1rem",
                   display: "flex",
-                  justifyContent: "space-between",
-                  width: "100%",
+                  columnGap: "1rem",
+                  borderTop: "1px solid #e0e0e0",
+                  justifyContent: "center",
                   [theme.breakpoints.down('lg')]: {
                     flexDirection: "column",
                     rowGap: "1rem",
                     justifyContent: "center",
                     alignItems: "center",
                   }
-                }}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="large"
+                }}
+              >
+                <IconButton>
+                  <PersonSearch
                     sx={{
-                      width: "9rem",
-                      height: "6rem",
-                      backgroundColor: "#1F96DF",
-                      "&:hover": {
-                        backgroundColor: "#1F96DF",
-                      }
-                    }}
-
-                  >
-                    50<br /> Inscritos
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="large"
+                      color: "black",
+                      fontSize: "2rem",
+                    }} />
+                </IconButton>
+                <IconButton>
+                  <CreateOutlined
                     sx={{
-                      width: "9rem",  
-                      height: "6rem",
-                      backgroundColor: "#DFAE1F",
-                      "&:hover": {
-                        backgroundColor: "#DFAE1F",
-                      }
+                      color: "black",
+                      fontSize: "2rem",
+                    }} />
+                </IconButton>
+                <IconButton>
+                  <Print
+                    sx={{
+                      color: "black",
+                      fontSize: "2rem",
+                    }} />
+                </IconButton>
+                <IconButton>
+                  <ContentCopy
+                    sx={{
+                      color: "black",
+                      fontSize: "2rem",
+                    }} />
+                </IconButton>
+                <IconButton>
+                  <Delete
+                    sx={{
+                      color: "black",
+                      fontSize: "2rem",
                     }}
-                  >
-                    2<br /> Descartados
-                  </Button>
-                </Box>
-                <Box
-                  sx={{
-                    paddingTop: "1rem",
-                    display: "flex",
-                    columnGap: "1rem",
-                    borderTop: "1px solid #e0e0e0",
-                    justifyContent: "center",
-                    [theme.breakpoints.down('lg')]: {
-                      flexDirection: "column",
-                      rowGap: "1rem",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }
-                  }}
-                >
-                  <IconButton>
-                    <PersonSearch
-                      sx={{
-                        color: "black",
-                        fontSize: "2rem",
-                      }} />
-                  </IconButton>
-                  <IconButton>
-                    <CreateOutlined
-                      sx={{
-                        color: "black",
-                        fontSize: "2rem",
-                      }} />
-                  </IconButton>
-                  <IconButton>
-                    <Print
-                      sx={{
-                        color: "black",
-                        fontSize: "2rem",
-                      }} />
-                  </IconButton>
-                  <IconButton>
-                    <ContentCopy
-                      sx={{
-                        color: "black",
-                        fontSize: "2rem",
-                      }} />
-                  </IconButton>
-                  <IconButton>
-                    <Delete
-                      sx={{
-                        color: "black",
-                        fontSize: "2rem",
-                      }}
-                    />
-                  </IconButton>
-                </Box>
+                  />
+                </IconButton>
               </Box>
+            </Box>
           </Grid>
         </Grid>
       </Container>

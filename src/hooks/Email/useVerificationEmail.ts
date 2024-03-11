@@ -16,11 +16,11 @@ const useVerificationEmail = () => {
         ok: true,
       };
     } catch (err) {
-      console.log(err);
+      //console.log(err);
       throw err;
     }
   };
-  
+
   const sendVerificationEmailCompany = async (data: any) => {
     try {
       const response: any = await apiClient.post(
@@ -36,17 +36,14 @@ const useVerificationEmail = () => {
         ok: true,
       };
     } catch (err) {
-      console.log(err);
+      //console.log(err);
       throw err;
     }
   };
 
   const verifyCodeEmail = async (data: any) => {
     try {
-      const response: any = await apiClient.post(
-        "/auth/verify-email",
-        data
-      );
+      const response: any = await apiClient.post("/auth/verify-email", data);
 
       const responseData = response.data;
 
@@ -56,7 +53,7 @@ const useVerificationEmail = () => {
         ok: true,
       };
     } catch (err) {
-      console.log(err);
+      //console.log(err);
       throw err;
     }
   };
@@ -76,16 +73,16 @@ const useVerificationEmail = () => {
         ok: true,
       };
     } catch (err) {
-      console.log(err);
+      //console.log(err);
       throw err;
     }
-  }
+  };
 
   return {
     sendVerificationEmail,
     verifyCodeEmail,
     sendVerificationEmailCompany,
-    verifyCodeEmailCompany
+    verifyCodeEmailCompany,
   };
 };
 

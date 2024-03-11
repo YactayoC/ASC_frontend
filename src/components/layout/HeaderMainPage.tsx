@@ -54,7 +54,7 @@ export const HeaderMainPage = () => {
                         src="/alert-2.png"
                         alt="banner"
                         style={{
-                            width: "8rem",
+                            width: "15rem",
                             height: "10rem",
                         }}
                     />

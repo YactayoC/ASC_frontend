@@ -32,7 +32,7 @@ const ModalUpdateStatePostulation = (props: {
                 data.estado_descripcion
             );
 
-            console.log(response)
+            //console.log(response)
 
             if (response.ok) {
                 props.onStateUpdated();
